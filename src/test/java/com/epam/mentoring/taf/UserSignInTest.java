@@ -1,52 +1,81 @@
 package com.epam.mentoring.taf;
 
+import com.epam.mentoring.taf.page.HomePage;
+import com.epam.mentoring.taf.page.LoginPage;
 import io.restassured.http.ContentType;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.epam.mentoring.taf.data.UserData.*;
+import static com.epam.mentoring.taf.page.HomePage.USERNAME_ACCOUNT_NAV;
+import static com.epam.mentoring.taf.page.LoginPage.CREDENTIALS_ERROR_TEXT;
+import static com.epam.mentoring.taf.page.LoginPage.INVALID_CREDENTIALS_MESSAGE;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 
 public class UserSignInTest extends AbstractTest {
-    private final String username = "Tom Marvolo Riddle";
-    private final String email = "tom_marvolo@example.com";
-    private final String password = "Voldemort";
+
+    private static final String LOGIN_URL = "/api/users/login";
+    public static final String FULL_URL = API_URL + LOGIN_URL;
+    public static final String LOCATION_HEADER_NAME = "Location";
+    public static final String WRONG_PASSWORD = "wrong_password";
+    public static final String REQUEST_MASK_JSON_BODY = "{\"user\":{\"email\":\"%s\",\"password\":\"%s\"}}";
+    public static final String EMAIL_OR_PASSWORD_JSON_PATH = "errors.'email or password'";
+    public static final String USER_EMAIL_JSON_PATH = "user.email";
+    public static final String INVALID_RESPONSE = "is invalid";
 
     @Test
-    public void uiVerification() {
-        driver.findElement(By.xpath("//li/a[text()=' Sign in ']")).click();
-        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys(email);
-        driver.findElement(By.xpath("//input[@placeholder='Password']")).sendKeys(password);
-        driver.findElement(By.xpath("//button[contains(text(),'Sign in')]")).click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[contains(@class,'navbar-nav')]/li[3]/a")));
-        String actualUserName = driver.findElement(By.xpath("//ul[contains(@class,'navbar-nav')]/li[3]/a")).getText();
-        Assert.assertEquals(actualUserName, username);
+    public void uiSignInWithValidCredentialsVerification() {
+        signIn(DEFAULT_PASSWORD);
+        HomePage homePage = new HomePage(driver, wait);
+        Assert.assertEquals(homePage.getTextWithWait(USERNAME_ACCOUNT_NAV), DEFAULT_USERNAME);
     }
 
     @Test
-    public void uiNegativeVerification() {
-        driver.findElement(By.xpath("//li/a[text()=' Sign in ']")).click();
-        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys(email);
-        driver.findElement(By.xpath("//input[@placeholder='Password']")).sendKeys("wrong_password");
-        driver.findElement(By.xpath("//button[contains(text(),'Sign in')]")).click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@class='error-messages']/li")));
-        String actualUserName = driver.findElement(By.xpath("//ul[@class='error-messages']/li")).getText();
-        Assert.assertEquals(actualUserName, "email or password is invalid");
+    public void uiSignInWithInvalidCredentialsVerification() {
+        signIn(WRONG_PASSWORD);
+        HomePage homePage = new HomePage(driver, wait);
+        Assert.assertEquals(homePage.getTextWithWait(INVALID_CREDENTIALS_MESSAGE), CREDENTIALS_ERROR_TEXT);
     }
 
     @Test
-    public void apiVerification() {
-        given().baseUri(API_URL).when().contentType(ContentType.JSON).body(String.format("{\"user\":{\"email\":\"%s\",\"password\":\"%s\"}}", email, password)).post("/api/users/login").then().statusCode(200).body("user.email", is(email));
+    public void apiVerificationHappyPath() {
+        given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(String.format(REQUEST_MASK_JSON_BODY, DEFAULT_EMAIL, DEFAULT_PASSWORD))
+                .post(getRedirectionUrl())
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body(USER_EMAIL_JSON_PATH, is(DEFAULT_EMAIL));
     }
 
     @Test
-    public void apiNegativeVerification() {
-        given().baseUri(API_URL).when().contentType(ContentType.JSON).body(String.format("{\"user\":{\"email\":\"%s\",\"password\":\"%s\"}}", email, "wrong_password")).post("/api/users/login").then().statusCode(422).body("errors.email or password", hasItem("is invalid"));
+    public void apiVerificationUnhappyPath() {
+        given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(String.format(REQUEST_MASK_JSON_BODY, DEFAULT_EMAIL, WRONG_PASSWORD))
+                .post(getRedirectionUrl())
+                .then()
+                .statusCode(HttpStatus.SC_FORBIDDEN)
+                .body(EMAIL_OR_PASSWORD_JSON_PATH, hasItem(INVALID_RESPONSE));
     }
 
+    private String getRedirectionUrl() {
+        String location = given()
+                .contentType(ContentType.JSON)
+                .when()
+                .redirects().follow(false)
+                .post(FULL_URL)
+                .header(LOCATION_HEADER_NAME);
+        return location;
+    }
+
+    private void signIn(String wrongPassword) {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.signIn(wrongPassword);
+    }
 }
