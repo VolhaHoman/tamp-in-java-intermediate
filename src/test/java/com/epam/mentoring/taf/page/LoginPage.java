@@ -7,7 +7,7 @@ import static com.epam.mentoring.taf.data.UserData.DEFAULT_EMAIL;
 
 public class LoginPage {
 
-    public static final By SIGN_IN_LINK = By.xpath("//li/a[text()=' Sign in ']");
+    public static final By SIGN_IN_LINK = By.xpath("//li/a[contains(text(),'Sign in')]");
     public static final By EMAIL_FIELD = By.xpath("//input[@placeholder='Email']");
     public static final By PASSWORD_FIELD = By.xpath("//input[@placeholder='Password']");
     public static final By SIGN_IN_BTN = By.xpath("//button[contains(text(),'Sign in')]");

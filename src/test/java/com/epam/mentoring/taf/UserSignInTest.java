@@ -27,21 +27,21 @@ public class UserSignInTest extends AbstractTest {
     public static final String INVALID_RESPONSE = "is invalid";
 
     @Test
-    public void uiVerification() {
+    public void uiSignInWithValidCredentialsVerification() {
         signIn(DEFAULT_PASSWORD);
         HomePage homePage = new HomePage(driver, wait);
         Assert.assertEquals(homePage.getTextWithWait(USERNAME_ACCOUNT_NAV), DEFAULT_USERNAME);
     }
 
     @Test
-    public void uiNegativeVerification() {
+    public void uiSignInWithInvalidCredentialsVerification() {
         signIn(WRONG_PASSWORD);
         HomePage homePage = new HomePage(driver, wait);
         Assert.assertEquals(homePage.getTextWithWait(INVALID_CREDENTIALS_MESSAGE), CREDENTIALS_ERROR_TEXT);
     }
 
     @Test
-    public void apiVerification() {
+    public void apiVerificationHappyPath() {
         given()
                 .when()
                 .contentType(ContentType.JSON)
@@ -53,7 +53,7 @@ public class UserSignInTest extends AbstractTest {
     }
 
     @Test
-    public void apiNegativeVerification() {
+    public void apiVerificationUnhappyPath() {
         given()
                 .when()
                 .contentType(ContentType.JSON)
