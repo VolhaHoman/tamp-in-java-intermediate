@@ -24,8 +24,9 @@ public class SearchingByTagTest extends AbstractTest {
     public Object[][] apiDataProviderMethod() {
         return new Object[][] {{"implementations"},{"welcome"},{"ipsum"}};
     }
+
     @Test
-    public void uiVerification() {
+    public void uiSearchByRandomValidTag() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(TAG_PILL_XPATH)));
         int tagCount = driver.findElements(By.xpath(TAG_PILL_XPATH)).size();
         int randomTag = (int) (Math.random() * tagCount + 1);
@@ -39,7 +40,7 @@ public class SearchingByTagTest extends AbstractTest {
     }
 
     @Test(dataProvider = "apiDataProvider")
-    public void apiVerification(String tag) {
+    public void apiSearchByValidTag(String tag) {
         given()
                 .baseUri(API_URL)
                 .when()
@@ -50,7 +51,7 @@ public class SearchingByTagTest extends AbstractTest {
     }
 
     @Test
-    public void apiNegativeVerification() {
+    public void apiSearchByInvalidTag() {
         given()
                 .baseUri(API_URL)
                 .when()
