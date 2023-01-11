@@ -1,17 +1,16 @@
-package com.epam.mentoring.taf.page;
+package com.epam.mentoring.taf.ui.page;
 
+import com.epam.mentoring.taf.ui.config.WebDriverCreate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage {
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+    private final WebDriver driver = WebDriverCreate.getWebDriverInstance();
+    private final WebDriverWait wait = WebDriverCreate.getWebDriverWaitInstance();
 
-    public HomePage(WebDriver driver, WebDriverWait wait) {
-        this.driver = driver;
-        this.wait = wait;
+    public HomePage() {
     }
 
     public static final By USERNAME_ACCOUNT_NAV = By.xpath("//ul[contains(@class,'navbar-nav')]/li[4]/a");

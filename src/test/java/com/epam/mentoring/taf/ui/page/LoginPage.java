@@ -1,5 +1,6 @@
-package com.epam.mentoring.taf.page;
+package com.epam.mentoring.taf.ui.page;
 
+import com.epam.mentoring.taf.ui.config.WebDriverCreate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -14,13 +15,16 @@ public class LoginPage {
     public static final By INVALID_CREDENTIALS_MESSAGE = By.xpath("//ul[@class='error-messages']/li");
     public static final String CREDENTIALS_ERROR_TEXT = "email or password is invalid";
 
-    private final WebDriver driver;
+    private final WebDriver driver = WebDriverCreate.getWebDriverInstance();
 
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
+    private final String baseUrl;
+
+    public LoginPage(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
     public void signIn(String password) {
+        driver.get(baseUrl);
         performClick(SIGN_IN_LINK);
         fillInInput(EMAIL_FIELD, DEFAULT_EMAIL);
         fillInInput(PASSWORD_FIELD, password);
