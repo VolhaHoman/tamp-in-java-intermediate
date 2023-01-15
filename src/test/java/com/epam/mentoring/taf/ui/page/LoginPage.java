@@ -1,41 +1,62 @@
 package com.epam.mentoring.taf.ui.page;
 
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static com.epam.mentoring.taf.data.UserData.DEFAULT_EMAIL;
 
 public class LoginPage {
 
-    public static final By SIGN_IN_LINK = By.xpath("//li/a[contains(text(),'Sign in')]");
-    public static final By EMAIL_FIELD = By.xpath("//input[@placeholder='Email']");
-    public static final By PASSWORD_FIELD = By.xpath("//input[@placeholder='Password']");
-    public static final By SIGN_IN_BTN = By.xpath("//button[contains(text(),'Sign in')]");
-    public static final By INVALID_CREDENTIALS_MESSAGE = By.xpath("//ul[@class='error-messages']/li");
+    @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
+    private WebElement signInLink;
+
+    @FindBy(xpath = "//input[@placeholder='Email']")
+    private WebElement emailField;
+
+    @FindBy(xpath = "//input[@placeholder='Password']")
+    private WebElement passwordField;
+
+    @FindBy(xpath = "//button[contains(text(),'Sign in')]")
+    private WebElement signInButton;
+
+    @FindBy(xpath = "//ul[@class='error-messages']/li")
+    private WebElement invalidCredentialsMessage;
+
     public static final String CREDENTIALS_ERROR_TEXT = "email or password is invalid";
 
     private final WebDriver driver = WebDriverCreate.getWebDriverInstance();
+    private final WebDriverWait wait = WebDriverCreate.getWebDriverWaitInstance();
 
     private final String baseUrl;
 
     public LoginPage(String baseUrl) {
         this.baseUrl = baseUrl;
+        PageFactory.initElements(driver, this);
+    }
+
+    public String getInvalidCredentialsMessage() {
+        wait.until(ExpectedConditions.visibilityOf(invalidCredentialsMessage));
+        return invalidCredentialsMessage.getText();
     }
 
     public void signIn(String password) {
         driver.get(baseUrl);
-        performClick(SIGN_IN_LINK);
-        fillInInput(EMAIL_FIELD, DEFAULT_EMAIL);
-        fillInInput(PASSWORD_FIELD, password);
-        performClick(SIGN_IN_BTN);
+        performClick(signInLink);
+        fillInInput(emailField, DEFAULT_EMAIL);
+        fillInInput(passwordField, password);
+        performClick(signInButton);
     }
 
-    private void fillInInput(By locator, String value) {
-        driver.findElement(locator).sendKeys(value);
+    private void fillInInput(WebElement webElement, String value) {
+        webElement.sendKeys(value);
     }
 
-    private void performClick(By locator) {
-        driver.findElement(locator).click();
+    private void performClick(WebElement webElement) {
+        webElement.click();
     }
 }

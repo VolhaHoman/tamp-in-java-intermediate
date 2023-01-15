@@ -3,6 +3,7 @@ package com.epam.mentoring.taf;
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
 
 abstract public class AbstractTest {
@@ -21,5 +22,11 @@ abstract public class AbstractTest {
         wait = WebDriverCreate.getWebDriverWaitInstance();
 
         driver.get(baseUrl);
+    }
+
+    @AfterClass
+    public void closeDriver() {
+
+        driver.close();
     }
 }
