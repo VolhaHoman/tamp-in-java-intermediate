@@ -11,7 +11,9 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItem;
 
 public class UserSignUpTest extends AbstractTest {
-    public static final String API_USERS = "https://api.realworld.io/api/users";
+    public static final String SIGNING_URL = "/api/users";
+    public static final String FULL_URL = API_URL + SIGNING_URL;
+    public static final String LOCATION_HEADER_NAME = "Location";
     public static final String JSON_BODY = "{\"user\":{\"email\":\"%s\",\"password\":\"%s\",\"username\":\"%s\"}}";
     public static final String URL_REG = "https://angular.realworld.io/register";
     private final String username = "Test User";
@@ -49,7 +51,7 @@ public class UserSignUpTest extends AbstractTest {
                 .baseUri(URL_REG)
                 .contentType(ContentType.JSON)
                 .body(String.format(JSON_BODY, email, password, username))
-                .post(API_USERS)
+                .post(getRedirectionUrl())
                 .then()
                 .statusCode(200);
     }
@@ -60,7 +62,7 @@ public class UserSignUpTest extends AbstractTest {
                 .when()
                 .contentType(ContentType.JSON)
                 .body(String.format(JSON_BODY, email, password, username))
-                .post(API_USERS)
+                .post(getRedirectionUrl())
                 .then()
                 .statusCode(422)
                 .body("errors.username", hasItem("has already been taken"));
@@ -72,10 +74,20 @@ public class UserSignUpTest extends AbstractTest {
                 .when()
                 .contentType(ContentType.JSON)
                 .body(String.format(JSON_BODY, email, password, ""))
-                .post(API_USERS)
+                .post(getRedirectionUrl())
                 .then()
                 .statusCode(422)
                 .body("errors.username", hasItem("can't be blank"));
+    }
+
+    private String getRedirectionUrl() {
+        String location = given()
+                .contentType(ContentType.JSON)
+                .when()
+                .redirects().follow(false)
+                .post(FULL_URL)
+                .header(LOCATION_HEADER_NAME);
+        return location;
     }
 
 }
