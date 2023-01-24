@@ -10,19 +10,19 @@ import static com.epam.mentoring.taf.data.UserData.DEFAULT_EMAIL;
 public class LoginPage extends BasePage {
 
     @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
-    private WebElement signInLink;
+    public WebElement signInLink;
 
     @FindBy(xpath = "//input[@placeholder='Email']")
-    private WebElement emailField;
+    public WebElement emailField;
 
     @FindBy(xpath = "//input[@placeholder='Password']")
-    private WebElement passwordField;
+    public WebElement passwordField;
 
     @FindBy(xpath = "//button[contains(text(),'Sign in')]")
-    private WebElement signInButton;
+    public WebElement signInButton;
 
     @FindBy(xpath = "//ul[@class='error-messages']/li")
-    private WebElement invalidCredentialsMessage;
+    public WebElement invalidCredentialsMessage;
 
     public static final String CREDENTIALS_ERROR_TEXT = "email or password is invalid";
 
@@ -38,19 +38,20 @@ public class LoginPage extends BasePage {
         return invalidCredentialsMessage.getText();
     }
 
-    public void signIn(String password) {
+    public void fillInEmail() {
+        emailField.sendKeys(DEFAULT_EMAIL);
+    }
+
+    public void fillInPassword(String password) {
+        passwordField.sendKeys(password);
+    }
+
+    public void clickSignInLink() {
         driver.get(baseUrl);
-        performClick(signInLink);
-        fillInInput(emailField, DEFAULT_EMAIL);
-        fillInInput(passwordField, password);
-        performClick(signInButton);
+        signInLink.click();
     }
 
-    private void fillInInput(WebElement webElement, String value) {
-        webElement.sendKeys(value);
-    }
-
-    private void performClick(WebElement webElement) {
-        webElement.click();
+    public void clickSignInBtn() {
+        signInButton.click();
     }
 }
