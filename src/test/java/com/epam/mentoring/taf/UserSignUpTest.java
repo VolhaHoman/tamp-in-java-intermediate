@@ -26,7 +26,7 @@ public class UserSignUpTest extends AbstractTest {
         String username = this.username + uniqueId;
         String email = this.email.replace("@", "." + uniqueId + "@");
 
-        driver.get(baseUrl);
+        driver.get(UI_URL);
         driver.findElement(By.xpath("//li/a[contains(text(),'Sign up')]")).click();
         driver.findElement(By.xpath("//input[@placeholder='Username']")).sendKeys(username);
         driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys(email);
