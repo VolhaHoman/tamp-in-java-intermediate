@@ -38,20 +38,24 @@ public class LoginPage extends BasePage {
         return invalidCredentialsMessage.getText();
     }
 
-    public void fillInEmail() {
+    public LoginPage fillInEmail() {
         emailField.sendKeys(DEFAULT_EMAIL);
+        return this;
     }
 
-    public void fillInPassword(String password) {
+    public LoginPage fillInPassword(String password) {
         passwordField.sendKeys(password);
+        return this;
     }
 
-    public void clickSignInLink() {
+    public LoginPage clickSignInLink() {
         driver.get(baseUrl);
         signInLink.click();
+        return this;
     }
 
-    public void clickSignInBtn() {
+    public LoginPage clickSignInBtn() {
         signInButton.click();
+        return this;
     }
 }
