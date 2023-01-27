@@ -1,16 +1,14 @@
 package com.epam.mentoring.taf;
 
-import com.epam.mentoring.taf.page.HomePage;
-import com.epam.mentoring.taf.page.LoginPage;
+import com.epam.mentoring.taf.ui.page.HomePage;
+import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static com.epam.mentoring.taf.data.UserData.*;
-import static com.epam.mentoring.taf.page.HomePage.USERNAME_ACCOUNT_NAV;
-import static com.epam.mentoring.taf.page.LoginPage.CREDENTIALS_ERROR_TEXT;
-import static com.epam.mentoring.taf.page.LoginPage.INVALID_CREDENTIALS_MESSAGE;
+import static com.epam.mentoring.taf.ui.page.LoginPage.CREDENTIALS_ERROR_TEXT;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
@@ -28,16 +26,23 @@ public class UserSignInTest extends AbstractTest {
 
     @Test
     public void uiSignInWithValidCredentialsVerification() {
-        signIn(DEFAULT_PASSWORD);
-        HomePage homePage = new HomePage(driver, wait);
-        Assert.assertEquals(homePage.getTextWithWait(USERNAME_ACCOUNT_NAV), DEFAULT_USERNAME);
+        LoginPage loginPage = new LoginPage(baseUrl);
+        loginPage.clickSignInLink();
+        loginPage.fillInEmail();
+        loginPage.fillInPassword(DEFAULT_PASSWORD);
+        loginPage.clickSignInBtn();
+        HomePage homePage = new HomePage();
+        Assert.assertEquals(homePage.getUsernameAccountNav(), DEFAULT_USERNAME);
     }
 
     @Test
     public void uiSignInWithInvalidCredentialsVerification() {
-        signIn(WRONG_PASSWORD);
-        HomePage homePage = new HomePage(driver, wait);
-        Assert.assertEquals(homePage.getTextWithWait(INVALID_CREDENTIALS_MESSAGE), CREDENTIALS_ERROR_TEXT);
+        LoginPage loginPage = new LoginPage(baseUrl);
+        loginPage.clickSignInLink();
+        loginPage.fillInEmail();
+        loginPage.fillInPassword(WRONG_PASSWORD);
+        loginPage.clickSignInBtn();
+        Assert.assertEquals(loginPage.getInvalidCredentialsMessage(), CREDENTIALS_ERROR_TEXT);
     }
 
     @Test
@@ -72,10 +77,5 @@ public class UserSignInTest extends AbstractTest {
                 .post(FULL_URL)
                 .header(LOCATION_HEADER_NAME);
         return location;
-    }
-
-    private void signIn(String wrongPassword) {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.signIn(wrongPassword);
     }
 }
