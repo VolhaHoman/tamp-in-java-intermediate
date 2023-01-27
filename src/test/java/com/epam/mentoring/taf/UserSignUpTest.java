@@ -3,7 +3,6 @@ package com.epam.mentoring.taf;
 import com.epam.mentoring.taf.api.ApiUserDTO;
 import com.epam.mentoring.taf.api.ResponseDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
