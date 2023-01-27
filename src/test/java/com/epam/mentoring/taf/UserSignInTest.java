@@ -27,10 +27,10 @@ public class UserSignInTest extends AbstractTest {
     @Test
     public void uiSignInWithValidCredentialsVerification() {
         LoginPage loginPage = new LoginPage(baseUrl);
-        loginPage.clickSignInLink();
-        loginPage.fillInEmail();
-        loginPage.fillInPassword(DEFAULT_PASSWORD);
-        loginPage.clickSignInBtn();
+        loginPage.clickSignInLink()
+                .fillInEmail()
+                .fillInPassword(DEFAULT_PASSWORD)
+                .clickSignInBtn();
         HomePage homePage = new HomePage();
         Assert.assertEquals(homePage.getUsernameAccountNav(), DEFAULT_USERNAME);
     }
@@ -38,10 +38,10 @@ public class UserSignInTest extends AbstractTest {
     @Test
     public void uiSignInWithInvalidCredentialsVerification() {
         LoginPage loginPage = new LoginPage(baseUrl);
-        loginPage.clickSignInLink();
-        loginPage.fillInEmail();
-        loginPage.fillInPassword(WRONG_PASSWORD);
-        loginPage.clickSignInBtn();
+        loginPage.clickSignInLink()
+                .fillInEmail()
+                .fillInPassword(WRONG_PASSWORD)
+                .clickSignInBtn();
         Assert.assertEquals(loginPage.getInvalidCredentialsMessage(), CREDENTIALS_ERROR_TEXT);
     }
 

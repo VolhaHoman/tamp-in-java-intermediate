@@ -32,7 +32,7 @@ public class SearchingByTagTest extends AbstractTest {
         YamlReader reader = new YamlReader();
         String[] tags = reader.readTags();
         Object[][] data = new Object[tags.length][1];
-        for (int i = 0; i < tags.length; i++){
+        for (int i = 0; i < tags.length; i++) {
             data[i][0] = tags[i];
         }
         return data;
