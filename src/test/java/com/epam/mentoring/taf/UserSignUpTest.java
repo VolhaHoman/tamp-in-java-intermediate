@@ -1,19 +1,17 @@
 package com.epam.mentoring.taf;
 
-import io.restassured.http.ContentType;
+import com.epam.mentoring.taf.api.ApiUserDTO;
+import com.epam.mentoring.taf.api.ResponseDTO;
+import com.epam.mentoring.taf.api.RestAPIClient;
+import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.hasItem;
-
 public class UserSignUpTest extends AbstractTest {
-    public static final String API_USERS = "https://api.realworld.io/api/users";
-    public static final String JSON_BODY = "{\"user\":{\"email\":\"%s\",\"password\":\"%s\",\"username\":\"%s\"}}";
-    public static final String URL_REG = "https://angular.realworld.io/register";
+
     private final String username = "Test User";
     private final String email = "test_user@example.com";
     private final String password = "test_password";
@@ -43,39 +41,30 @@ public class UserSignUpTest extends AbstractTest {
         String uniqueId = RandomStringUtils.randomNumeric(1000);
         String username = this.username + uniqueId;
         String email = this.email.replace("@", "." + uniqueId + "@");
-
-        given()
-                .when()
-                .baseUri(URL_REG)
-                .contentType(ContentType.JSON)
-                .body(String.format(JSON_BODY, email, password, username))
-                .post(API_USERS)
-                .then()
-                .statusCode(200);
-    }
+        ApiUserDTO apiUserDTO = new ApiUserDTO.ApiUserDTOBuilder(email, password).setUsername(username).build();
+        RestAPIClient restAPIClient = new RestAPIClient();
+        Response response = restAPIClient.sendApiRequest(apiUserDTO);
+        Assert.assertEquals(response.getStatusCode(), 200);
+}
 
     @Test
     public void apiAlreadyRegisteredUserVerification() {
-        given()
-                .when()
-                .contentType(ContentType.JSON)
-                .body(String.format(JSON_BODY, email, password, username))
-                .post(API_USERS)
-                .then()
-                .statusCode(422)
-                .body("errors.username", hasItem("has already been taken"));
+        ApiUserDTO apiUserDTO = new ApiUserDTO.ApiUserDTOBuilder(email, password).setUsername(username).build();
+        RestAPIClient restAPIClient = new RestAPIClient();
+        Response response = restAPIClient.sendApiRequest(apiUserDTO);
+        ResponseDTO responseDTO = restAPIClient.transformToDto(response);
+        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "has already been taken");
     }
 
     @Test
     public void apiBlankUserVerification() {
-        given()
-                .when()
-                .contentType(ContentType.JSON)
-                .body(String.format(JSON_BODY, email, password, ""))
-                .post(API_USERS)
-                .then()
-                .statusCode(422)
-                .body("errors.username", hasItem("can't be blank"));
+        ApiUserDTO apiUserDTO = new ApiUserDTO.ApiUserDTOBuilder(email, password).setUsername("").build();
+        RestAPIClient restAPIClient = new RestAPIClient();
+        Response response = restAPIClient.sendApiRequest(apiUserDTO);
+        ResponseDTO responseDTO = restAPIClient.transformToDto(response);
+        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "can't be blank");
     }
 
 }
