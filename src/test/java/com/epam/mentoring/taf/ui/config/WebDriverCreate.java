@@ -13,8 +13,8 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.naming.ConfigurationException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class WebDriverCreate {
@@ -38,21 +38,23 @@ public class WebDriverCreate {
 
     public static void initDriver() {
         try {
-            YamlReader browser = new YamlReader();
-            String[] driverType = browser.readBrowser();
-            chooseBrowser(Arrays.toString(driverType));
+            YamlReader driver = new YamlReader();
+            String driverType = driver.readBrowser();
+            chooseBrowser(driverType);
         } catch (ParameterIsNullException | IOException e) {
             throw new ConfigurationSetupException("Error when loading driver configuration properties", e);
+        } catch (ConfigurationException e) {
+            throw new RuntimeException(e);
         }
     }
 
     private static void chooseBrowser(String browser) throws ParameterIsNullException {
         switch (browser) {
-            case "[CHROME]": {
+            case "CHROME": {
                 setupDriver(getChrome());
                 break;
             }
-            case "[FIREFOX]": {
+            case "FIREFOX": {
                 setupDriver(getFireFox());
                 break;
             }

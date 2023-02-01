@@ -15,14 +15,12 @@ import static org.hamcrest.Matchers.is;
 
 public class UserSignInTest extends AbstractTest {
 
-    private static final String LOGIN_URL = "/api/users/login";
-    public static final String FULL_URL = API_URL + LOGIN_URL;
-    public static final String LOCATION_HEADER_NAME = "Location";
     public static final String WRONG_PASSWORD = "wrong_password";
     public static final String REQUEST_MASK_JSON_BODY = "{\"user\":{\"email\":\"%s\",\"password\":\"%s\"}}";
     public static final String EMAIL_OR_PASSWORD_JSON_PATH = "errors.'email or password'";
     public static final String USER_EMAIL_JSON_PATH = "user.email";
     public static final String INVALID_RESPONSE = "is invalid";
+    public static final String FULL_URL = API_URL + LOGIN_URL;
 
     @Test
     public void uiSignInWithValidCredentialsVerification() {
@@ -51,7 +49,7 @@ public class UserSignInTest extends AbstractTest {
                 .when()
                 .contentType(ContentType.JSON)
                 .body(String.format(REQUEST_MASK_JSON_BODY, DEFAULT_EMAIL, DEFAULT_PASSWORD))
-                .post(getRedirectionUrl())
+                .post(redirection.getRedirectionUrl(FULL_URL))
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .body(USER_EMAIL_JSON_PATH, is(DEFAULT_EMAIL));
@@ -63,19 +61,10 @@ public class UserSignInTest extends AbstractTest {
                 .when()
                 .contentType(ContentType.JSON)
                 .body(String.format(REQUEST_MASK_JSON_BODY, DEFAULT_EMAIL, WRONG_PASSWORD))
-                .post(getRedirectionUrl())
+                .post(redirection.getRedirectionUrl(FULL_URL))
                 .then()
                 .statusCode(HttpStatus.SC_FORBIDDEN)
                 .body(EMAIL_OR_PASSWORD_JSON_PATH, hasItem(INVALID_RESPONSE));
     }
 
-    private String getRedirectionUrl() {
-        String location = given()
-                .contentType(ContentType.JSON)
-                .when()
-                .redirects().follow(false)
-                .post(FULL_URL)
-                .header(LOCATION_HEADER_NAME);
-        return location;
-    }
 }
