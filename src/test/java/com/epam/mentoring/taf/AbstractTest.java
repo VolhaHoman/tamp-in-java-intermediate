@@ -1,6 +1,7 @@
 package com.epam.mentoring.taf;
 
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
+import com.epam.mentoring.taf.util.Redirection;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
@@ -10,10 +11,14 @@ abstract public class AbstractTest {
 
     protected final static String baseUrl = "https://angular.realworld.io";
     protected final static String UI_URL = "https://angular.realworld.io";
-    protected final static String API_URL = "https://conduit.productionready.io";
+    public final static String API_URL = "https://conduit.productionready.io";
+    public static final String LOGIN_URL = "/api/users/login";
+    public static final String SIGNING_URL = "/api/users";
 
     protected WebDriver driver;
     protected WebDriverWait wait;
+
+    Redirection redirection = new Redirection();
 
     @BeforeMethod
     public void initialisation() {

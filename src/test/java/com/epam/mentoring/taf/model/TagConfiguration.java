@@ -2,7 +2,7 @@ package com.epam.mentoring.taf.model;
 
 import java.util.Arrays;
 
-public class Tag {
+public class TagConfiguration {
 
     private String[] tags;
 
@@ -14,7 +14,6 @@ public class Tag {
         this.tags = tags;
     }
 
-    @Override
     public String toString() {
         return "Tag{" +
                 "tags=" + Arrays.toString(tags) +
