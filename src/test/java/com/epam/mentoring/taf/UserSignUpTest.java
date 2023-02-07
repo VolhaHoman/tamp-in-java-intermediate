@@ -20,8 +20,6 @@ public class UserSignUpTest extends AbstractTest {
     private final String username = "Test User";
     private final String email = "test_user@example.com";
     private final String password = "test_password";
-    public static final String FULL_URL = API_URL + SIGNING_URL;
-
 
     @Test
     public void signUpVerification() {
