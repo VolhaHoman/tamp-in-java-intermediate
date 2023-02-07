@@ -3,20 +3,28 @@ package com.epam.mentoring.taf;
 import com.epam.mentoring.taf.api.ApiUserDTO;
 import com.epam.mentoring.taf.api.ResponseDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;
+import com.epam.mentoring.taf.listeners.TestListener;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+@Listeners({ TestListener.class })
+@Feature("Sign Up Tests")
 public class UserSignUpTest extends AbstractTest {
 
     private final String username = "Test User";
     private final String email = "test_user@example.com";
     private final String password = "test_password";
 
-    @Test
+    @Test(description = "UI Sign Up with new credentials")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("UI Sign Up with new credentials")
+    @Story("Investigate the issues and fix UserSignUpTest")
     public void signUpVerification() {
         String uniqueId = RandomStringUtils.randomNumeric(1000);
         String username = this.username + uniqueId;
@@ -36,7 +44,10 @@ public class UserSignUpTest extends AbstractTest {
 
     }
 
-    @Test
+    @Test(description = "API Sign Up with new credentials")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("API Sign Up with new credentials")
+    @Story("Create layers for API tests")
     public void apiRegisterVerification() {
         String uniqueId = RandomStringUtils.randomNumeric(1000);
         String username = this.username + uniqueId;
@@ -47,7 +58,10 @@ public class UserSignUpTest extends AbstractTest {
         Assert.assertEquals(response.getStatusCode(), 200);
 }
 
-    @Test
+    @Test(description = "API Sign Up with existing credentials")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("API Sign Up with existing credentials")
+    @Story("Create layers for API tests")
     public void apiAlreadyRegisteredUserVerification() {
         ApiUserDTO apiUserDTO = new ApiUserDTO.ApiUserDTOBuilder(email, password).setUsername(username).build();
         RestAPIClient restAPIClient = new RestAPIClient();
@@ -57,7 +71,10 @@ public class UserSignUpTest extends AbstractTest {
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "has already been taken");
     }
 
-    @Test
+    @Test(description = "API Sign Up with blank username")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("API Sign Up with blank username")
+    @Story("Create layers for API tests")
     public void apiBlankUserVerification() {
         ApiUserDTO apiUserDTO = new ApiUserDTO.ApiUserDTOBuilder(email, password).setUsername("").build();
         RestAPIClient restAPIClient = new RestAPIClient();
