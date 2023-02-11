@@ -10,8 +10,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.hasItem;
+
 public class UserSignUpTest extends AbstractTest {
 
+    public static final String JSON_BODY = "{\"user\":{\"email\":\"%s\",\"password\":\"%s\",\"username\":\"%s\"}}";
+    public static final String URL_REG = "https://angular.realworld.io/register";
     private final String username = "Test User";
     private final String email = "test_user@example.com";
     private final String password = "test_password";
