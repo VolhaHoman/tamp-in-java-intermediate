@@ -25,7 +25,7 @@ public class ApiUserDTO {
         return password;
     }
 
-    public String toString(){
+    public String toString() {
         return String.format(JSON_BODY, email, password, username);
     }
 
@@ -35,7 +35,7 @@ public class ApiUserDTO {
         private String password;
 
 
-        public ApiUserDTOBuilder(String email, String password){
+        public ApiUserDTOBuilder(String email, String password) {
             this.email = email;
             this.password = password;
         }
@@ -45,7 +45,7 @@ public class ApiUserDTO {
             return this;
         }
 
-        public ApiUserDTO build(){
+        public ApiUserDTO build() {
             return new ApiUserDTO(this);
         }
     }

@@ -5,12 +5,15 @@ import com.epam.mentoring.taf.api.ResponseDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
+import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
 
 public class UserSignUpTest extends AbstractTest {
 
@@ -19,8 +22,13 @@ public class UserSignUpTest extends AbstractTest {
 
     @BeforeMethod
     public void generateUserData() {
-        userDataDTO = UserData.generateUserData();
-        defaultUserData = UserData.getDefaultUserData();
+        try {
+            userDataDTO = UserData.generateUserData();
+            defaultUserData = UserData.getDefaultUserData();
+        } catch (IOException e) {
+            throw new ConfigurationSetupException("Can't load default user data", e);
+        }
+
     }
 
     @Test

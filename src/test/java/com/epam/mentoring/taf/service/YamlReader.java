@@ -2,7 +2,9 @@ package com.epam.mentoring.taf.service;
 
 import com.epam.mentoring.taf.model.BrowserConfiguration;
 import com.epam.mentoring.taf.model.TagConfiguration;
+import com.epam.mentoring.taf.model.UserDataModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import javax.naming.ConfigurationException;
@@ -18,6 +20,13 @@ public class YamlReader {
         File file = new File("src/test/resources/listOfTags.yml");
         TagConfiguration tag = mapper.readValue(file, TagConfiguration.class);
         return tag.getTags();
+    }
+
+    public UserDataModel readUserData() throws IOException {
+        File file = new File("src/test/resources/listOfTags.yml");
+        ObjectReader userReader = mapper.readerFor(UserDataModel.class)
+                .at("/defaultUser");
+        return userReader.readValue(file);
     }
 
     public String readBrowser() throws IOException, ConfigurationException {
