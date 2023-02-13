@@ -1,5 +1,6 @@
 package com.epam.mentoring.taf.ui.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -33,27 +34,32 @@ public class LoginPage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
+    @Step("Get invalid credentials message")
     public String getInvalidCredentialsMessage() {
         wait.until(ExpectedConditions.visibilityOf(invalidCredentialsMessage));
         return invalidCredentialsMessage.getText();
     }
 
+    @Step("Fill in email")
     public LoginPage fillInEmail() {
         emailField.sendKeys(DEFAULT_EMAIL);
         return this;
     }
 
+    @Step("Fill in password {0}")
     public LoginPage fillInPassword(String password) {
         passwordField.sendKeys(password);
         return this;
     }
 
+    @Step("Click on Sign In link")
     public LoginPage clickSignInLink() {
         driver.get(baseUrl);
         signInLink.click();
         return this;
     }
 
+    @Step("Click on Sign In button")
     public LoginPage clickSignInBtn() {
         signInButton.click();
         return this;

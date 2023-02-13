@@ -1,5 +1,6 @@
 package com.epam.mentoring.taf.ui.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -14,6 +15,7 @@ public class HomePage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
+    @Step("Get username from navigation bar")
     public String getUsernameAccountNav() {
         wait.until(ExpectedConditions.visibilityOf(usernameAccountNav));
         return usernameAccountNav.getText();
