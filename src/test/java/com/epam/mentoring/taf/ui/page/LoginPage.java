@@ -41,23 +41,27 @@ public class LoginPage extends BasePage {
     }
 
     @Step("Fill in email")
-    public void fillInEmail() {
+    public LoginPage fillInEmail() {
         emailField.sendKeys(DEFAULT_EMAIL);
+        return this;
     }
 
     @Step("Fill in password {0}")
-    public void fillInPassword(String password) {
+    public LoginPage fillInPassword(String password) {
         passwordField.sendKeys(password);
+        return this;
     }
 
     @Step("Click on Sign In link")
-    public void clickSignInLink() {
+    public LoginPage clickSignInLink() {
         driver.get(baseUrl);
         signInLink.click();
+        return this;
     }
 
     @Step("Click on Sign In button")
-    public void clickSignInBtn() {
+    public LoginPage clickSignInBtn() {
         signInButton.click();
+        return this;
     }
 }

@@ -1,7 +1,11 @@
 package com.epam.mentoring.taf;
 
+<<<<<<< HEAD
 import com.epam.mentoring.taf.listeners.TestListener;
 import io.qameta.allure.*;
+=======
+import com.epam.mentoring.taf.service.YamlReader;
+>>>>>>> master
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,6 +14,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -17,6 +23,7 @@ import static org.hamcrest.Matchers.*;
 @Feature("Searching By Tag Tests")
 public class SearchingByTagTest extends AbstractTest {
 
+    public static final YamlReader READER = new YamlReader();
     private static final String ARTICLES_BY_TAG_URL = "/api/articles?tag={tag}&limit=10&offset=0";
     public static final String INVALID_TAG = "invalid_tag_name";
     public static final String TAG_LIST_JSON_PATH = "articles.tagList";
@@ -26,8 +33,21 @@ public class SearchingByTagTest extends AbstractTest {
     public static final String NAV_LINK_XPATH = "//a[@class='nav-link active']";
 
     @DataProvider(name = "apiDataProvider")
-    public Object[][] apiDataProviderMethod() {
-        return new Object[][] {{"implementations"},{"welcome"},{"ipsum"}};
+    public Object[][] apiDataProviderMethod() throws IOException {
+        return getTags();
+    }
+
+    private Object[][] getTags() throws IOException {
+        try {
+            String[] tags = READER.readTags();
+            Object[][] data = new Object[tags.length][1];
+            for (int i = 0; i < tags.length; i++) {
+                data[i][0] = tags[i];
+            }
+            return data;
+        } catch (IOException e) {
+            throw new IOException("Failed to load the file.");
+        }
     }
 
     @Test(description = "UI Search by a valid tag")
