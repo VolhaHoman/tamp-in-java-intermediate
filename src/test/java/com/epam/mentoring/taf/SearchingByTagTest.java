@@ -1,11 +1,8 @@
 package com.epam.mentoring.taf;
 
-<<<<<<< HEAD
 import com.epam.mentoring.taf.listeners.TestListener;
 import io.qameta.allure.*;
-=======
 import com.epam.mentoring.taf.service.YamlReader;
->>>>>>> master
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
