@@ -3,7 +3,7 @@ tags:
   - ipsum
   - et
 
-defaultUser:
+testUser:
   userName: Test User
   userEmail: test_user@example.com
   userPassword: test_password

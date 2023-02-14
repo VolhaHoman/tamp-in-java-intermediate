@@ -25,7 +25,7 @@ public class YamlReader {
     public UserDataModel readUserData() throws IOException {
         File file = new File("src/test/resources/listOfTags.yml");
         ObjectReader userReader = mapper.readerFor(UserDataModel.class)
-                .at("/defaultUser");
+                .at("/testUser");
         return userReader.readValue(file);
     }
 
