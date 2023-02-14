@@ -16,10 +16,10 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-@Listeners({ TestListener.class })
-@Feature("Sign Up Tests")
 import java.io.IOException;
 
+@Listeners({ TestListener.class })
+@Feature("Sign Up Tests")
 public class UserSignUpTest extends AbstractTest {
 
     private UserDataDTO userDataDTO;
