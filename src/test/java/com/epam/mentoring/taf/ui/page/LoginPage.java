@@ -27,6 +27,15 @@ public class LoginPage extends BasePage {
 
     public static final String CREDENTIALS_ERROR_TEXT = "email or password is invalid";
 
+    @FindBy(xpath = "//li/a[contains(text(),'Sign up')]")
+    public WebElement signUpLink;
+
+    @FindBy(xpath = "//input[@placeholder='Username']")
+    public WebElement usernameField;
+
+    @FindBy(xpath = "//button[contains(text(),'Sign up')]")
+    public WebElement signUpButton;
+
     private final String baseUrl;
 
     public LoginPage(String baseUrl) {
@@ -62,6 +71,27 @@ public class LoginPage extends BasePage {
     @Step("Click on Sign In button")
     public LoginPage clickSignInBtn() {
         signInButton.click();
+        return this;
+    }
+
+    public LoginPage clickSignUpLink() {
+        driver.get(baseUrl);
+        signUpLink.click();
+        return this;
+    }
+
+    public LoginPage clickSignUpBtn() {
+        signUpButton.click();
+        return this;
+    }
+
+    public LoginPage fillInUsername(String username) {
+        usernameField.sendKeys(username);
+        return this;
+    }
+
+    public LoginPage fillInEmail(String email) {
+        emailField.sendKeys(email);
         return this;
     }
 }
