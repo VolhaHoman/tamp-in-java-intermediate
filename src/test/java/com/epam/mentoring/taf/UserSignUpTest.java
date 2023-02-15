@@ -29,7 +29,7 @@ public class UserSignUpTest extends AbstractTest {
     public void generateUserData() {
         try {
             userDataDTO = UserData.generateUserData();
-            defaultUserData = UserData.getDefaultUserData();
+            defaultUserData = UserData.getUserDataFromYaml("testUser");
         } catch (IOException e) {
             throw new ConfigurationSetupException("Can't load default user data", e);
         }

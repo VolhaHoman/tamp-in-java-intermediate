@@ -19,15 +19,15 @@ public class UserData {
     }
 
     public static UserDataDTO generateUserData() throws IOException {
-        UserDataModel userDataModel = YAML_READER.readUserData();
+        UserDataModel userDataModel = YAML_READER.readUserData("testUser");
         String uniqueId = generateUniqueId();
         String userEmail = userDataModel.getUserEmail().replace("@", "." + uniqueId + "@");
         String username = userDataModel.getUserName() + uniqueId;
         return new UserDataDTO(username, userEmail, userDataModel.getUserPassword());
     }
 
-    public static UserDataDTO getDefaultUserData() throws IOException {
-        UserDataModel userDataModel = YAML_READER.readUserData();
+    public static UserDataDTO getUserDataFromYaml(String path) throws IOException {
+        UserDataModel userDataModel = YAML_READER.readUserData(path);
         return new UserDataDTO(
                 userDataModel.getUserName(),
                 userDataModel.getUserEmail(),

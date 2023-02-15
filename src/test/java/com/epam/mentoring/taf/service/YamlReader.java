@@ -22,10 +22,10 @@ public class YamlReader {
         return tag.getTags();
     }
 
-    public UserDataModel readUserData() throws IOException {
+    public UserDataModel readUserData(String path) throws IOException {
         File file = new File("src/test/resources/listOfTags.yml");
         ObjectReader userReader = mapper.readerFor(UserDataModel.class)
-                .at("/testUser");
+                .at("/" + path);
         return userReader.readValue(file);
     }
 
