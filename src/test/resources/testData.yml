@@ -9,6 +9,6 @@ testUser:
   userPassword: test_password
 
 signInUser:
-  email: tom_marvolo@example.com
-  password: Voldemort
-  username: Tom Marvolo Riddle
+  userEmail: tom_marvolo@example.com
+  userPassword: Voldemort
+  userName: Tom Marvolo Riddle

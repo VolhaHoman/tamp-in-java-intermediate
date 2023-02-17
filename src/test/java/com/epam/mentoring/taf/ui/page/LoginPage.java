@@ -6,8 +6,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static com.epam.mentoring.taf.data.UserData.DEFAULT_EMAIL;
-
 public class LoginPage extends BasePage {
 
     @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
@@ -53,18 +51,18 @@ public class LoginPage extends BasePage {
     @Step("Fill in email")
     public LoginPage fillInEmail(String email) {
         emailField.sendKeys(email);
-        logger.info("Fill in email");
+        logger.info("Fill in email: " + email);
         return this;
     }
 
     @Step("Fill in password {0}")
     public LoginPage fillInPassword(String password) {
         passwordField.sendKeys(password);
-        logger.info("Fill in password");
+        logger.info("Fill in password: " + password);
         return this;
     }
 
-    @Step("Click on Sign In link")
+    @Step("Click on 'Sign In' link")
     public LoginPage clickSignInLink() {
         driver.get(baseUrl);
         signInLink.click();
@@ -72,31 +70,33 @@ public class LoginPage extends BasePage {
         return this;
     }
 
-    @Step("Click on Sign In button")
+    @Step("Click on 'Sign In' button")
     public LoginPage clickSignInBtn() {
         signInButton.click();
         logger.info("Click on 'Sign In' button");
         return this;
     }
 
+    @Step("Click on 'Sign Up' link")
     public LoginPage clickSignUpLink() {
         driver.get(baseUrl);
         signUpLink.click();
+        logger.info("Click on 'Sign Up' link");
         return this;
     }
 
+    @Step("Click on 'Sign Up' button")
     public LoginPage clickSignUpBtn() {
         signUpButton.click();
+        logger.info("Click on 'Sign Up' button");
         return this;
     }
 
+    @Step("Fill in username")
     public LoginPage fillInUsername(String username) {
         usernameField.sendKeys(username);
+        logger.info("Fill in username: " + username);
         return this;
     }
 
-    public LoginPage fillInEmail(String email) {
-        emailField.sendKeys(email);
-        return this;
-    }
 }

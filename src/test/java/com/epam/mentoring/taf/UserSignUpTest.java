@@ -3,8 +3,6 @@ package com.epam.mentoring.taf;
 import com.epam.mentoring.taf.api.ApiUserDTO;
 import com.epam.mentoring.taf.api.ResponseDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;
-import com.epam.mentoring.taf.listeners.TestListener;
-import io.qameta.allure.*;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
@@ -14,6 +12,11 @@ import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -25,11 +28,10 @@ import java.io.IOException;
 @Listeners({ TestListener.class, ReportPortalTestListener.class })
 @Feature("Sign Up Tests")
 public class UserSignUpTest extends AbstractTest {
-
     private UserDataDTO userDataDTO;
     private UserDataDTO defaultUserData;
 
-    @BeforeMethod
+    @BeforeMethod(description = "Generate Test User")
     public void generateUserData() {
         try {
             userDataDTO = UserData.generateUserData();
@@ -50,7 +52,6 @@ public class UserSignUpTest extends AbstractTest {
                 .fillInEmail(userDataDTO.getUserEmail())
                 .fillInPassword(userDataDTO.getUserPassword())
                 .clickSignUpBtn();
-
         HomePage homePage = new HomePage();
         Assert.assertEquals(homePage.getUsernameAccountNav(), userDataDTO.getUserName());
     }
@@ -69,7 +70,10 @@ public class UserSignUpTest extends AbstractTest {
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
-    @Test
+    @Test(description = "API Sign Up with existing credentials")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("API Sign Up with existing credentials")
+    @Story("Create layers for API tests")
     public void apiAlreadyRegisteredUserVerification() {
         ApiUserDTO apiUserDTO = new ApiUserDTO
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword())
@@ -82,16 +86,15 @@ public class UserSignUpTest extends AbstractTest {
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "has already been taken");
     }
 
-    @Test(description = "API Sign Up with existing credentials")
+    @Test(description = "API Sign Up with empty username")
     @Severity(SeverityLevel.CRITICAL)
-    @Description("API Sign Up with existing credentials")
+    @Description("API Sign Up with empty username")
     @Story("Create layers for API tests")
     public void apiBlankUserVerification() {
         ApiUserDTO apiUserDTO = new ApiUserDTO
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword())
                 .setUsername("")
                 .build();
-        ApiUserDTO apiUserDTO = new ApiUserDTO.ApiUserDTOBuilder(email, password).setUsername("").build();
         logger.info("Request body: " + apiUserDTO);
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS);
