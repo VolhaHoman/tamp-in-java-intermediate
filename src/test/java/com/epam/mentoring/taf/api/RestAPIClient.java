@@ -11,13 +11,13 @@ public class RestAPIClient {
     public static final String API_USERS = "https://api.realworld.io/api/users";
 
     @Step("Send API request to endpoint")
-    public Response sendApiRequest(ApiUserDTO apiUserDTO) {
+    public Response sendApiRequest(ApiUserDTO apiUserDTO, String url) {
 
         Response response = given()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(apiUserDTO.toString())
-                .post(API_USERS)
+                .post(url)
                 .then()
                 .extract().response();
         return response;

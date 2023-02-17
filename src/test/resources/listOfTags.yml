@@ -7,3 +7,8 @@ testUser:
   userName: Test User
   userEmail: test_user@example.com
   userPassword: test_password
+
+signInUser:
+  email: tom_marvolo@example.com
+  password: Voldemort
+  username: Tom Marvolo Riddle

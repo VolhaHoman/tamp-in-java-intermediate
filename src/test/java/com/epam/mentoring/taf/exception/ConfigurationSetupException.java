@@ -5,4 +5,5 @@ public class ConfigurationSetupException extends RuntimeException {
     public ConfigurationSetupException(String message, Throwable cause) {
         super(message, cause);
     }
+
 }

@@ -14,7 +14,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.naming.ConfigurationException;
-import java.io.IOException;
 import java.util.Objects;
 
 public class WebDriverCreate {
@@ -41,7 +40,7 @@ public class WebDriverCreate {
             YamlReader driver = new YamlReader();
             String driverType = driver.readBrowser();
             chooseBrowser(driverType);
-        } catch (ParameterIsNullException | IOException e) {
+        } catch (ParameterIsNullException e) {
             throw new ConfigurationSetupException("Error when loading driver configuration properties", e);
         } catch (ConfigurationException e) {
             throw new RuntimeException(e);

@@ -46,18 +46,21 @@ public class LoginPage extends BasePage {
     @Step("Get invalid credentials message")
     public String getInvalidCredentialsMessage() {
         wait.until(ExpectedConditions.visibilityOf(invalidCredentialsMessage));
+        logger.info("Appear error message: '" + invalidCredentialsMessage.getText() + "'");
         return invalidCredentialsMessage.getText();
     }
 
     @Step("Fill in email")
-    public LoginPage fillInEmail() {
-        emailField.sendKeys(DEFAULT_EMAIL);
+    public LoginPage fillInEmail(String email) {
+        emailField.sendKeys(email);
+        logger.info("Fill in email");
         return this;
     }
 
     @Step("Fill in password {0}")
     public LoginPage fillInPassword(String password) {
         passwordField.sendKeys(password);
+        logger.info("Fill in password");
         return this;
     }
 
@@ -65,12 +68,14 @@ public class LoginPage extends BasePage {
     public LoginPage clickSignInLink() {
         driver.get(baseUrl);
         signInLink.click();
+        logger.info("Click on 'Sign In' link");
         return this;
     }
 
     @Step("Click on Sign In button")
     public LoginPage clickSignInBtn() {
         signInButton.click();
+        logger.info("Click on 'Sign In' button");
         return this;
     }
 

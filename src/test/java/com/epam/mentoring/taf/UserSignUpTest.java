@@ -3,6 +3,8 @@ package com.epam.mentoring.taf;
 import com.epam.mentoring.taf.api.ApiUserDTO;
 import com.epam.mentoring.taf.api.ResponseDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;
+import com.epam.mentoring.taf.listeners.TestListener;
+import io.qameta.allure.*;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
@@ -15,6 +17,7 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -62,7 +65,7 @@ public class UserSignUpTest extends AbstractTest {
                 .setUsername(userDataDTO.getUserName())
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS);
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
@@ -73,7 +76,7 @@ public class UserSignUpTest extends AbstractTest {
                 .setUsername(defaultUserData.getUserName())
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS);
         ResponseDTO responseDTO = restAPIClient.transformToDto(response);
         Assert.assertEquals(response.getStatusCode(), 422);
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "has already been taken");
@@ -88,8 +91,10 @@ public class UserSignUpTest extends AbstractTest {
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword())
                 .setUsername("")
                 .build();
+        ApiUserDTO apiUserDTO = new ApiUserDTO.ApiUserDTOBuilder(email, password).setUsername("").build();
+        logger.info("Request body: " + apiUserDTO);
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS);
         ResponseDTO responseDTO = restAPIClient.transformToDto(response);
         Assert.assertEquals(response.getStatusCode(), 422);
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "can't be blank");

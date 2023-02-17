@@ -18,6 +18,7 @@ public class HomePage extends BasePage {
     @Step("Get username from navigation bar")
     public String getUsernameAccountNav() {
         wait.until(ExpectedConditions.visibilityOf(usernameAccountNav));
+        logger.info("Get username from navigation bar");
         return usernameAccountNav.getText();
     }
 }
