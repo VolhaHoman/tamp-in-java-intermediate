@@ -37,4 +37,9 @@ where:
 
 ## License
 
-MIT
+## REPORT PORTAL
+Add to your local system env properties RP_UUID (rp.uuid) and RP_PROJECT (rp.project)
+
+E.g: 
+export RP_UUID=4394hfkj-ewti74hifw-wkfubf-w484u
+export RP_PROJECT=Team work 
