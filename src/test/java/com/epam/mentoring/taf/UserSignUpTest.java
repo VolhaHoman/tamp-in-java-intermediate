@@ -95,7 +95,6 @@ public class UserSignUpTest extends AbstractTest {
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword())
                 .setUsername("")
                 .build();
-        logger.info("Request body: " + apiUserDTO);
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS);
         ResponseDTO responseDTO = restAPIClient.transformToDto(response);

@@ -20,14 +20,15 @@ public class YamlReader {
 
     public String[] readTags() {
         String[] tags = new String[0];
+        TagConfiguration tag = null;
         try {
             File file = new File("src/test/resources/testData.yml");
-            TagConfiguration tag = mapper.readValue(file, TagConfiguration.class);
+            tag = mapper.readValue(file, TagConfiguration.class);
             tags = tag.getTags();
         } catch (IOException e) {
-            e.printStackTrace();
             logger.error("Error log message", e);
         }
+        logger.info("Test tags: " + tag);
         return tags;
     }
 

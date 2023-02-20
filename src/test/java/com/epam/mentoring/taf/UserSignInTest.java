@@ -70,7 +70,6 @@ public class UserSignInTest extends AbstractTest {
         ApiUserDTO apiUserDTO = new ApiUserDTO
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword())
                 .build();
-        logger.info("Request body: " + apiUserDTO);
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, redirection.getRedirectionUrl(API_LOGIN));
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
@@ -84,10 +83,8 @@ public class UserSignInTest extends AbstractTest {
         ApiUserDTO apiUserDTO = new ApiUserDTO
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword() + "1")
                 .build();
-        logger.info("Request body: " + apiUserDTO);
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, redirection.getRedirectionUrl(API_LOGIN));
-        //ResponseDTO responseDTO = restAPIClient.transformToDto(response);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_FORBIDDEN);
     }
 

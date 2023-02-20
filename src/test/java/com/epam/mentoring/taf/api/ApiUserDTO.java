@@ -7,7 +7,7 @@ public class ApiUserDTO {
 
     public static final String JSON_BODY = "{\"user\":{\"email\":\"%s\",\"password\":\"%s\",\"username\":\"%s\"}}";
 
-    public ApiUserDTO(ApiUserDTOBuilder builder) {
+    ApiUserDTO(ApiUserDTOBuilder builder) {
         this.username = builder.username;
         this.email = builder.email;
         this.password = builder.password;

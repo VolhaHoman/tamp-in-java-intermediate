@@ -34,18 +34,23 @@ public class TestListener implements ITestListener {
     public void onTestFailure(ITestResult iTestResult) {
         WebDriver driver = WebDriverCreate.getWebDriverInstance();
         saveScreenshotPng(driver);
-        saveScreenshotToFolder();
+        saveScreenshotToLogFile();
     }
 
-    private void saveScreenshotToFolder() {
+    private String saveScreenshotToLogFile() {
         File screenCapture = ((TakesScreenshot) driver)
                 .getScreenshotAs(OutputType.FILE);
+        String path = ".//target/screenshots/"
+                + getCurrentAsString() + ".png";
         try {
-            FileUtils.copyFile(screenCapture, new File(".//target/screenshots/"
-                    + getCurrentAsString() + ".png"));
+            FileUtils.copyFile(screenCapture, new File(path));
         } catch (IOException e) {
             logger.error("Failed to save screenshot: " + e.getLocalizedMessage());
         }
+        StringBuilder builder = new StringBuilder();
+        builder.append("Path to the failed test screenshot: <img src=\"").append(path).append("\">");
+        logger.info(builder.toString());
+        return "";
     }
 
     private String getCurrentAsString() {
