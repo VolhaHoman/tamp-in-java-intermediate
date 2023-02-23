@@ -37,7 +37,7 @@ public class TestListener implements ITestListener {
         saveScreenshotToLogFile();
     }
 
-    private String saveScreenshotToLogFile() {
+    private void saveScreenshotToLogFile() {
         File screenCapture = ((TakesScreenshot) driver)
                 .getScreenshotAs(OutputType.FILE);
         String path = ".//target/screenshots/"
@@ -50,7 +50,6 @@ public class TestListener implements ITestListener {
         StringBuilder builder = new StringBuilder();
         builder.append("Path to the failed test screenshot: <img src=\"").append(path).append("\">");
         logger.info(builder.toString());
-        return "";
     }
 
     private String getCurrentAsString() {

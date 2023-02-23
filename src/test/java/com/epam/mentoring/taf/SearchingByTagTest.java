@@ -37,7 +37,7 @@ public class SearchingByTagTest extends AbstractTest {
         return getTags();
     }
 
-    private Object[][] getTags() throws EmptyFileException {
+    private Object[][] getTags() throws IOException {
         String[] tags = READER.readTags();
         if (tags == null || tags.length == 0) {
             throw new EmptyFileException("List of tags are empty.");

@@ -18,16 +18,10 @@ public class YamlReader {
     public final Logger logger = LogManager.getRootLogger();
     ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
-    public String[] readTags() {
-        String[] tags = new String[0];
-        TagConfiguration tag = null;
-        try {
-            File file = new File("src/test/resources/testData.yml");
-            tag = mapper.readValue(file, TagConfiguration.class);
-            tags = tag.getTags();
-        } catch (IOException e) {
-            logger.error("Error log message", e);
-        }
+    public String[] readTags() throws IOException {
+        File file = new File("src/test/resources/testData1.yml");
+        TagConfiguration tag = mapper.readValue(file, TagConfiguration.class);
+        String[] tags = tag.getTags();
         logger.info("Test tags: " + tag);
         return tags;
     }
