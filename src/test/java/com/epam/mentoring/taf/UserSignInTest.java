@@ -1,5 +1,6 @@
 package com.epam.mentoring.taf;
 
+import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
@@ -16,7 +17,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 
-@Listeners({ TestListener.class })
+@Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Sign In Tests")
 public class UserSignInTest extends AbstractTest {
 

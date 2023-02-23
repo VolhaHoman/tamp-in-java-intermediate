@@ -3,22 +3,23 @@ package com.epam.mentoring.taf;
 import com.epam.mentoring.taf.api.ApiUserDTO;
 import com.epam.mentoring.taf.api.ResponseDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;
-import com.epam.mentoring.taf.listeners.TestListener;
-import io.qameta.allure.*;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
+import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
+import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-@Listeners({ TestListener.class })
+@Listeners({ TestListener.class, ReportPortalTestListener.class })
 @Feature("Sign Up Tests")
 public class UserSignUpTest extends AbstractTest {
 
@@ -33,7 +34,6 @@ public class UserSignUpTest extends AbstractTest {
         } catch (IOException e) {
             throw new ConfigurationSetupException("Can't load default user data", e);
         }
-
     }
 
     @Test(description = "UI Sign Up with new credentials")
