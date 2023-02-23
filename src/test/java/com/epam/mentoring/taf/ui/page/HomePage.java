@@ -7,6 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class HomePage extends BasePage {
+
     @FindBy(xpath = "//ul[contains(@class,'navbar-nav')]/li[4]/a")
     private WebElement usernameAccountNav;
 
@@ -17,7 +18,6 @@ public class HomePage extends BasePage {
     @Step("Get username from navigation bar")
     public String getUsernameAccountNav() {
         wait.until(ExpectedConditions.visibilityOf(usernameAccountNav));
-        logger.info("Get username from navigation bar: " + usernameAccountNav.getText());
         return usernameAccountNav.getText();
     }
 }
