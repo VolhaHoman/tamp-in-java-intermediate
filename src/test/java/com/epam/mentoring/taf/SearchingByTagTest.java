@@ -93,4 +93,5 @@ public class SearchingByTagTest extends AbstractTest {
                 .statusCode(200)
                 .body(ARTICLES_COUNT_JSON_PATH, equalTo(0));
     }
+
 }

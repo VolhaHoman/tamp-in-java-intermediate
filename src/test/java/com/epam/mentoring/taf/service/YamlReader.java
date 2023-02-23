@@ -19,7 +19,7 @@ public class YamlReader {
     ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
     public String[] readTags() throws IOException {
-        File file = new File("src/test/resources/testData1.yml");
+        File file = new File("src/test/resources/testData.yml");
         TagConfiguration tag = mapper.readValue(file, TagConfiguration.class);
         String[] tags = tag.getTags();
         logger.info("Test tags: " + tag);

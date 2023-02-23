@@ -98,5 +98,4 @@ public class LoginPage extends BasePage {
         logger.info("Fill in username: " + username);
         return this;
     }
-
 }
