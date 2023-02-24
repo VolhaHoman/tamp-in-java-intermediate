@@ -3,7 +3,6 @@ package com.epam.mentoring.taf;
 import com.epam.mentoring.taf.exception.EmptyFileException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import io.qameta.allure.*;
 import com.epam.mentoring.taf.service.YamlReader;
 import io.qameta.allure.*;
 import org.openqa.selenium.By;
@@ -19,7 +18,7 @@ import java.io.IOException;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
-@Listeners({ TestListener.class, ReportPortalTestListener.class })
+@Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Searching By Tag Tests")
 public class SearchingByTagTest extends AbstractTest {
 

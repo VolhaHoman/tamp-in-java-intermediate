@@ -1,12 +1,12 @@
 package com.epam.mentoring.taf;
 
-import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
-import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.api.ApiUserDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
+import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
+import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.qameta.allure.*;
@@ -14,8 +14,9 @@ import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
 import java.io.IOException;
 
 import static com.epam.mentoring.taf.ui.page.LoginPage.CREDENTIALS_ERROR_TEXT;
@@ -87,5 +88,4 @@ public class UserSignInTest extends AbstractTest {
         Response response = restAPIClient.sendApiRequest(apiUserDTO, redirection.getRedirectionUrl(API_LOGIN));
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_FORBIDDEN);
     }
-
 }

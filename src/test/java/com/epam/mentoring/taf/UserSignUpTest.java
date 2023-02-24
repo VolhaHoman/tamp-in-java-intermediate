@@ -14,11 +14,12 @@ import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-@Listeners({ TestListener.class, ReportPortalTestListener.class })
+@Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Sign Up Tests")
 public class UserSignUpTest extends AbstractTest {
     private UserDataDTO userDataDTO;
