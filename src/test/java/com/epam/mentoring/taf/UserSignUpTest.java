@@ -66,7 +66,10 @@ public class UserSignUpTest extends AbstractTest {
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
-    @Test
+    @Test(description = "API Sign Up with existing credentials")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("API Sign Up with existing credentials")
+    @Story("Create layers for API tests")
     public void apiAlreadyRegisteredUserVerification() {
         ApiUserDTO apiUserDTO = new ApiUserDTO
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword())
@@ -79,9 +82,9 @@ public class UserSignUpTest extends AbstractTest {
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "has already been taken");
     }
 
-    @Test(description = "API Sign Up with existing credentials")
+    @Test(description = "API Sign Up with blank credentials")
     @Severity(SeverityLevel.CRITICAL)
-    @Description("API Sign Up with existing credentials")
+    @Description("API Sign Up with blank credentials")
     @Story("Create layers for API tests")
     public void apiBlankUserVerification() {
         ApiUserDTO apiUserDTO = new ApiUserDTO

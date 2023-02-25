@@ -74,22 +74,26 @@ public class LoginPage extends BasePage {
         return this;
     }
 
+    @Step("Click on Sign Up link")
     public LoginPage clickSignUpLink() {
         driver.get(baseUrl);
         signUpLink.click();
         return this;
     }
 
+    @Step("Click on Sign Up button")
     public LoginPage clickSignUpBtn() {
         signUpButton.click();
         return this;
     }
 
+    @Step("Fill in Username")
     public LoginPage fillInUsername(String username) {
         usernameField.sendKeys(username);
         return this;
     }
 
+    @Step("Fill in Email")
     public LoginPage fillInEmail(String email) {
         emailField.sendKeys(email);
         return this;

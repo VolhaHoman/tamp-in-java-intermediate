@@ -3,6 +3,7 @@ package com.epam.mentoring.taf;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.service.YamlReader;
+import com.epam.mentoring.taf.ui.page.HomePage;
 import io.qameta.allure.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -53,6 +54,7 @@ public class SearchingByTagTest extends AbstractTest {
     @Description("UI Search by a valid tag")
     @Story("Investigate the issues and fix SearchingByTagTest")
     public void uiSearchByRandomValidTag() {
+        HomePage homePage = new HomePage();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(TAG_PILL_XPATH)));
         int tagCount = driver.findElements(By.xpath(TAG_PILL_XPATH)).size();
         int randomTag = (int) (Math.random() * tagCount + 1);
