@@ -10,10 +10,8 @@ import org.testng.annotations.BeforeMethod;
 abstract public class AbstractTest {
 
     protected final static String baseUrl = "https://angular.realworld.io";
-    protected final static String UI_URL = "https://angular.realworld.io";
     public final static String API_URL = "https://conduit.productionready.io";
     public static final String LOGIN_URL = "/api/users/login";
-    public static final String SIGNING_URL = "/api/users";
 
     protected WebDriver driver;
     protected WebDriverWait wait;

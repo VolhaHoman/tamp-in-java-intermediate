@@ -82,9 +82,9 @@ public class UserSignUpTest extends AbstractTest {
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "has already been taken");
     }
 
-    @Test(description = "API Sign Up with blank credentials")
+    @Test(description = "API Sign Up with empty username")
     @Severity(SeverityLevel.CRITICAL)
-    @Description("API Sign Up with blank credentials")
+    @Description("API Sign Up with empty username")
     @Story("Create layers for API tests")
     public void apiBlankUserVerification() {
         ApiUserDTO apiUserDTO = new ApiUserDTO
