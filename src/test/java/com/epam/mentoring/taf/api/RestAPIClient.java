@@ -27,8 +27,30 @@ public class RestAPIClient {
         return response;
     }
 
+    @Step("Send API request to endpoint")
+    public Response sendApiRequest(ApiUserDTO apiUserDTO, String url, Logger logger) {
+
+        Response response = given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(apiUserDTO.toString())
+                .post(url)
+                .then()
+                .extract().response();
+        logger.info("Request body: " + apiUserDTO);
+        logger.info("Response status: " + response.getStatusCode());
+        return response;
+    }
+
     @Step("Transform API response to DTO")
     public ResponseDTO transformToDto(Response response) {
+        ResponseDTO responseDTO = response.body().as(ResponseDTO.class);
+        logger.info("Response message: " + responseDTO.getErrors().getUsername().get(0));
+        return responseDTO;
+    }
+
+    @Step("Transform API response to DTO")
+    public ResponseDTO transformToDto(Response response, Logger logger) {
         ResponseDTO responseDTO = response.body().as(ResponseDTO.class);
         logger.info("Response message: " + responseDTO.getErrors().getUsername().get(0));
         return responseDTO;

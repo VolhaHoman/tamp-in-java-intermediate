@@ -12,6 +12,8 @@ import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -24,6 +26,7 @@ import java.io.IOException;
 public class UserSignUpTest extends AbstractTest {
     private UserDataDTO userDataDTO;
     private UserDataDTO defaultUserData;
+    protected Logger log = LogManager.getLogger();
 
     @BeforeMethod(description = "Generate Test User")
     public void generateUserData() {
@@ -40,13 +43,13 @@ public class UserSignUpTest extends AbstractTest {
     @Description("UI Sign Up with new credentials")
     @Story("Investigate the issues and fix UserSignUpTest")
     public void signUpVerification() {
-        LoginPage loginPage = new LoginPage(baseUrl);
+        LoginPage loginPage = new LoginPage(baseUrl, log);
         loginPage.clickSignUpLink()
                 .fillInUsername(userDataDTO.getUserName())
                 .fillInEmail(userDataDTO.getUserEmail())
                 .fillInPassword(userDataDTO.getUserPassword())
                 .clickSignUpBtn();
-        HomePage homePage = new HomePage();
+        HomePage homePage = new HomePage(log);
         Assert.assertEquals(homePage.getUsernameAccountNav(), userDataDTO.getUserName());
     }
 
@@ -60,7 +63,7 @@ public class UserSignUpTest extends AbstractTest {
                 .setUsername(userDataDTO.getUserName())
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
@@ -74,8 +77,8 @@ public class UserSignUpTest extends AbstractTest {
                 .setUsername(defaultUserData.getUserName())
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS);
-        ResponseDTO responseDTO = restAPIClient.transformToDto(response);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
+        ResponseDTO responseDTO = restAPIClient.transformToDto(response, log);
         Assert.assertEquals(response.getStatusCode(), 422);
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "has already been taken");
     }
@@ -90,9 +93,10 @@ public class UserSignUpTest extends AbstractTest {
                 .setUsername("")
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS);
-        ResponseDTO responseDTO = restAPIClient.transformToDto(response);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
+        ResponseDTO responseDTO = restAPIClient.transformToDto(response, log);
         Assert.assertEquals(response.getStatusCode(), 422);
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "can't be blank");
     }
+
 }

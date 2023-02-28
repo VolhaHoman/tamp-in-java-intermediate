@@ -16,7 +16,7 @@
         </File>
         <Console name="Console">
             <PatternLayout>
-                <Pattern>%d %p %c{2} [%t] - %m%n</Pattern>
+                <Pattern>%d [%t] %-5level %logger{36} - %msg%n%</Pattern>
             </PatternLayout>
         </Console>
     </Appenders>
