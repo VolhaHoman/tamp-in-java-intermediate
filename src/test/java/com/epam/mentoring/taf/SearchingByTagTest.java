@@ -13,8 +13,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-
-import static org.hamcrest.Matchers.*;
+import java.util.List;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Searching By Tag Tests")
@@ -62,9 +61,9 @@ public class SearchingByTagTest extends AbstractTest {
     public void apiSearchByValidTag(String tag) {
         RestAPIClient RestAPIClient = new RestAPIClient();
         Response response = RestAPIClient.sendGetTagRequest(tag);
-        response.then().statusCode(200).body(TAG_LIST_JSON_PATH, is(not(empty())));
-        response.then().body(TAG_LIST_JSON_PATH, everyItem(hasItem(tag)));
-
+        List<String> tagList = response.getBody().jsonPath().get(TAG_LIST_JSON_PATH);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertTrue(tagList.toString().contains(tag));
     }
 
     @Test(description = "API Search by an invalid tag")
@@ -74,6 +73,8 @@ public class SearchingByTagTest extends AbstractTest {
     public void apiSearchByInvalidTag() {
         RestAPIClient RestAPIClient = new RestAPIClient();
         Response response = RestAPIClient.sendGetTagRequest(INVALID_TAG);
-        response.then().statusCode(200).body(ARTICLES_COUNT_JSON_PATH, equalTo(0));
+        int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(articlesCount, 0);
     }
 }
