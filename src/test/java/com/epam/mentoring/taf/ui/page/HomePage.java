@@ -46,7 +46,7 @@ public class HomePage extends BasePage {
 
     @Step("Get a tag name")
     public String getTagText() {
-//        logger.info("Get a tag from side bar: " + tag.getText();
+//        logger.info("Get a tag from side bar: " + tag.getText());
         return tag.getText();
     }
 
