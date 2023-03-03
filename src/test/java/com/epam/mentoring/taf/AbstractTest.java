@@ -2,6 +2,8 @@ package com.epam.mentoring.taf;
 
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
 import com.epam.mentoring.taf.util.Redirection;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
@@ -17,6 +19,7 @@ abstract public class AbstractTest {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
+    protected Logger log = LogManager.getLogger();
 
     Redirection redirection = new Redirection();
 

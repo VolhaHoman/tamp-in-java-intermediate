@@ -12,8 +12,6 @@ import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -26,7 +24,6 @@ import java.io.IOException;
 public class UserSignUpTest extends AbstractTest {
     private UserDataDTO userDataDTO;
     private UserDataDTO defaultUserData;
-    protected Logger log = LogManager.getLogger();
 
     @BeforeMethod(description = "Generate Test User")
     public void generateUserData() {
