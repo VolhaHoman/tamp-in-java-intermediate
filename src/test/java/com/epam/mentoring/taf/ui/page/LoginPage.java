@@ -1,7 +1,6 @@
 package com.epam.mentoring.taf.ui.page;
 
 import io.qameta.allure.Step;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -37,12 +36,6 @@ public class LoginPage extends BasePage {
     public WebElement signUpButton;
 
     private final String baseUrl;
-
-    public LoginPage(String baseUrl) {
-        this.baseUrl = baseUrl;
-        PageFactory.initElements(driver, this);
-        logger = LogManager.getLogger();
-    }
 
     public LoginPage(String baseUrl, Logger logger) {
         this.baseUrl = baseUrl;

@@ -1,7 +1,6 @@
 package com.epam.mentoring.taf.ui.page;
 
 import io.qameta.allure.Step;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,11 +25,6 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//a[@class='nav-link active']")
     private WebElement navLink;
-
-    public HomePage() {
-        PageFactory.initElements(driver, this);
-        logger = LogManager.getLogger();
-    }
 
     public HomePage(Logger logger) {
         PageFactory.initElements(driver, this);

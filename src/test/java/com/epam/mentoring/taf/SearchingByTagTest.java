@@ -50,7 +50,7 @@ public class SearchingByTagTest extends AbstractTest {
     @Description("UI Search by a valid tag")
     @Story("Add UI and API layers support to SearchByTagTest")
     public void uiSearchByRandomValidTag() {
-        HomePage homePage = new HomePage();
+        HomePage homePage = new HomePage(log);
         String tagName = homePage.getTagFromSidebar().getTagText();
         homePage.clickTag();
         String selectedTag = homePage.getNavLink();
