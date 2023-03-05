@@ -1,12 +1,12 @@
 package com.epam.mentoring.taf.ui.page;
 
 import io.qameta.allure.Step;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import static com.epam.mentoring.taf.data.UserData.DEFAULT_EMAIL;
 
 public class LoginPage extends BasePage {
 
@@ -41,23 +41,33 @@ public class LoginPage extends BasePage {
     public LoginPage(String baseUrl) {
         this.baseUrl = baseUrl;
         PageFactory.initElements(driver, this);
+        logger = LogManager.getLogger();
+    }
+
+    public LoginPage(String baseUrl, Logger logger) {
+        this.baseUrl = baseUrl;
+        PageFactory.initElements(driver, this);
+        this.logger = logger;
     }
 
     @Step("Get invalid credentials message")
     public String getInvalidCredentialsMessage() {
         wait.until(ExpectedConditions.visibilityOf(invalidCredentialsMessage));
+        logger.info("Appear error message: '" + invalidCredentialsMessage.getText() + "'");
         return invalidCredentialsMessage.getText();
     }
 
     @Step("Fill in email")
-    public LoginPage fillInEmail() {
-        emailField.sendKeys(DEFAULT_EMAIL);
+    public LoginPage fillInEmail(String email) {
+        emailField.sendKeys(email);
+        logger.info("Fill in email: " + email);
         return this;
     }
 
     @Step("Fill in password {0}")
     public LoginPage fillInPassword(String password) {
         passwordField.sendKeys(password);
+        logger.info("Fill in password: " + password);
         return this;
     }
 
@@ -65,12 +75,14 @@ public class LoginPage extends BasePage {
     public LoginPage clickSignInLink() {
         driver.get(baseUrl);
         signInLink.click();
+        logger.info("Click on 'Sign In' link");
         return this;
     }
 
     @Step("Click on 'Sign In' button")
     public LoginPage clickSignInBtn() {
         signInButton.click();
+        logger.info("Click on 'Sign In' button");
         return this;
     }
 
@@ -78,12 +90,14 @@ public class LoginPage extends BasePage {
     public LoginPage clickSignUpLink() {
         driver.get(baseUrl);
         signUpLink.click();
+        logger.info("Click on 'Sign Up' link");
         return this;
     }
 
     @Step("Click on 'Sign Up' button")
     public LoginPage clickSignUpBtn() {
         signUpButton.click();
+        logger.info("Click on 'Sign Up' button");
         return this;
     }
 
@@ -93,9 +107,4 @@ public class LoginPage extends BasePage {
         return this;
     }
 
-    @Step("Fill in email")
-    public LoginPage fillInEmail(String email) {
-        emailField.sendKeys(email);
-        return this;
-    }
 }

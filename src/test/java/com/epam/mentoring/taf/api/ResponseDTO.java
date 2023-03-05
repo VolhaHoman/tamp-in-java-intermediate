@@ -3,7 +3,6 @@ package com.epam.mentoring.taf.api;
 import java.util.List;
 
 public class ResponseDTO {
-
     private Errors errors;
 
     public Errors getErrors() {
@@ -33,7 +32,6 @@ public class ResponseDTO {
         public void setUsername(List<String> username) {
             this.username = username;
         }
-
     }
 
 }

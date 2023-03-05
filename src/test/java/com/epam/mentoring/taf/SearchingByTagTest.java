@@ -1,6 +1,7 @@
 package com.epam.mentoring.taf;
 
 import com.epam.mentoring.taf.api.RestAPIClient;
+import com.epam.mentoring.taf.exception.EmptyFileException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.service.YamlReader;
@@ -30,16 +31,15 @@ public class SearchingByTagTest extends AbstractTest {
     }
 
     private Object[][] getTags() throws IOException {
-        try {
-            String[] tags = READER.readTags();
-            Object[][] data = new Object[tags.length][1];
-            for (int i = 0; i < tags.length; i++) {
-                data[i][0] = tags[i];
-            }
-            return data;
-        } catch (IOException e) {
-            throw new IOException("Failed to load the file.");
+        String[] tags = READER.readTags();
+        if (tags == null || tags.length == 0) {
+            throw new EmptyFileException("List of tags are empty.");
         }
+        Object[][] data = new Object[tags.length][1];
+        for (int i = 0; i < tags.length; i++) {
+            data[i][0] = tags[i];
+        }
+        return data;
     }
 
     @Test(description = "UI Search by a valid tag")
@@ -77,4 +77,5 @@ public class SearchingByTagTest extends AbstractTest {
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(articlesCount, 0);
     }
+
 }

@@ -6,7 +6,6 @@ import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TagConfiguration {
-
     private String[] tags;
 
     public String[] getTags() {
@@ -17,9 +16,11 @@ public class TagConfiguration {
         this.tags = tags;
     }
 
+    @Override
     public String toString() {
         return "Tag{" +
                 "tags=" + Arrays.toString(tags) +
                 '}';
     }
+
 }

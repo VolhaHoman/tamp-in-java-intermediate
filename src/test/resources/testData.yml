@@ -1,0 +1,14 @@
+tags:
+  - welcome
+  - ipsum
+  - et
+
+testUser:
+  userName: Test User
+  userEmail: test_user@example.com
+  userPassword: test_password
+
+signInUser:
+  userEmail: tom_marvolo@example.com
+  userPassword: Voldemort
+  userName: Tom Marvolo Riddle
