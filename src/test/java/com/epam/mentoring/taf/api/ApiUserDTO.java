@@ -34,7 +34,6 @@ public class ApiUserDTO {
         private String email;
         private String password;
 
-
         public ApiUserDTOBuilder(String email, String password) {
             this.email = email;
             this.password = password;

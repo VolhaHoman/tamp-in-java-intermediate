@@ -8,10 +8,6 @@ import java.io.IOException;
 
 public class UserData {
 
-    public static final String DEFAULT_USERNAME = "Tom Marvolo Riddle";
-    public static final String DEFAULT_EMAIL = "tom_marvolo@example.com";
-    public static final String DEFAULT_PASSWORD = "Voldemort";
-
     public static final YamlReader YAML_READER = new YamlReader();
 
     private static String generateUniqueId() {

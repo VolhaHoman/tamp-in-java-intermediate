@@ -12,9 +12,11 @@ public class BrowserConfiguration {
         this.browser = browser;
     }
 
+    @Override
     public String toString() {
         return "BrowserConfiguration{" +
                 "browser='" + browser + '\'' +
                 '}';
     }
+
 }
