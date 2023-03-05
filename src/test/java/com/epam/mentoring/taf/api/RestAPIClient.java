@@ -14,21 +14,6 @@ public class RestAPIClient {
     public final Logger logger = LogManager.getRootLogger();
 
     @Step("Send API request to endpoint")
-    public Response sendApiRequest(ApiUserDTO apiUserDTO, String url) {
-
-        Response response = given()
-                .when()
-                .contentType(ContentType.JSON)
-                .body(apiUserDTO.toString())
-                .post(url)
-                .then()
-                .extract().response();
-        logger.info("Request body: " + apiUserDTO);
-        logger.info("Response status: " + response.getStatusCode());
-        return response;
-    }
-
-    @Step("Send API request to endpoint")
     public Response sendApiRequest(ApiUserDTO apiUserDTO, String url, Logger logger) {
 
         Response response = given()
@@ -51,7 +36,7 @@ public class RestAPIClient {
     }
 
     @Step("Send Get request for the given tag")
-    public Response sendGetTagRequest(String tag) {
+    public Response sendGetTagRequest(String tag, Logger logger) {
         Response response = given()
                 .baseUri(AbstractTest.API_URL)
                 .when()

@@ -8,6 +8,8 @@ import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.ui.page.HomePage;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
@@ -24,6 +26,7 @@ public class SearchingByTagTest extends AbstractTest {
     public static final String INVALID_TAG = "invalid_tag_name";
     public static final String TAG_LIST_JSON_PATH = "articles.tagList";
     public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
+    private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "apiDataProvider")
     public Object[][] apiDataProviderMethod() throws IOException {
@@ -60,7 +63,7 @@ public class SearchingByTagTest extends AbstractTest {
     @Story("Add UI and API layers support to SearchByTagTest")
     public void apiSearchByValidTag(String tag) {
         RestAPIClient RestAPIClient = new RestAPIClient();
-        Response response = RestAPIClient.sendGetTagRequest(tag);
+        Response response = RestAPIClient.sendGetTagRequest(tag, log);
         List<String> tagList = response.getBody().jsonPath().get(TAG_LIST_JSON_PATH);
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertTrue(tagList.toString().contains(tag));
@@ -72,7 +75,7 @@ public class SearchingByTagTest extends AbstractTest {
     @Story("Add UI and API layers support to SearchByTagTest")
     public void apiSearchByInvalidTag() {
         RestAPIClient RestAPIClient = new RestAPIClient();
-        Response response = RestAPIClient.sendGetTagRequest(INVALID_TAG);
+        Response response = RestAPIClient.sendGetTagRequest(INVALID_TAG, log);
         int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(articlesCount, 0);
