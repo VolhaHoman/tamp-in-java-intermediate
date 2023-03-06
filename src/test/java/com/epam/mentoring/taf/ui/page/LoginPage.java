@@ -97,6 +97,7 @@ public class LoginPage extends BasePage {
     @Step("Fill in username")
     public LoginPage fillInUsername(String username) {
         usernameField.sendKeys(username);
+        logger.info("Fill in username: " + username);
         return this;
     }
 
