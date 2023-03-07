@@ -1,35 +1,32 @@
 package com.epam.mentoring.taf;
 
+import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.exception.EmptyFileException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.service.YamlReader;
+import com.epam.mentoring.taf.ui.page.HomePage;
 import io.qameta.allure.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import io.restassured.response.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import java.util.List;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Searching By Tag Tests")
 public class SearchingByTagTest extends AbstractTest {
 
     public static final YamlReader READER = new YamlReader();
-    private static final String ARTICLES_BY_TAG_URL = "/api/articles?tag={tag}&limit=10&offset=0";
     public static final String INVALID_TAG = "invalid_tag_name";
     public static final String TAG_LIST_JSON_PATH = "articles.tagList";
     public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
-    public static final String APP_ARTICLE_PREVIEW_XPATH = "//div[@class='app-article-preview' and not(@hidden)]";
-    public static final String TAG_PILL_XPATH = "//a[contains(@class,'tag-pill')]";
-    public static final String NAV_LINK_XPATH = "//a[@class='nav-link active']";
+    private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "apiDataProvider")
     public Object[][] apiDataProviderMethod() throws IOException {
@@ -51,46 +48,37 @@ public class SearchingByTagTest extends AbstractTest {
     @Test(description = "UI Search by a valid tag")
     @Severity(SeverityLevel.CRITICAL)
     @Description("UI Search by a valid tag")
-    @Story("Investigate the issues and fix SearchingByTagTest")
+    @Story("Add UI and API layers support to SearchByTagTest")
     public void uiSearchByRandomValidTag() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(TAG_PILL_XPATH)));
-        int tagCount = driver.findElements(By.xpath(TAG_PILL_XPATH)).size();
-        int randomTag = (int) (Math.random() * tagCount + 1);
-        WebElement tag = driver.findElement(By.xpath(TAG_PILL_XPATH + "[" + randomTag + "]"));
-        String tagName = tag.getText();
-        tag.click();
-
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(APP_ARTICLE_PREVIEW_XPATH)));
-        String selectedTag = driver.findElement(By.xpath(NAV_LINK_XPATH)).getText();
+        HomePage homePage = new HomePage(log);
+        String tagName = homePage.getTagFromSidebar().getTagText();
+        homePage.clickTag();
+        String selectedTag = homePage.getNavLink();
         Assert.assertEquals(selectedTag, tagName);
     }
 
     @Test(dataProvider = "apiDataProvider", description = "API Search by a valid tag")
     @Severity(SeverityLevel.CRITICAL)
     @Description("API Search by a valid tag")
-    @Story("Create layers for Data storing")
+    @Story("Add UI and API layers support to SearchByTagTest")
     public void apiSearchByValidTag(String tag) {
-        given()
-                .baseUri(API_URL)
-                .when()
-                .get(ARTICLES_BY_TAG_URL, tag)
-                .then()
-                .statusCode(200)
-                .body(TAG_LIST_JSON_PATH, everyItem(hasItem(tag)));
+        RestAPIClient RestAPIClient = new RestAPIClient();
+        Response response = RestAPIClient.sendGetTagRequest(tag, log);
+        List<String> tagList = response.getBody().jsonPath().get(TAG_LIST_JSON_PATH);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertTrue(tagList.toString().contains(tag));
     }
 
     @Test(description = "API Search by an invalid tag")
     @Severity(SeverityLevel.MINOR)
     @Description("API Search by an invalid tag")
-    @Story("Create layers for Data storing")
+    @Story("Add UI and API layers support to SearchByTagTest")
     public void apiSearchByInvalidTag() {
-        given()
-                .baseUri(API_URL)
-                .when()
-                .get(ARTICLES_BY_TAG_URL, INVALID_TAG)
-                .then()
-                .statusCode(200)
-                .body(ARTICLES_COUNT_JSON_PATH, equalTo(0));
+        RestAPIClient RestAPIClient = new RestAPIClient();
+        Response response = RestAPIClient.sendGetTagRequest(INVALID_TAG, log);
+        int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(articlesCount, 0);
     }
 
 }
