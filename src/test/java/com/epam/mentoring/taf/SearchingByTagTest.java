@@ -6,6 +6,7 @@ import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.ui.page.HomePage;
+import com.epam.mentoring.taf.util.DataProviderHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
@@ -31,18 +32,6 @@ public class SearchingByTagTest extends AbstractTest {
     @DataProvider(name = "apiDataProvider")
     public Object[][] apiDataProviderMethod() throws IOException {
         return getTags();
-    }
-
-    private Object[][] getTags() throws IOException {
-        String[] tags = READER.readTags();
-        if (tags == null || tags.length == 0) {
-            throw new EmptyFileException("List of tags are empty.");
-        }
-        Object[][] data = new Object[tags.length][1];
-        for (int i = 0; i < tags.length; i++) {
-            data[i][0] = tags[i];
-        }
-        return data;
     }
 
     @Test(description = "UI Search by a valid tag")
@@ -81,4 +70,11 @@ public class SearchingByTagTest extends AbstractTest {
         Assert.assertEquals(articlesCount, 0);
     }
 
+    private Object[][] getTags() throws IOException {
+        try {
+            return DataProviderHelper.mapToProviderArray( READER.readTags());
+        } catch (IOException e) {
+            throw new IOException("Failed to load file.");
+        }
+    }
 }

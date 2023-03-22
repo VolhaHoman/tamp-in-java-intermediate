@@ -30,7 +30,7 @@ public class WebDriverCreate {
     public static WebDriverWait getWebDriverWaitInstance() {
         initProps();
         if (wait == null) {
-            wait = new WebDriverWait(getWebDriverInstance(), 2);
+            wait = new WebDriverWait(getWebDriverInstance(), 5);
         }
         return wait;
     }

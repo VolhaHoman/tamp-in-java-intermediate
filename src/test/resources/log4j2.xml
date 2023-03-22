@@ -27,7 +27,6 @@
             <AppenderRef ref="File"/>
         </Root>
         <Logger name="com.epam.reportportal" level="INFO" additivity="true">
-            <AppenderRef ref="ConsoleAppender"/>
             <AppenderRef ref="ReportPortalAppender"/>
         </Logger>
     </Loggers>

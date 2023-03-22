@@ -38,7 +38,8 @@ where:
 ## License
 
 ## REPORT PORTAL
-Add to your local system env properties RP_UUID (rp.uuid) and RP_PROJECT (rp.project)
+Add to your local system env properties RP_UUID (rp.uuid) and RP_PROJECT (rp.project). 
+These properties can be found in your report portal profile on https://reportportal.epam.com.
 
 E.g: 
 export RP_UUID=4394hfkj-ewti74hifw-wkfubf-w484u

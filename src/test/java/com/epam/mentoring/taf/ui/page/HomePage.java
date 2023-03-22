@@ -25,6 +25,11 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//a[@class='nav-link active']")
     private WebElement navLink;
+    @FindBy(xpath = "//li/a[contains(text(),'Your Feed')]")
+    private WebElement userFeedNav;
+
+    @FindBy(xpath = "(//div[@class='row'])[last()]/descendant::div[@class='article-preview']//a[@class='author']")
+    private WebElement userFeedAuthor;
 
     public HomePage(Logger logger) {
         PageFactory.initElements(driver, this);
@@ -65,5 +70,27 @@ public class HomePage extends BasePage {
         wait.until(ExpectedConditions.visibilityOf(articlePreview));
         logger.info("Get the new tag tab title: " + navLink.getText());
         return navLink.getText();
+    }
+
+    @Step("Verify 'Your Feed' exists")
+    public String getYourFeedNav() {
+        wait.until(ExpectedConditions.visibilityOf(userFeedNav));
+        logger.info("Get user feed: " + userFeedNav.getText());
+        return userFeedNav.getText();
+    }
+
+    @Step("Verify 'Your Feed Author' exists")
+    public String getYourFeedAuthor() {
+        wait.until(ExpectedConditions.visibilityOf(userFeedAuthor));
+        logger.info("Get user feed: " + userFeedAuthor.getText());
+        return userFeedAuthor.getText();
+    }
+
+    @Step("Click on 'Celeb User' link")
+    public HomePage clickCelebUserLink() {
+        wait.until(ExpectedConditions.elementToBeClickable(userFeedAuthor));
+        userFeedAuthor.click();
+        logger.info("Click on 'Celeb User' link");
+        return this;
     }
 }
