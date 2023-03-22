@@ -29,6 +29,25 @@ public class RestAPIClient {
     }
 
     @Step("Transform API response to DTO")
+    public ResponseDTO transformToDto(Response response) {
+        ResponseDTO responseDTO = response.body().as(ResponseDTO.class);
+        logger.info("Response message: " + responseDTO.getErrors().getUsername().get(0));
+        return responseDTO;
+    }
+
+    public CommentDTO transformToDtoCom(Response response) {
+        CommentDTO commentDTO = response.body().as(CommentDTO.class);
+        // logger.info("Response message: " + commentDTO.getComment().getBody().toString());
+        return commentDTO;
+    }
+
+    public ArticleDTO transformToDtoArt(Response response) {
+        ArticleDTO arDTO = response.body().as(ArticleDTO.class);
+        // logger.info("Response message: " + commentDTO.getComment().getBody().toString());
+        return arDTO;
+    }
+
+    @Step("Transform API response to DTO")
     public ResponseDTO transformToDto(Response response, Logger logger) {
         ResponseDTO responseDTO = response.body().as(ResponseDTO.class);
         logger.info("Response message: " + responseDTO.getErrors().getUsername().get(0));

@@ -16,6 +16,12 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//ul[contains(@class,'navbar-nav')]/li[4]/a")
     private WebElement usernameAccountNav;
+    @FindBy(xpath = "//a[contains(text(),'Global Feed')]")
+    private WebElement globalLink;
+    @FindBy(xpath = "//app-article-list/app-article-preview[1]/div/a")
+    private WebElement article;
+    @FindBy(xpath = "//a[contains(@class,'nav-link')]/img")
+    private WebElement user;
 
     @FindBy(xpath = "//a[contains(@class,'tag-pill')]")
     private List<WebElement> tagPills;
@@ -93,4 +99,29 @@ public class HomePage extends BasePage {
         logger.info("Click on 'Celeb User' link");
         return this;
     }
+
+    @Step("Navigate to Global feed")
+    public HomePage navGlobalFeed() {
+        wait.until(ExpectedConditions.visibilityOf(globalLink));
+        globalLink.click();
+        logger.info("Navigate to Global feed");
+        return this;
+    }
+
+    @Step("Select article")
+    public void selectFirstArt() {
+        wait.until(ExpectedConditions.visibilityOf(article));
+        article.click();
+        logger.info("Select article");
+
+    }
+
+    @Step("Navigate to User page")
+    public HomePage navToUser() {
+        wait.until(ExpectedConditions.visibilityOf(user));
+        user.click();
+        logger.info("Navigate to User page");
+        return this;
+    }
+
 }
