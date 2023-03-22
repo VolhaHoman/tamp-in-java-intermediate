@@ -22,7 +22,7 @@ import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
 
-import static com.epam.mentoring.taf.FollowUserTest.AUTH_TOKEN;
+import static com.epam.mentoring.taf.FollowUserTest.*;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.*;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
 
@@ -34,7 +34,7 @@ abstract public class AbstractTest {
     public static final String LOGIN_URL = "/api/users/login";
     public static final String API_LOGIN = API_URL + LOGIN_URL;
     public static final String API_PROFILES = "https://api.realworld.io/api/profiles/";
-    public static final String BASE_PATH = "/follow";
+    public static final String FOLLOW_PATH = "/follow";
 
     protected WebDriver driver;
     protected WebDriverWait wait;
@@ -62,11 +62,18 @@ abstract public class AbstractTest {
 
         String authToken =
                 response.getBody().jsonPath().get("user.token");
+        String adminUserEmail = defaultUserData.getUserEmail();
+        String adminUserPassword = defaultUserData.getUserPassword();
+        String adminUserName = defaultUserData.getUserName();
+
         log.info("Username: " + defaultUserData.getUserName());
         log.info("User email: " + defaultUserData.getUserEmail());
         log.info("token: " + authToken);
 
         rememberThat(AUTH_TOKEN, authToken);
+        rememberThat(ADMIN_EMAIL, adminUserEmail);
+        rememberThat(ADMIN_PASSWORD, adminUserPassword);
+        rememberThat(ADMIN_USERNAME, adminUserName);
     }
 
     @BeforeMethod

@@ -1,8 +1,5 @@
 package com.epam.mentoring.taf;
 
-import com.epam.mentoring.taf.data.UserData;
-import com.epam.mentoring.taf.data.UserDataDTO;
-import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.model.UserDataModel;
@@ -16,7 +13,6 @@ import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -26,11 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
-@Feature("Sign Up Tests")
+@Feature("Follow User Functionality")
 public class FollowUserTest extends AbstractTest {
 
     public static final String AUTH_TOKEN = "AUTH_TOKEN";
-    private UserDataDTO defaultUserData;
+    public static final String ADMIN_EMAIL = "ADMIN_USER";
+    public static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
+    public static final String ADMIN_USERNAME = "ADMIN_USERNAME";
     private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "csvDataProvider")
@@ -39,22 +37,13 @@ public class FollowUserTest extends AbstractTest {
         return DataProviderHelper.mapToProviderArray(userDataModels);
     }
 
-    @BeforeMethod(description = "Generate default Sign in User")
-    public void generateUserData() {
-        try {
-            defaultUserData = UserData.getUserDataFromYaml("adminUser");
-        } catch (IOException e) {
-            throw new ConfigurationSetupException("Can't load default user data", e);
-        }
-    }
-
     @Test(description = "Pre-condition: follow the user", dataProvider = "csvDataProvider", priority = 0)
     @Severity(SeverityLevel.BLOCKER)
     @Description("API follow the user request")
     @Story("Create new tests for users following functionality")
     public void followUser(UserDataModel model) {
 
-        String path = API_PROFILES + model.getCelebUsername() + BASE_PATH;
+        String path = API_PROFILES + model.getCelebUsername() + FOLLOW_PATH;
 
         Response response = client.sendPostRequestWithHeaders(path, "", Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
@@ -71,15 +60,15 @@ public class FollowUserTest extends AbstractTest {
     public void uiSignInAsAdminUser(UserDataModel model) {
 
         loginPage.clickSignInLink()
-                .fillInEmail(defaultUserData.getUserEmail())
-                .fillInPassword(defaultUserData.getUserPassword())
+                .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
+                .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
                 .clickSignInBtn();
 
-        Assert.assertEquals(homePage.getUsernameAccountNav(), defaultUserData.getUserName());
+        Assert.assertEquals(homePage.getUsernameAccountNav(), StorageHelper.whatIsThe(ADMIN_USERNAME));
         Assert.assertEquals(homePage.getYourFeedNav(), "Your Feed");
         Assert.assertEquals(homePage.getYourFeedAuthor(), model.getCelebUsername());
 
-        log.info("Admin user name is: " + defaultUserData.getUserName());
+        log.info("Admin user name is: " + StorageHelper.whatIsThe(ADMIN_USERNAME));
         log.info("Your Feed tab exists: " + homePage.getYourFeedNav());
         log.info("Author name is: " + model.getCelebUsername());
     }
@@ -105,7 +94,7 @@ public class FollowUserTest extends AbstractTest {
     @Story("Create new tests for users following functionality")
     public void unfollowUser(UserDataModel model) {
 
-        String path = API_PROFILES + model.getCelebUsername() + BASE_PATH;
+        String path = API_PROFILES + model.getCelebUsername() + FOLLOW_PATH;
 
         Response response = client.sendDeleteRequestWithHeaders(path, "", Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
