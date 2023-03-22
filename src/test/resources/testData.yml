@@ -17,3 +17,8 @@ adminUser:
   userName: Fox_Tribb
   userEmail: fox_teddy@example.com
   userPassword: 662goqOO07^
+
+commentUser:
+  userEmail: test_comment@example.com
+  userPassword: Comment
+  userName: Comment User
