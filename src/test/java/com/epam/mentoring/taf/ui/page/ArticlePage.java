@@ -1,7 +1,6 @@
 package com.epam.mentoring.taf.ui.page;
 
 import io.qameta.allure.Step;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,14 +18,12 @@ public class ArticlePage extends BasePage {
     public WebElement trashBtn;
     @FindBy(xpath = "//ul[contains(@class, 'error-messages')]")
     public WebElement errorMsg;
-    public ArticlePage() {
-        PageFactory.initElements(driver, this);
-        logger = LogManager.getLogger();
-    }
+
     public ArticlePage(Logger logger) {
         PageFactory.initElements(driver, this);
         this.logger = logger;
     }
+
     @Step("Enter the comment")
     public ArticlePage enterComment(String text) {
         wait.until(ExpectedConditions.visibilityOf(commentArea));
@@ -34,6 +31,7 @@ public class ArticlePage extends BasePage {
         logger.info("Enter the following comment: " + text);
         return this;
     }
+
     @Step("Send comment")
     public ArticlePage sendComment() {
         wait.until(ExpectedConditions.visibilityOf(sendBtn));
@@ -41,6 +39,7 @@ public class ArticlePage extends BasePage {
         logger.info("Send comment");
         return this;
     }
+
     @Step("Delete comment")
     public ArticlePage deleteComment() {
         wait.until(ExpectedConditions.visibilityOf(trashBtn));
@@ -48,19 +47,13 @@ public class ArticlePage extends BasePage {
         logger.info("Delete comment");
         return this;
     }
+
     @Step("Get text of comment")
-    public String getComment() throws InterruptedException {
+    public String getComment() {
         wait.until(ExpectedConditions.visibilityOf(cardArea));
-        Thread.sleep(2000);
         cardArea.getText();
         logger.info("The following comment is added: " + cardArea.getText());
         return cardArea.getText();
-    }
-    @Step("Comment is not presented check")
-    public boolean commentIsNotPresent() {
-        cardArea.isDisplayed();
-        return true;
-        // return driver.findElements(By.xpath(String.valueOf(cardArea))).isEmpty();
     }
 
     @Step("Get error message")
@@ -71,5 +64,11 @@ public class ArticlePage extends BasePage {
         return errorMsg.getText();
     }
 
+    @Step("Verify that comment is empty")
+    public boolean commentIsNotPresent() {
+        cardArea.isDisplayed();
+        logger.info("Comment is not displayed");
+        return true;
+    }
 }
 
