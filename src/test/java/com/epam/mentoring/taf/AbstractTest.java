@@ -5,6 +5,8 @@ import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
+import com.epam.mentoring.taf.ui.page.ArticlePage;
+import com.epam.mentoring.taf.ui.page.ArticlePage;
 import com.epam.mentoring.taf.ui.page.CelebPage;
 import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
@@ -24,6 +26,8 @@ import org.testng.annotations.BeforeMethod;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
+import static com.epam.mentoring.taf.CommentTest.SLUG;
 import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
 import static com.epam.mentoring.taf.FollowUserTest.*;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
@@ -53,6 +57,7 @@ abstract public class AbstractTest {
     protected LoginPage loginPage;
     protected HomePage homePage;
     protected CelebPage celebPage;
+    protected ArticlePage articlePage;
 
     Redirection redirection = new Redirection();
 
@@ -93,7 +98,6 @@ abstract public class AbstractTest {
                 getResponse.getBody().jsonPath().get("articles[0].slug");
         log.info("slug: " + slug);
         rememberThat(SLUG, slug);
-
         String allCommentPath = API_ARTICLES + whatIsThe(SLUG) + COMMENT_PATH;
         rememberThat(ALL_COMMENT, allCommentPath);
     }

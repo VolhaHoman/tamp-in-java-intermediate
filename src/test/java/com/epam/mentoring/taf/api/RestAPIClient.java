@@ -17,6 +17,7 @@ public class RestAPIClient {
 
     @Step("Send API request to endpoint")
     public Response sendApiRequest(ApiUserDTO apiUserDTO, String url, Logger logger) {
+
         Response response = given()
                 .when()
                 .contentType(ContentType.JSON)
@@ -46,5 +47,4 @@ public class RestAPIClient {
         logger.info("Response status: " + response.getStatusCode());
         return response;
     }
-
 }
