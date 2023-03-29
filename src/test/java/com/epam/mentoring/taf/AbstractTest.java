@@ -5,6 +5,7 @@ import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
+import com.epam.mentoring.taf.ui.page.ArticlePage;
 import com.epam.mentoring.taf.ui.page.CelebPage;
 import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
@@ -22,9 +23,12 @@ import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
 
+import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
+import static com.epam.mentoring.taf.CommentTest.SLUG;
 import static com.epam.mentoring.taf.FollowUserTest.*;
-import static com.epam.mentoring.taf.mapper.UserDataMapper.*;
+import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
+import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 abstract public class AbstractTest {
 
@@ -35,6 +39,8 @@ abstract public class AbstractTest {
     public static final String API_LOGIN = API_URL + LOGIN_URL;
     public static final String API_PROFILES = "https://api.realworld.io/api/profiles/";
     public static final String FOLLOW_PATH = "/follow";
+    public static final String API_ARTICLES = "https://api.realworld.io/api/articles/";
+    public static final String COMMENT_PATH = "/comments";
 
     protected WebDriver driver;
     protected WebDriverWait wait;

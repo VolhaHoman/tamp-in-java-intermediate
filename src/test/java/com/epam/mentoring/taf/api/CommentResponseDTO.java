@@ -24,7 +24,7 @@ public class CommentResponseDTO {
         private String body;
 
         public ApiDTOBuilder(String body) {
-            this.body = body;
+            this.body = String.valueOf(body);
         }
 
         public CommentResponseDTO.ApiDTOBuilder setBody(String text) {
@@ -36,5 +36,4 @@ public class CommentResponseDTO {
             return new CommentResponseDTO(this);
         }
     }
-
 }

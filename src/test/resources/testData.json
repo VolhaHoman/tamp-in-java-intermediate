@@ -1,10 +1,10 @@
 {
-  "comment": [
-    {
-      "body": "Text1"
-    },
-    {
-      "body": "Text2"
-    }
+  "valid_text": [
+    {"body": "This is the first valid comment."},
+    {"body": "This is the second valid comment."},
+    {"body": "This is the third valid comment."}
+  ],
+  "invalid_text": [
+    ""
   ]
 }

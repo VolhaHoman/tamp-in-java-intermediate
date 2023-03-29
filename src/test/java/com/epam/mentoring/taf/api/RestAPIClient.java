@@ -15,7 +15,6 @@ public class RestAPIClient {
 
     @Step("Send API request to endpoint")
     public Response sendApiRequest(ApiUserDTO apiUserDTO, String url, Logger logger) {
-
         Response response = given()
                 .when()
                 .contentType(ContentType.JSON)
@@ -26,25 +25,6 @@ public class RestAPIClient {
         logger.info("Request body: " + apiUserDTO);
         logger.info("Response status: " + response.getStatusCode());
         return response;
-    }
-
-    @Step("Transform API response to DTO")
-    public ResponseDTO transformToDto(Response response) {
-        ResponseDTO responseDTO = response.body().as(ResponseDTO.class);
-        logger.info("Response message: " + responseDTO.getErrors().getUsername().get(0));
-        return responseDTO;
-    }
-
-    public CommentDTO transformToDtoCom(Response response) {
-        CommentDTO commentDTO = response.body().as(CommentDTO.class);
-        // logger.info("Response message: " + commentDTO.getComment().getBody().toString());
-        return commentDTO;
-    }
-
-    public ArticleDTO transformToDtoArt(Response response) {
-        ArticleDTO arDTO = response.body().as(ArticleDTO.class);
-        // logger.info("Response message: " + commentDTO.getComment().getBody().toString());
-        return arDTO;
     }
 
     @Step("Transform API response to DTO")
@@ -60,8 +40,14 @@ public class RestAPIClient {
                 .baseUri(AbstractTest.API_URL)
                 .when()
                 .get(ARTICLES_BY_TAG_URL, tag);
-                logger.info("Request sent for: " + tag);
-                logger.info("Response status: " + response.getStatusCode());
+        logger.info("Request sent for: " + tag);
+        logger.info("Response status: " + response.getStatusCode());
         return response;
+    }
+
+    @Step("Transform API response to DTO for comment")
+    public CommentDTO transformToDtoCom(Response response) {
+        CommentDTO commentDTO = response.body().as(CommentDTO.class);
+        return commentDTO;
     }
 }

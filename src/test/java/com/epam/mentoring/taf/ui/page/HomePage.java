@@ -16,6 +16,16 @@ public class HomePage extends BasePage {
 
     private WebElement tag;
 
+    @FindBy(xpath = "//a[contains(@class,'tag-pill')]")
+    private List<WebElement> tagPills;
+    @FindBy(xpath = "//div[@class='app-article-preview' and not(@hidden)]")
+    private WebElement articlePreview;
+    @FindBy(xpath = "//a[@class='nav-link active']")
+    private WebElement navLink;
+    @FindBy(xpath = "//li/a[contains(text(),'Your Feed')]")
+    private WebElement userFeedNav;
+    @FindBy(xpath = "(//div[@class='row'])[last()]/descendant::div[@class='article-preview']//a[@class='author']")
+    private WebElement userFeedAuthor;
     @FindBy(xpath = "//ul[contains(@class,'navbar-nav')]/li[4]/a")
     private WebElement usernameAccountNav;
     @FindBy(xpath = "//a[contains(text(),'Global Feed')]")
@@ -23,21 +33,7 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//app-article-list/app-article-preview[1]/div/a")
     private WebElement article;
     @FindBy(xpath = "//a[contains(@class,'nav-link')]/img")
-    private WebElement user;
-
-    @FindBy(xpath = "//a[contains(@class,'tag-pill')]")
-    private List<WebElement> tagPills;
-
-    @FindBy(xpath = "//div[@class='app-article-preview' and not(@hidden)]")
-    private WebElement articlePreview;
-
-    @FindBy(xpath = "//a[@class='nav-link active']")
-    private WebElement navLink;
-    @FindBy(xpath = "//li/a[contains(text(),'Your Feed')]")
-    private WebElement userFeedNav;
-
-    @FindBy(xpath = "(//div[@class='row'])[last()]/descendant::div[@class='article-preview']//a[@class='author']")
-    private WebElement userFeedAuthor;
+    private WebElement userIcon;
 
     public HomePage(Logger logger) {
         PageFactory.initElements(driver, this);
@@ -109,6 +105,21 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    @Step("Select article")
+    public void selectArt() {
+        wait.until(ExpectedConditions.visibilityOf(article));
+        article.click();
+        logger.info("Select article");
+    }
+
+    @Step("Navigate to User page")
+    public HomePage navToUser() {
+        wait.until(ExpectedConditions.visibilityOf(userIcon));
+        userIcon.click();
+        logger.info("Navigate to User page");
+        return this;
+    }
+
     @Step("Navigate to Global feed")
     public HomePage navGlobalFeed() {
         wait.until(ExpectedConditions.visibilityOf(globalLink));
@@ -116,21 +127,4 @@ public class HomePage extends BasePage {
         logger.info("Navigate to Global feed");
         return this;
     }
-
-    @Step("Select article")
-    public void selectFirstArt() {
-        wait.until(ExpectedConditions.visibilityOf(article));
-        article.click();
-        logger.info("Select article");
-
-    }
-
-    @Step("Navigate to User page")
-    public HomePage navToUser() {
-        wait.until(ExpectedConditions.visibilityOf(user));
-        user.click();
-        logger.info("Navigate to User page");
-        return this;
-    }
-
 }
