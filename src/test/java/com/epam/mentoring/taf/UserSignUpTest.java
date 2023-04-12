@@ -1,7 +1,7 @@
 package com.epam.mentoring.taf;
 
 import com.epam.mentoring.taf.api.ApiUserDTO;
-import com.epam.mentoring.taf.api.ResponseDTO;
+import com.epam.mentoring.taf.api.SignInResponseDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
@@ -78,9 +78,9 @@ public class UserSignUpTest extends AbstractTest {
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
-        ResponseDTO responseDTO = restAPIClient.transformToDto(response, log);
+        SignInResponseDTO signInResponseDTO = restAPIClient.transformToDto(response, log);
         Assert.assertEquals(response.getStatusCode(), 422);
-        Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "has already been taken");
+        Assert.assertEquals(signInResponseDTO.getErrors().getUsername().get(0), "has already been taken");
     }
 
     @Test(description = "API Sign Up with empty username")
@@ -94,9 +94,9 @@ public class UserSignUpTest extends AbstractTest {
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
-        ResponseDTO responseDTO = restAPIClient.transformToDto(response, log);
+        SignInResponseDTO signInResponseDTO = restAPIClient.transformToDto(response, log);
         Assert.assertEquals(response.getStatusCode(), 422);
-        Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "can't be blank");
+        Assert.assertEquals(signInResponseDTO.getErrors().getUsername().get(0), "can't be blank");
     }
 
 }

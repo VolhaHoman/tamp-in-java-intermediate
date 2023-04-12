@@ -5,10 +5,7 @@ import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
-import com.epam.mentoring.taf.ui.page.ArticlePage;
-import com.epam.mentoring.taf.ui.page.CelebPage;
-import com.epam.mentoring.taf.ui.page.HomePage;
-import com.epam.mentoring.taf.ui.page.LoginPage;
+import com.epam.mentoring.taf.ui.page.*;
 import com.epam.mentoring.taf.util.Redirection;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -52,6 +49,7 @@ abstract public class AbstractTest {
     protected static HomePage homePage = new HomePage(log);
     protected static CelebPage celebPage = new CelebPage(log);
     protected static ArticlePage articlePage = new ArticlePage(log);
+    protected static AppEditorPage appEditorPage = new AppEditorPage(log);
 
     Redirection redirection = new Redirection();
 
@@ -99,6 +97,7 @@ abstract public class AbstractTest {
         wait = WebDriverCreate.getWebDriverWaitInstance();
 
         driver.get(baseUrl);
+        driver.manage().window().maximize();
     }
 
     @AfterClass

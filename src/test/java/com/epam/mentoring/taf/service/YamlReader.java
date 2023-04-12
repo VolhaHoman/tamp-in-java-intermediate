@@ -1,5 +1,6 @@
 package com.epam.mentoring.taf.service;
 
+import com.epam.mentoring.taf.model.ArticleModel;
 import com.epam.mentoring.taf.model.BrowserConfiguration;
 import com.epam.mentoring.taf.model.TagConfiguration;
 import com.epam.mentoring.taf.model.UserDataModel;
@@ -13,6 +14,7 @@ import javax.naming.ConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 public class YamlReader {
     public final Logger logger = LogManager.getRootLogger();
@@ -42,6 +44,20 @@ public class YamlReader {
         ObjectReader userReader = mapper.readerFor(UserDataModel.class)
                 .at("/" + path);
         return userReader.readValue(file);
+    }
+
+    public ArticleModel readArticle(String path) throws IOException {
+        File file = new File("src/test/resources/testData.yml");
+        ObjectReader articleReader = mapper.readerFor(ArticleModel.class)
+                .at("/" + path);
+        return articleReader.readValue(file);
+    }
+
+    public List<String> readTags(String path) throws IOException {
+        File file = new File("src/test/resources/testData.yml");
+        ObjectReader articleReader = mapper.readerFor(String.class)
+                .at("/" + path);
+        return articleReader.readValue(file);
     }
 
 }

@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.naming.ConfigurationException;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class WebDriverCreate {
 
@@ -83,7 +84,7 @@ public class WebDriverCreate {
     private static void initProps() {
         if (Objects.isNull(driver) || isDriverSessionNotPresent()) {
             initDriver();
-            wait = new WebDriverWait(getWebDriverInstance(), 2);
+            wait = new WebDriverWait(getWebDriverInstance(), 10);
         }
     }
 

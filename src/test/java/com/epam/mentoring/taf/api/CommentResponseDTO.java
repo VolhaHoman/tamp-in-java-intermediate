@@ -1,8 +1,8 @@
 package com.epam.mentoring.taf.api;
 
-public class CommentResponseDTO {
+public class CommentResponseDTO implements ResponseDTO {
     private String body;
-    public static final String JSON_BODY = "{\"comment\":{\"body\":\"%s\"}}";
+    private static final String JSON_BODY = "{\"comment\":{\"body\":\"%s\"}}";
 
     CommentResponseDTO(CommentResponseDTO.ApiDTOBuilder builder) {
         this.body = builder.body;

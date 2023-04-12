@@ -33,6 +33,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//a[contains(@class,'nav-link')]/img")
     private WebElement userIcon;
 
+    @FindBy(xpath = "//a[contains(text(),'New Article')]")
+    private WebElement newArticle;
+
     public HomePage(Logger logger) {
         PageFactory.initElements(driver, this);
         this.logger = logger;
@@ -105,7 +108,7 @@ public class HomePage extends BasePage {
 
     @Step("Navigate to User page")
     public HomePage navToUser() {
-        wait.until(ExpectedConditions.visibilityOf(userIcon));
+        wait.until(ExpectedConditions.visibilityOfAllElements(tagPills));
         userIcon.click();
         logger.info("Navigate to User page");
         return this;
@@ -117,5 +120,12 @@ public class HomePage extends BasePage {
         globalLink.click();
         logger.info("Navigate to Global feed");
         return this;
+    }
+
+    @Step("Navigate to AppEditor page")
+    public void navToEditorPage() {
+        wait.until(ExpectedConditions.visibilityOf(newArticle));
+        newArticle.click();
+        logger.info("Navigate to AppEditor page");
     }
 }

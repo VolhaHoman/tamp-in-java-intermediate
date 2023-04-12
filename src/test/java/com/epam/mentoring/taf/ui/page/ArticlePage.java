@@ -18,6 +18,15 @@ public class ArticlePage extends BasePage {
     public WebElement trashBtn;
     @FindBy(xpath = "//ul[contains(@class, 'error-messages')]")
     public WebElement errorMsg;
+    @FindBy(xpath = "//h1")
+    private WebElement articleTitle;
+    @FindBy(xpath = "//div[contains(@class, 'row article-content')]/div[contains(@class, 'col-md-12')]/div")
+    private WebElement articleBody;
+    @FindBy(xpath = "//a[contains(text(),'Edit Article')]")
+    private WebElement editArticleBtn;
+    @FindBy(xpath = "//button[contains(text(),'Delete Article')]")
+    private WebElement deleteArticleBtn;
+
 
     public ArticlePage(Logger logger) {
         PageFactory.initElements(driver, this);
@@ -51,7 +60,6 @@ public class ArticlePage extends BasePage {
     @Step("Get text of comment")
     public String getComment() {
         wait.until(ExpectedConditions.visibilityOf(cardArea));
-        cardArea.getText();
         logger.info("The following comment is added: " + cardArea.getText());
         return cardArea.getText();
     }
@@ -59,7 +67,6 @@ public class ArticlePage extends BasePage {
     @Step("Get error message")
     public String getError() {
         wait.until(ExpectedConditions.visibilityOf(errorMsg));
-        errorMsg.getText();
         logger.info("The following error appears: " + errorMsg.getText());
         return errorMsg.getText();
     }
@@ -69,6 +76,34 @@ public class ArticlePage extends BasePage {
         cardArea.isDisplayed();
         logger.info("Comment is not displayed");
         return true;
+    }
+
+    @Step("Get the article's title")
+    public String getArticleTitle() {
+        wait.until(ExpectedConditions.visibilityOf(articleTitle));
+        logger.info("The following title is displayed: " + articleTitle.getText());
+        return articleTitle.getText();
+    }
+
+    @Step("Get the article's text")
+    public String getArticleBody() {
+        wait.until(ExpectedConditions.visibilityOf(articleBody));
+        logger.info("The following article text is displayed: " + articleBody.getText());
+        return articleBody.getText();
+    }
+
+    @Step("Get the article's text")
+    public void clickEditArticleBtn() {
+        wait.until(ExpectedConditions.visibilityOf(editArticleBtn));
+        editArticleBtn.click();
+        logger.info("Edit an article");
+    }
+
+    @Step("Click on 'Delete Article' button")
+    public void clickDeleteArticleBtn() {
+        wait.until(ExpectedConditions.visibilityOf(deleteArticleBtn));
+        deleteArticleBtn.click();
+        logger.info("Delete an article");
     }
 }
 
