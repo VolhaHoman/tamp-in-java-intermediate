@@ -5,6 +5,7 @@ import com.epam.mentoring.taf.service.YamlReader;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ArticleRequest {
 
@@ -19,6 +20,6 @@ public class ArticleRequest {
         String uniqueId = generateUniqueId();
         String title = articleModel.getTitle() + uniqueId;
         String body = articleModel.getBody() + uniqueId;
-        return new ArticleDTO(title, articleModel.getDescription(), body, articleModel.getTagList());
+        return new ArticleDTO(title, articleModel.getDescription(), body, List.of(articleModel.getTagList()));
     }
 }

@@ -2,17 +2,20 @@ package com.epam.mentoring.taf.api;
 
 import com.epam.mentoring.taf.service.YamlReader;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ArticleDTO {
 
     public static final YamlReader READER = new YamlReader();
     private final String title;
     private final String description;
     private final String body;
-    private final String[] tagList;
+    private final List<String> tagList;
 
-    public static final String JSON_BODY = "{\"article\":{\"title\":\"%s\",\"description\":\"%s\",\"body\":\"%s\",\"tagList\":[\"%s\", \"%s\"]}}";
+    public static final String JSON_BODY = "{\"article\":{\"title\":\"%s\", \"description\":\"%s\", \"body\":\"%s\", \"tagList\":[%s]}}";
 
-    public ArticleDTO(String title, String description, String body, String[] tagList) {
+    public ArticleDTO(String title, String description, String body, List<String> tagList) {
         this.title = title;
         this.description = description;
         this.body = body;
@@ -31,11 +34,12 @@ public class ArticleDTO {
         return body;
     }
 
-    public String[] getTagList() {
+    public List<String> getTagList() {
         return tagList;
     }
 
-    public String toString() {
-        return String.format(JSON_BODY, title, description, body, tagList);
+    public String articleToString() {
+        return String.format(JSON_BODY, title, description, body, tagList.stream()
+                .collect(Collectors.joining("\", \"", "\"", "\"")));
     }
 }

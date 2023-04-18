@@ -3,12 +3,12 @@ package com.epam.mentoring.taf;
 import com.epam.mentoring.taf.api.*;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
+import com.epam.mentoring.taf.mapper.ArticleResponseMapper;
 import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -19,8 +19,6 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
@@ -40,23 +38,22 @@ public class ArticleTest extends AbstractTest {
     public static final String ADMIN_EMAIL = "ADMIN_USER";
 
     public static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
+
+    public static final String SLUG = "SLUG";
     public static final String ERROR_MESSAGE = "title can't be blank";
 
-    String title = "How to train your dragon" + RandomStringUtils.randomNumeric(10);
-    String description = "Ever wonder how?";
-    String body = "Very carefully.";
-    List<String> tagList = Arrays.asList("training", "dragons");
-    String newTitle = "This title was updated" + RandomStringUtils.randomNumeric(10);
-    String newBody = "This body was updated" + RandomStringUtils.randomNumeric(10);
+    public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
+
+    public static final String updatedBody = "{\"article\":{\"body\":\"With two hands\"}}";
 
     @DataProvider(name = "ymlArticleDataProvider")
-    public Object[][] apiDataProviderMethod() throws IOException {
+    public Object[][] dataProviderMethod() throws IOException {
         return getTags();
     }
 
     private Object[][] getTags() throws IOException {
         try {
-            return DataProviderHelper.mapToProviderArray(READER.readTags("article/tagList"));
+            return DataProviderHelper.mapToProviderArray(READER.readArticleTags("article.tagList"));
         } catch (IOException e) {
             throw new IOException("Failed to load file.");
         }
@@ -81,15 +78,15 @@ public class ArticleTest extends AbstractTest {
         appEditorPage.enterTag(tag);
         appEditorPage.publishArticle();
 
-        Assert.assertEquals(articlePage.getArticleTitle(), title);
-        Assert.assertEquals(articlePage.getArticleBody(), body);
+        Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
+        Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
     }
 
     @Test(description = "UI: Edit an existing article", priority = 1)
     @Severity(SeverityLevel.BLOCKER)
     @Description("UI: Edit an existing article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
-    public void uiEditExistingArticle() {
+    public void uiEditExistingArticle() throws IOException {
         loginPage.clickSignInLink()
                 .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
@@ -98,13 +95,15 @@ public class ArticleTest extends AbstractTest {
         homePage.navToUser()
                 .selectArt();
 
+        ArticleDTO articleDTO = ArticleRequest.generateArticle();
+
         articlePage.clickEditArticleBtn();
-        appEditorPage.enterTitle(newTitle)
-                .enterBody(newBody)
+        appEditorPage.enterTitle(articleDTO.getTitle())
+                .enterBody(articleDTO.getBody())
                 .publishArticle();
 
-        Assert.assertEquals(articlePage.getArticleTitle(), newTitle);
-        Assert.assertEquals(articlePage.getArticleBody(), newBody);
+        Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
+        Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
     }
 
     @Test(description = "UI: Delete an article", priority = 2)
@@ -130,7 +129,7 @@ public class ArticleTest extends AbstractTest {
         Assert.assertNotEquals(articlePage.getArticleTitle(), articleTobeDeleted);
     }
 
-    @Test(description = "UI: Add an article with empty fields", priority = 6)
+    @Test(description = "UI: Add an article with empty fields", priority = 7)
     @Severity(SeverityLevel.MINOR)
     @Description("UI: Add an article with empty fields")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
@@ -153,17 +152,66 @@ public class ArticleTest extends AbstractTest {
     public void apiAddValidArticle() throws IOException {
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
-        Response response = client.sendPostRequestWithHeaders(API_ARTICLES + "/articles", String.valueOf(articleDTO), Map.ofEntries(
+        Response response = client.sendPostRequestWithHeaders(API_ARTICLES, articleDTO.articleToString(), Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
-        RestAPIClient restAPIClient = new RestAPIClient();
-        ArticleResponseDTO articleResponseDTO = restAPIClient.transformToDtoArticle(response, log);
+        ArticleResponseMapper articleResponseMapper = new ArticleResponseMapper();
+        ArticleResponseDTO articleResponseDTO = articleResponseMapper.articleToDto(response, log);
 
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(articleResponseDTO.getArticle().getTitle(), articleDTO.getTitle());
         Assert.assertEquals(articleResponseDTO.getArticle().getDescription(), articleDTO.getDescription());
         Assert.assertEquals(articleResponseDTO.getArticle().getBody(), articleDTO.getBody());
-        Assert.assertEquals(articleResponseDTO.getArticle().getTagList(), articleDTO.getTagList());
+        Assert.assertTrue(articleResponseDTO.getArticle().getTagList().containsAll(articleDTO.getTagList()));
+
+    }
+
+    @Test(description = "API: Update an existing article", priority = 4)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("API: Update an existing article")
+    @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
+    public void apiUpdateArticle() {
+
+//        ArticleDTO articleDTO = ArticleRequest.generateArticle();
+        Response response = client.sendPutRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), updatedBody, Map.ofEntries(
+                Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest")));
+        ArticleResponseMapper articleResponseMapper = new ArticleResponseMapper();
+        ArticleResponseDTO articleResponseDTO = articleResponseMapper.articleToDto(response, log);
+
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
+        Assert.assertEquals(articleResponseDTO.getArticle().getBody(), "With two hands");
+
+    }
+
+    @Test(description = "API: Delete an existing article", priority = 6)
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("API: Delete an existing article")
+    @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
+    public void apiDeleteArticle() {
+
+        Response response = client.sendDeleteRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), "", Map.ofEntries(
+                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest")));
+
+        Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_OK);
+
+    }
+
+    @Test(description = "API: Read all articles", priority = 5)
+    @Severity(SeverityLevel.NORMAL)
+    @Description("API: Read all articles")
+    @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
+    public void apiReadAllArticles() {
+
+        Response response = client.sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(
+                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest")));
+
+        int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
+
+        Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_OK);
+        Assert.assertTrue(articlesCount>0);
 
     }
 }

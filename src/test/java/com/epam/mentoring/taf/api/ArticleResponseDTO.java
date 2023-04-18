@@ -34,6 +34,8 @@ public class ArticleResponseDTO {
 
         private int favoritesCount;
 
+        private Author author;
+
         public String getSlug() {
             return slug;
         }
@@ -68,6 +70,10 @@ public class ArticleResponseDTO {
 
         public int getFavoritesCount() {
             return favoritesCount;
+        }
+
+        public Author getAuthor() {
+            return author;
         }
 
         public class Author {
