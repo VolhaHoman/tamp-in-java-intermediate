@@ -92,8 +92,8 @@ public class ArticleTest extends AbstractTest {
                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
                 .clickSignInBtn();
 
-        homePage.navToUser()
-                .selectArt();
+        homePage.navToUser();
+        userProfilePage.selectArt();
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
 
@@ -116,15 +116,15 @@ public class ArticleTest extends AbstractTest {
                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
                 .clickSignInBtn();
 
-        homePage.navToUser()
-                .selectArt();
+        homePage.navToUser();
+        userProfilePage.selectArt();
 
         String articleTobeDeleted = articlePage.getArticleTitle();
 
         articlePage.clickDeleteArticleBtn();
 
-        homePage.navToUser()
-                .selectArt();
+        homePage.navToUser();
+        userProfilePage.selectArt();
 
         Assert.assertNotEquals(articlePage.getArticleTitle(), articleTobeDeleted);
     }
@@ -190,7 +190,7 @@ public class ArticleTest extends AbstractTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void apiDeleteArticle() {
 
-        Response response = client.sendDeleteRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), "", Map.ofEntries(
+        Response response = client.sendDeleteRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), Map.ofEntries(
                 Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
 

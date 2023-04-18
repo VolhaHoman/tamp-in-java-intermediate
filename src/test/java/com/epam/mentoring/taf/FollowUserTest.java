@@ -96,7 +96,7 @@ public class FollowUserTest extends AbstractTest {
 
         String path = API_PROFILES + model.getCelebUsername() + FOLLOW_PATH;
 
-        Response response = client.sendDeleteRequestWithHeaders(path, "", Map.ofEntries(
+        Response response = client.sendDeleteRequestWithHeaders(path, Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
                 Map.entry("X-Requested-With", "XMLHttpRequest")
         ));

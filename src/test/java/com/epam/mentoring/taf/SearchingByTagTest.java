@@ -72,7 +72,7 @@ public class SearchingByTagTest extends AbstractTest {
 
     private Object[][] getTags() throws IOException {
         try {
-            return DataProviderHelper.mapToProviderArray( READER.readTags());
+            return DataProviderHelper.mapToProviderArray(READER.readTags());
         } catch (IOException e) {
             throw new IOException("Failed to load file.");
         }

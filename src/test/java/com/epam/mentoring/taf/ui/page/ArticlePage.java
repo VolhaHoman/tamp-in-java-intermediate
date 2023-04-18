@@ -10,23 +10,30 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 public class ArticlePage extends BasePage {
     @FindBy(xpath = "//textarea")
     private WebElement commentArea;
+
     @FindBy(xpath = "//app-article-comment[1]/div/div[contains(@class, 'card-block')]")
     private WebElement cardArea;
+
     @FindBy(xpath = "//button[contains(text(),'Post Comment')]")
     public WebElement sendBtn;
+
     @FindBy(xpath = "(//span/i[contains(@class, 'ion-trash-a')])[1]")
     public WebElement trashBtn;
+
     @FindBy(xpath = "//ul[contains(@class, 'error-messages')]")
     public WebElement errorMsg;
+
     @FindBy(xpath = "//h1")
     private WebElement articleTitle;
+
     @FindBy(xpath = "//div[contains(@class, 'row article-content')]/div[contains(@class, 'col-md-12')]/div")
     private WebElement articleBody;
+
     @FindBy(xpath = "//a[contains(text(),'Edit Article')]")
     private WebElement editArticleBtn;
+
     @FindBy(xpath = "//button[contains(text(),'Delete Article')]")
     private WebElement deleteArticleBtn;
-
 
     public ArticlePage(Logger logger) {
         PageFactory.initElements(driver, this);

@@ -82,8 +82,8 @@ public class CommentTest extends AbstractTest {
                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
                 .clickSignInBtn();
 
-        homePage.navToUser()
-                .selectArt();
+        homePage.navToUser();
+        userProfilePage.selectArt();
 
         articlePage.enterComment(COMMENT)
                 .sendComment();
@@ -97,8 +97,8 @@ public class CommentTest extends AbstractTest {
     @Description("UI add empty comment")
     public void uiEmptyCommentVerification() {
 
-        homePage.navGlobalFeed()
-                .selectArt();
+        homePage.navToUser();
+        userProfilePage.selectArt();
 
         articlePage.enterComment("")
                 .sendComment();
@@ -112,8 +112,8 @@ public class CommentTest extends AbstractTest {
     @Story("Create new tests for comments functionality")
     public void uiDeleteCommentVerification() {
 
-        homePage.navToUser()
-                .selectArt();
+        homePage.navToUser();
+        userProfilePage.selectArt();
 
         articlePage.enterComment(COMMENT)
                 .sendComment()
@@ -139,7 +139,7 @@ public class CommentTest extends AbstractTest {
         for (int i = 0; i < id.size(); i++) {
             String uniqueCommentPath = whatIsThe(ALL_COMMENT) + "/" + id.get(i);
 
-            Response response = client.sendDeleteRequestWithHeaders(uniqueCommentPath, "", Map.ofEntries(
+            Response response = client.sendDeleteRequestWithHeaders(uniqueCommentPath, Map.ofEntries(
                     Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
                     Map.entry("X-Requested-With", "XMLHttpRequest")
             ));

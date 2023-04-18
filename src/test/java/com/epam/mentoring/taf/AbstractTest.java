@@ -50,6 +50,7 @@ abstract public class AbstractTest {
     protected static CelebPage celebPage = new CelebPage(log);
     protected static ArticlePage articlePage = new ArticlePage(log);
     protected static AppEditorPage appEditorPage = new AppEditorPage(log);
+    protected static UserProfilePage userProfilePage = new UserProfilePage(log);
 
     Redirection redirection = new Redirection();
 
