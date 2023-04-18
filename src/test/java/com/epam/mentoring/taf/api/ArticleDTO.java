@@ -10,13 +10,13 @@ public class ArticleDTO {
     private final String body;
     private final String[] tagList;
 
-    public static final String JSON_BODY = "{\"user\":{\"email\":\"%s\",\"password\":\"%s\",\"username\":\"%s\"}}";
+    public static final String JSON_BODY = "{\"article\":{\"title\":\"%s\",\"description\":\"%s\",\"body\":\"%s\",\"tagList\":[\"%s\", \"%s\"]}}";
 
-    public ArticleDTO(ArticleDTOBuilder articleDTOBuilder) {
-        this.title = articleDTOBuilder.title;
-        this.description = articleDTOBuilder.description;
-        this.body = articleDTOBuilder.body;
-        this.tagList = articleDTOBuilder.tagList;
+    public ArticleDTO(String title, String description, String body, String[] tagList) {
+        this.title = title;
+        this.description = description;
+        this.body = body;
+        this.tagList = tagList;
     }
 
     public String getTitle() {
@@ -35,26 +35,7 @@ public class ArticleDTO {
         return tagList;
     }
 
-    public static class ArticleDTOBuilder {
-
-        private String title;
-        private String description;
-        private String body;
-        private String[] tagList;
-
-        public ArticleDTOBuilder(String title, String description, String body) {
-            this.title = title;
-            this.description = description;
-            this.body = body;
-        }
-
-        public ArticleDTOBuilder setTagList(String[] tagList) {
-            this.tagList = tagList;
-            return this;
-        }
-
-        public ArticleDTO build() {
-            return new ArticleDTO(this);
-        }
+    public String toString() {
+        return String.format(JSON_BODY, title, description, body, tagList);
     }
 }

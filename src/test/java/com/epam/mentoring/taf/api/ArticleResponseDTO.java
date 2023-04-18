@@ -2,7 +2,7 @@ package com.epam.mentoring.taf.api;
 
 import java.util.List;
 
-public class ArticleResponseDTO implements ResponseDTO {
+public class ArticleResponseDTO {
 
     private Article article;
 

@@ -50,4 +50,10 @@ public class RestAPIClient {
         CommentDTO commentDTO = response.body().as(CommentDTO.class);
         return commentDTO;
     }
+
+    public ArticleResponseDTO transformToDtoArticle(Response response, Logger logger) {
+        ArticleResponseDTO articleResponseDTO = response.body().as(ArticleResponseDTO.class);
+        logger.info("Response message: " + articleResponseDTO.getArticle());
+        return articleResponseDTO;
+    }
 }

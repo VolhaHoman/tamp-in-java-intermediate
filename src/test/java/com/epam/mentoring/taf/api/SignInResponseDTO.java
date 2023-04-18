@@ -2,7 +2,7 @@ package com.epam.mentoring.taf.api;
 
 import java.util.List;
 
-public class SignInResponseDTO implements ResponseDTO {
+public class SignInResponseDTO {
     private Errors errors;
 
     public Errors getErrors() {

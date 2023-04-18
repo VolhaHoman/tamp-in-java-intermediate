@@ -9,6 +9,7 @@ import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +21,9 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Article handling Tests")
@@ -30,6 +34,8 @@ public class ArticleTest extends AbstractTest {
     private static Logger log = LogManager.getLogger();
 
     protected static RestClient client = new RestClient(log);
+
+    public static final String AUTH_TOKEN = "AUTH_TOKEN";
 
     public static final String ADMIN_EMAIL = "ADMIN_USER";
 
@@ -45,34 +51,34 @@ public class ArticleTest extends AbstractTest {
 
     @DataProvider(name = "ymlArticleDataProvider")
     public Object[][] apiDataProviderMethod() throws IOException {
-        return getArticleTags();
+        return getTags();
     }
 
-    private Object[][] getArticleTags() throws IOException {
+    private Object[][] getTags() throws IOException {
         try {
-            return DataProviderHelper.mapToProviderArray(READER.readTags("article"));
+            return DataProviderHelper.mapToProviderArray(READER.readTags("article/tagList"));
         } catch (IOException e) {
             throw new IOException("Failed to load file.");
         }
     }
 
-    @Test(description = "UI: Add a valid article", priority = 0)
+    @Test(description = "UI: Add a valid article", dataProvider = "ymlArticleDataProvider", priority = 0)
     @Severity(SeverityLevel.BLOCKER)
     @Description("UI: Add a valid article from YAML file")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
-    public void uiAddValidArticle() {
+    public void uiAddValidArticle(String tag) throws IOException {
         loginPage.clickSignInLink()
                 .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
                 .clickSignInBtn();
 
+        ArticleDTO articleDTO = ArticleRequest.generateArticle();
+
         homePage.navToEditorPage();
-        appEditorPage.enterTitle(title)
-                .enterDescription(description)
-                .enterBody(body);
-        for (int i=0; i<=tagList.size()-1; i++) {
-            appEditorPage.enterTag(tagList.get(i));
-        }
+        appEditorPage.enterTitle(articleDTO.getTitle())
+                .enterDescription(articleDTO.getDescription())
+                .enterBody(articleDTO.getBody());
+        appEditorPage.enterTag(tag);
         appEditorPage.publishArticle();
 
         Assert.assertEquals(articlePage.getArticleTitle(), title);
@@ -147,9 +153,12 @@ public class ArticleTest extends AbstractTest {
     public void apiAddValidArticle() throws IOException {
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
-        Response response = client.sendPostRequestWithHeaders();
-        ArticleResponseDTO articleResponseDTO = response.body().as(ArticleResponseDTO.class);
-//        logger.info("Response message: " + articleResponseDTO.getArticle());
+        Response response = client.sendPostRequestWithHeaders(API_ARTICLES + "/articles", String.valueOf(articleDTO), Map.ofEntries(
+                Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest")));
+        RestAPIClient restAPIClient = new RestAPIClient();
+        ArticleResponseDTO articleResponseDTO = restAPIClient.transformToDtoArticle(response, log);
+
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(articleResponseDTO.getArticle().getTitle(), articleDTO.getTitle());
         Assert.assertEquals(articleResponseDTO.getArticle().getDescription(), articleDTO.getDescription());
