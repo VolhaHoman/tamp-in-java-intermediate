@@ -12,14 +12,19 @@ public class AppEditorPage extends BasePage {
 
     @FindBy(xpath = "//input[@formcontrolname='title']")
     private WebElement title;
+
     @FindBy(xpath = "//input[@formcontrolname='description']")
     private WebElement description;
+
     @FindBy(xpath = "//textarea[@formcontrolname='body']")
     private WebElement body;
+
     @FindBy(xpath = "//fieldset/fieldset[4]/input")
     private WebElement tagList;
+
     @FindBy(xpath = "//button[contains(text(),'Publish Article')]")
     private WebElement publishBtn;
+
     @FindBy(xpath = "//app-list-errors/ul/li")
     public WebElement errorMsg;
 
