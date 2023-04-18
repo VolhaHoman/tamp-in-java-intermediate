@@ -40,11 +40,14 @@ public class ArticleTest extends AbstractTest {
     public static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
 
     public static final String SLUG = "SLUG";
+
     public static final String ERROR_MESSAGE = "title can't be blank";
 
     public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
 
-    public static final String updatedBody = "{\"article\":{\"body\":\"With two hands\"}}";
+
+    public static final String updatedBody = "With two hands";
+    public static final String JSON_BODY = "{\"article\":{\"body\":\"%s\"}}";
 
     @DataProvider(name = "ymlArticleDataProvider")
     public Object[][] dataProviderMethod() throws IOException {
@@ -172,15 +175,14 @@ public class ArticleTest extends AbstractTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void apiUpdateArticle() {
 
-//        ArticleDTO articleDTO = ArticleRequest.generateArticle();
-        Response response = client.sendPutRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), updatedBody, Map.ofEntries(
+        Response response = client.sendPutRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), String.format(JSON_BODY, updatedBody), Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
         ArticleResponseMapper articleResponseMapper = new ArticleResponseMapper();
         ArticleResponseDTO articleResponseDTO = articleResponseMapper.articleToDto(response, log);
 
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
-        Assert.assertEquals(articleResponseDTO.getArticle().getBody(), "With two hands");
+        Assert.assertEquals(articleResponseDTO.getArticle().getBody(), updatedBody);
 
     }
 
@@ -211,7 +213,7 @@ public class ArticleTest extends AbstractTest {
         int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
 
         Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_OK);
-        Assert.assertTrue(articlesCount>0);
+        Assert.assertTrue(articlesCount > 0);
 
     }
 }
