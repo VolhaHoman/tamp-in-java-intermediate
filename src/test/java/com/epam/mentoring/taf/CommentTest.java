@@ -35,7 +35,7 @@ public class CommentTest extends AbstractTest {
     public static final String ALL_COMMENT = "ALL_COMMENT";
     public static final String ERROR_MESSAGE = "body can't be blank";
     public static final String COMMENT = "Test";
-    public static final String ADMIN_EMAIL = "ADMIN_USER";
+    public static final String ADMIN_EMAIL = "ADMIN_EMAIL";
     public static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
 
     private static Logger log = LogManager.getLogger();

@@ -12,6 +12,7 @@ import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.apache.hc.core5.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
@@ -26,6 +27,9 @@ import java.io.IOException;
 public class UserSignUpTest extends AbstractTest {
     private UserDataDTO userDataDTO;
     private UserDataDTO defaultUserData;
+
+    public static final String ERROR_MESSAGE_TAKEN = "has already been taken";
+    public static final String ERROR_MESSAGE_BLANK = "can't be blank";
     private Logger log = LogManager.getLogger();
 
     @BeforeMethod(description = "Generate Test User")
@@ -64,7 +68,7 @@ public class UserSignUpTest extends AbstractTest {
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
-        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
     @Test(description = "API Sign Up with existing credentials")
@@ -79,8 +83,8 @@ public class UserSignUpTest extends AbstractTest {
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
         SignInResponseDTO signInResponseDTO = restAPIClient.transformToDto(response, log);
-        Assert.assertEquals(response.getStatusCode(), 422);
-        Assert.assertEquals(signInResponseDTO.getErrors().getUsername().get(0), "has already been taken");
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
+        Assert.assertEquals(signInResponseDTO.getErrors().getUsername().get(0), ERROR_MESSAGE_TAKEN);
     }
 
     @Test(description = "API Sign Up with empty username")
@@ -95,8 +99,8 @@ public class UserSignUpTest extends AbstractTest {
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
         SignInResponseDTO signInResponseDTO = restAPIClient.transformToDto(response, log);
-        Assert.assertEquals(response.getStatusCode(), 422);
-        Assert.assertEquals(signInResponseDTO.getErrors().getUsername().get(0), "can't be blank");
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
+        Assert.assertEquals(signInResponseDTO.getErrors().getUsername().get(0), ERROR_MESSAGE_BLANK);
     }
 
 }

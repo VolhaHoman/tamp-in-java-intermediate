@@ -26,7 +26,7 @@ import java.util.Map;
 public class FollowUserTest extends AbstractTest {
 
     public static final String AUTH_TOKEN = "AUTH_TOKEN";
-    public static final String ADMIN_EMAIL = "ADMIN_USER";
+    public static final String ADMIN_EMAIL = "ADMIN_EMAIL";
     public static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
     public static final String ADMIN_USERNAME = "ADMIN_USERNAME";
     private Logger log = LogManager.getLogger();

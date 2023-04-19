@@ -9,6 +9,7 @@ import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.apache.hc.core5.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
@@ -54,7 +55,7 @@ public class SearchingByTagTest extends AbstractTest {
         RestAPIClient RestAPIClient = new RestAPIClient();
         Response response = RestAPIClient.sendGetTagRequest(tag, log);
         List<String> tagList = response.getBody().jsonPath().get(TAG_LIST_JSON_PATH);
-        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertTrue(tagList.toString().contains(tag));
     }
 
@@ -66,7 +67,7 @@ public class SearchingByTagTest extends AbstractTest {
         RestAPIClient RestAPIClient = new RestAPIClient();
         Response response = RestAPIClient.sendGetTagRequest(INVALID_TAG, log);
         int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
-        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(articlesCount, 0);
     }
 

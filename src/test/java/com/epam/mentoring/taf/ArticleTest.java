@@ -28,24 +28,14 @@ import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 public class ArticleTest extends AbstractTest {
 
     public static final YamlReader READER = new YamlReader();
-
     private static Logger log = LogManager.getLogger();
-
     protected static RestClient client = new RestClient(log);
-
     public static final String AUTH_TOKEN = "AUTH_TOKEN";
-
-    public static final String ADMIN_EMAIL = "ADMIN_USER";
-
+    public static final String ADMIN_EMAIL = "ADMIN_EMAIL";
     public static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
-
     public static final String SLUG = "SLUG";
-
     public static final String ERROR_MESSAGE = "title can't be blank";
-
     public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
-
-
     public static final String updatedBody = "With two hands";
     public static final String JSON_BODY = "{\"article\":{\"body\":\"%s\"}}";
 
@@ -56,7 +46,7 @@ public class ArticleTest extends AbstractTest {
 
     private Object[][] getTags() throws IOException {
         try {
-            return DataProviderHelper.mapToProviderArray(READER.readArticleTags("article.tagList"));
+            return DataProviderHelper.mapToProviderArray(READER.readArticleTags("article"));
         } catch (IOException e) {
             throw new IOException("Failed to load file.");
         }
@@ -169,7 +159,24 @@ public class ArticleTest extends AbstractTest {
 
     }
 
-    @Test(description = "API: Update an existing article", priority = 4)
+    @Test(description = "API: Read all articles with authorization", priority = 4)
+    @Severity(SeverityLevel.NORMAL)
+    @Description("API: Read all articles with authorization")
+    @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
+    public void apiReadAllArticles() {
+
+        Response response = client.sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(
+                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest")));
+
+        int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
+
+        Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_OK);
+        Assert.assertTrue(articlesCount > 0);
+
+    }
+
+    @Test(description = "API: Update an existing article", priority = 5)
     @Severity(SeverityLevel.BLOCKER)
     @Description("API: Update an existing article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
@@ -196,24 +203,8 @@ public class ArticleTest extends AbstractTest {
                 Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
 
-        Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_OK);
+        Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_NO_CONTENT);
 
     }
 
-    @Test(description = "API: Read all articles", priority = 5)
-    @Severity(SeverityLevel.NORMAL)
-    @Description("API: Read all articles")
-    @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
-    public void apiReadAllArticles() {
-
-        Response response = client.sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(
-                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
-                Map.entry("X-Requested-With", "XMLHttpRequest")));
-
-        int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
-
-        Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_OK);
-        Assert.assertTrue(articlesCount > 0);
-
-    }
 }
