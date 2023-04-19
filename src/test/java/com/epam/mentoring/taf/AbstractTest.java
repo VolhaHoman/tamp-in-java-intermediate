@@ -92,5 +92,4 @@ abstract public class AbstractTest implements ApiURLs {
     public void terminate() {
         driver.quit();
     }
-
 }
