@@ -4,17 +4,17 @@ import java.util.Date;
 
 public class CommentDTO {
 
-    private CommentResponse comment;
+    private CommentBody comment;
 
-    public CommentResponse getComment() {
+    public CommentBody getComment() {
         return comment;
     }
 
-    public void setComment(CommentResponse comment) {
+    public void setComment(CommentBody comment) {
         this.comment = comment;
     }
 
-    public class CommentResponse {
+    public class CommentBody {
         private int id;
         private Date createdAt;
         private Date updatedAt;

@@ -5,10 +5,7 @@ import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
-import com.epam.mentoring.taf.ui.page.ArticlePage;
-import com.epam.mentoring.taf.ui.page.CelebPage;
-import com.epam.mentoring.taf.ui.page.HomePage;
-import com.epam.mentoring.taf.ui.page.LoginPage;
+import com.epam.mentoring.taf.ui.page.*;
 import com.epam.mentoring.taf.util.Redirection;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -39,8 +36,6 @@ abstract public class AbstractTest {
     public static final String API_LOGIN = API_URL + LOGIN_URL;
     public static final String API_PROFILES = "https://api.realworld.io/api/profiles/";
     public static final String FOLLOW_PATH = "/follow";
-    public static final String API_ARTICLES = "https://api.realworld.io/api/articles/";
-    public static final String COMMENT_PATH = "/comments";
 
     protected WebDriver driver;
     protected WebDriverWait wait;
@@ -80,6 +75,15 @@ abstract public class AbstractTest {
         rememberThat(ADMIN_EMAIL, adminUserEmail);
         rememberThat(ADMIN_PASSWORD, adminUserPassword);
         rememberThat(ADMIN_USERNAME, adminUserName);
+
+        Response getResponse = client.sendGetRequest(API_ARTICLES);
+        String slug =
+                getResponse.getBody().jsonPath().get("articles[0].slug");
+        log.info("slug: " + slug);
+        rememberThat(SLUG, slug);
+
+        String allCommentPath = API_ARTICLES + whatIsThe(SLUG) + COMMENT_PATH;
+        rememberThat(ALL_COMMENT, allCommentPath);
     }
 
     @BeforeMethod

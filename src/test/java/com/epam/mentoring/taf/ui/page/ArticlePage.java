@@ -8,14 +8,19 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ArticlePage extends BasePage {
+
     @FindBy(xpath = "//textarea")
     private WebElement commentArea;
+
     @FindBy(xpath = "//app-article-comment[1]/div/div[contains(@class, 'card-block')]")
     private WebElement cardArea;
+
     @FindBy(xpath = "//button[contains(text(),'Post Comment')]")
     public WebElement sendBtn;
+
     @FindBy(xpath = "(//span/i[contains(@class, 'ion-trash-a')])[1]")
     public WebElement trashBtn;
+
     @FindBy(xpath = "//ul[contains(@class, 'error-messages')]")
     public WebElement errorMsg;
 
@@ -51,7 +56,6 @@ public class ArticlePage extends BasePage {
     @Step("Get text of comment")
     public String getComment() {
         wait.until(ExpectedConditions.visibilityOf(cardArea));
-        cardArea.getText();
         logger.info("The following comment is added: " + cardArea.getText());
         return cardArea.getText();
     }
@@ -59,16 +63,16 @@ public class ArticlePage extends BasePage {
     @Step("Get error message")
     public String getError() {
         wait.until(ExpectedConditions.visibilityOf(errorMsg));
-        errorMsg.getText();
         logger.info("The following error appears: " + errorMsg.getText());
         return errorMsg.getText();
     }
 
     @Step("Verify that comment is empty")
-    public boolean commentIsNotPresent() {
-        cardArea.isDisplayed();
-        logger.info("Comment is not displayed");
-        return true;
+    public boolean commentIsNotDisplayed() {
+        return !cardArea.isDisplayed();
     }
+
 }
+
+
 

@@ -1,15 +1,13 @@
 package com.epam.mentoring.taf.api;
 
 public class CommentResponseDTO {
+
     private String body;
-    public static final String JSON_BODY = "{\"comment\":{\"body\":\"%s\"}}";
 
-    CommentResponseDTO(CommentResponseDTO.ApiDTOBuilder builder) {
+    private static final String JSON_BODY = "{\"comment\":{\"body\":\"%s\"}}";
+
+    CommentResponseDTO(CommentResponseDTOBuilder builder) {
         this.body = builder.body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
     }
 
     public String getBody() {
@@ -20,14 +18,14 @@ public class CommentResponseDTO {
         return String.format(JSON_BODY, body);
     }
 
-    public static class ApiDTOBuilder {
+    public static class CommentResponseDTOBuilder {
         private String body;
 
-        public ApiDTOBuilder(String body) {
+        public CommentResponseDTOBuilder(String body) {
             this.body = String.valueOf(body);
         }
 
-        public CommentResponseDTO.ApiDTOBuilder setBody(String text) {
+        public CommentResponseDTOBuilder setBody(String text) {
             this.body = body;
             return this;
         }
