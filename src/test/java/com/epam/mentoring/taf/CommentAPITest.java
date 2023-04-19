@@ -36,20 +36,6 @@ public class CommentAPITest extends AbstractTest {
 
     private static Logger log = LogManager.getLogger();
 
-    @BeforeClass
-    public void getSlug() {
-        Response getResponse = client.sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(
-                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
-                Map.entry("X-Requested-With", "XMLHttpRequest")));
-        String slug =
-                getResponse.getBody().jsonPath().get("articles[0].slug");
-        log.info("slug: " + slug);
-        rememberThat(SLUG, slug);
-
-        String allCommentPath = API_ARTICLES + whatIsThe(SLUG) + COMMENT_PATH;
-        rememberThat(ALL_COMMENT, allCommentPath);
-    }
-
     @Test(description = "API: add multiple valid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForValidComments", priority = 0, groups = {"smoke"})
     @Severity(SeverityLevel.BLOCKER)
     @Description("API add comments to article from json file")

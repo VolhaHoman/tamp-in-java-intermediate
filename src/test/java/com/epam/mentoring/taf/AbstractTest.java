@@ -7,6 +7,7 @@ import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
 import com.epam.mentoring.taf.ui.page.*;
 import com.epam.mentoring.taf.util.Redirection;
+import com.epam.mentoring.taf.util.StorageHelper;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -19,10 +20,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
+import java.util.Map;
 
+import static com.epam.mentoring.taf.CommentUITest.ALL_COMMENT;
 import static com.epam.mentoring.taf.FollowUserTest.*;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
+import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 abstract public class AbstractTest implements ApiURLs {
 
@@ -81,6 +85,20 @@ abstract public class AbstractTest implements ApiURLs {
 
     }
 
+    @BeforeClass
+    public void getSlug() {
+        Response getResponse = client.sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(
+                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest")));
+        String slug =
+                getResponse.getBody().jsonPath().get("articles[0].slug");
+        log.info("slug: " + slug);
+        rememberThat(SLUG, slug);
+
+        String allCommentPath = API_ARTICLES + whatIsThe(SLUG) + COMMENT_PATH;
+        rememberThat(ALL_COMMENT, allCommentPath);
+    }
+
     @BeforeMethod
     public void initialisation() {
         // TODO: Remove after migration to Page Object Pattern.
@@ -89,6 +107,20 @@ abstract public class AbstractTest implements ApiURLs {
 
         driver.get(baseUrl);
         driver.manage().window().maximize();
+    }
+
+    public void login() {
+        loginPage.clickSignInLink()
+                .fillInEmail(whatIsThe(ADMIN_EMAIL))
+                .fillInPassword(whatIsThe(ADMIN_PASSWORD))
+                .clickSignInBtn();
+        homePage.navToUser();
+        userProfilePage.selectArt();
+    }
+
+    public static void logOut() {
+        homePage.navToSetting();
+        settingPage.logout();
     }
 
     @AfterClass
