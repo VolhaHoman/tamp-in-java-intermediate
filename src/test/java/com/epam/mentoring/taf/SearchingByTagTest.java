@@ -1,7 +1,6 @@
 package com.epam.mentoring.taf;
 
 import com.epam.mentoring.taf.api.RestAPIClient;
-import com.epam.mentoring.taf.exception.EmptyFileException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.service.YamlReader;

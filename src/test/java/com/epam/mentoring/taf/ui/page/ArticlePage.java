@@ -8,6 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ArticlePage extends BasePage {
+
     @FindBy(xpath = "//textarea")
     private WebElement commentArea;
 
@@ -79,10 +80,8 @@ public class ArticlePage extends BasePage {
     }
 
     @Step("Verify that comment is empty")
-    public boolean commentIsNotPresent() {
-        cardArea.isDisplayed();
-        logger.info("Comment is not displayed");
-        return true;
+    public boolean commentIsNotDisplayed() {
+        return !cardArea.isDisplayed();
     }
 
     @Step("Get the article's title")
@@ -99,7 +98,7 @@ public class ArticlePage extends BasePage {
         return articleBody.getText();
     }
 
-    @Step("Get the article's text")
+    @Step("Click on 'Edit Article' button")
     public void clickEditArticleBtn() {
         wait.until(ExpectedConditions.visibilityOf(editArticleBtn));
         editArticleBtn.click();
@@ -112,5 +111,8 @@ public class ArticlePage extends BasePage {
         deleteArticleBtn.click();
         logger.info("Delete an article");
     }
+
 }
+
+
 

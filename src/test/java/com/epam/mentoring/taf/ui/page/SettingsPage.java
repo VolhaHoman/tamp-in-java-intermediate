@@ -7,21 +7,22 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public class UserProfilePage extends BasePage {
+public class SettingsPage extends BasePage {
 
-    @FindBy(xpath = "//app-article-list/app-article-preview[1]/div/a")
-    private WebElement article;
+    @FindBy(xpath = "//button[contains(text(),'Or click here to logout.')]")
+    public WebElement logoutBtn;
 
-    public UserProfilePage(Logger logger) {
+    public SettingsPage(Logger logger) {
         PageFactory.initElements(driver, this);
         this.logger = logger;
     }
 
-    @Step("Select article")
-    public void selectArt() {
-        wait.until(ExpectedConditions.visibilityOf(article));
-        article.click();
-        logger.info("Select article");
+    @Step("Log out")
+    public SettingsPage logout() {
+        wait.until(ExpectedConditions.visibilityOf(logoutBtn));
+        logoutBtn.click();
+        logger.info("Log out");
+        return this;
     }
 
 }

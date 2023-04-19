@@ -15,7 +15,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.naming.ConfigurationException;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class WebDriverCreate {
 

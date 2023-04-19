@@ -41,6 +41,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//a[contains(text(),'New Article')]")
     private WebElement newArticle;
 
+    @FindBy(xpath = "//ul[contains(@class,'navbar-nav')]/li[3]/a")
+    private WebElement settingNav;
+
     public HomePage(Logger logger) {
         PageFactory.initElements(driver, this);
         this.logger = logger;
@@ -126,4 +129,13 @@ public class HomePage extends BasePage {
         newArticle.click();
         logger.info("Navigate to AppEditor page");
     }
+
+    @Step("Navigate to Setting page")
+    public HomePage navToSetting() {
+        wait.until(ExpectedConditions.visibilityOf(settingNav));
+        settingNav.click();
+        logger.info("Navigate to Setting page");
+        return this;
+    }
+
 }

@@ -8,31 +8,32 @@ import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import com.epam.mentoring.taf.ui.page.HomePage;
-import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
-@Feature("Sign Up Tests")
-public class UserSignUpTest extends AbstractTest {
+@Feature("API: Sign Up Tests")
+public class UserSignUpAPITest extends AbstractTest {
+
     private UserDataDTO userDataDTO;
+
     private UserDataDTO defaultUserData;
 
     public static final String ERROR_MESSAGE_TAKEN = "has already been taken";
     public static final String ERROR_MESSAGE_BLANK = "can't be blank";
+
     private Logger log = LogManager.getLogger();
 
-    @BeforeMethod(description = "Generate Test User")
+    @BeforeClass(description = "Generate Test User", groups = {"smoke", "regression"})
     public void generateUserData() {
         try {
             userDataDTO = UserData.generateUserData();
@@ -42,22 +43,7 @@ public class UserSignUpTest extends AbstractTest {
         }
     }
 
-    @Test(description = "UI Sign Up with new credentials")
-    @Severity(SeverityLevel.BLOCKER)
-    @Description("UI Sign Up with new credentials")
-    @Story("Investigate the issues and fix UserSignUpTest")
-    public void signUpVerification() {
-        LoginPage loginPage = new LoginPage(baseUrl, log);
-        loginPage.clickSignUpLink()
-                .fillInUsername(userDataDTO.getUserName())
-                .fillInEmail(userDataDTO.getUserEmail())
-                .fillInPassword(userDataDTO.getUserPassword())
-                .clickSignUpBtn();
-        HomePage homePage = new HomePage(log);
-        Assert.assertEquals(homePage.getUsernameAccountNav(), userDataDTO.getUserName());
-    }
-
-    @Test(description = "API Sign Up with new credentials")
+    @Test(description = "API Sign Up with new credentials", groups = {"regression"})
     @Severity(SeverityLevel.BLOCKER)
     @Description("API Sign Up with new credentials")
     @Story("Create layers for API tests")
@@ -71,7 +57,7 @@ public class UserSignUpTest extends AbstractTest {
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
-    @Test(description = "API Sign Up with existing credentials")
+    @Test(description = "API Sign Up with existing credentials", groups = {"regression"})
     @Severity(SeverityLevel.CRITICAL)
     @Description("API Sign Up with existing credentials")
     @Story("Create layers for API tests")
@@ -87,7 +73,7 @@ public class UserSignUpTest extends AbstractTest {
         Assert.assertEquals(signInResponseDTO.getErrors().getUsername().get(0), ERROR_MESSAGE_TAKEN);
     }
 
-    @Test(description = "API Sign Up with empty username")
+    @Test(description = "API Sign Up with empty username", groups = {"regression"})
     @Severity(SeverityLevel.CRITICAL)
     @Description("API Sign Up with empty username")
     @Story("Create layers for API tests")

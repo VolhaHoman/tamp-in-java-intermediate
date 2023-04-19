@@ -1,6 +1,8 @@
 package com.epam.mentoring.taf.util;
 
-import com.epam.mentoring.taf.ui.page.BasePage;
+import com.epam.mentoring.taf.exception.DataUtilException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,74 +15,85 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DataUtil extends BasePage {
-
+public class DataUtil {
+    private static final Logger log = LogManager.getLogger();
     public static final String TEST_DATA_JSON = "src/test/resources/testData.json";
 
     @DataProvider(name = "dataProviderForValidComments")
-    public Object[] dataProviderForValidComments() {
+    public Object[][] dataProviderForValidComments() {
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = null;
 
-        //Read JSON file
         try {
             Object obj = parser.parse(new FileReader(TEST_DATA_JSON));
             jsonObject = (JSONObject) obj;
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            log.error("Error reading test data from JSON file");
+            throw new DataUtilException("Error reading test data from JSON file", e);
         }
 
         if (jsonObject == null) {
-            logger.error("Error retrieving JSON data");
-            throw new RuntimeException();
+            log.error("Error retrieving JSON data");
+            throw new DataUtilException("Error retrieving JSON data");
         }
 
-        //Create an array of HashMap objects, one for each test run
-        JSONArray validTextArray = (JSONArray) jsonObject.get("valid_text");
+        JSONArray validTextArray = null;
+        try {
+            validTextArray = (JSONArray) jsonObject.get("valid_text");
+        } catch (NullPointerException e) {
+            log.error("JSON data is null or does not contain valid_text array");
+            throw new DataUtilException("JSON data is null or does not contain valid_text array", e);
+        }
         int numTests = validTextArray.size();
-        Object[] data = new Object[numTests];
+        Object[][] data = new Object[numTests][1];
         for (int i = 0; i < numTests; i++) {
             String body = (String) ((JSONObject) validTextArray.get(i)).get("body");
             HashMap<String, Object> hashMap = new HashMap<>();
             hashMap.put("body", body);
-            data[i] = hashMap;
+            data[i][0] = hashMap;
         }
 
         return data;
     }
 
     @DataProvider(name = "dataProviderForInvalidComments")
-    public Object[] dataProviderForInvalidComments() {
+    public Object[][] dataProviderForInvalidComments() {
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = null;
 
-        //Read JSON file
         try {
             Object obj = parser.parse(new FileReader(TEST_DATA_JSON));
             jsonObject = (JSONObject) obj;
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            throw new DataUtilException("Error reading test data from JSON file", e);
         }
 
         List<String> invalidTexts = new ArrayList<>();
         if (jsonObject != null) {
-            JSONArray invalidTextArray = (JSONArray) jsonObject.get("invalid_text");
+            JSONArray invalidTextArray = null;
+            try {
+                invalidTextArray = (JSONArray) jsonObject.get("invalid_text");
+            } catch (NullPointerException e) {
+                log.error("JSON data is null or does not contain valid_text array");
+                throw new DataUtilException("JSON data is null or does not contain valid_text array", e);
+            }
             for (Object invalidTextObj : invalidTextArray) {
                 invalidTexts.add((String) invalidTextObj);
             }
         } else {
-            logger.error("Error retrieving JSON data");
-            throw new RuntimeException();
+            log.error("Error retrieving JSON data");
+            throw new DataUtilException("Error retrieving JSON data");
         }
 
-        Object[] data = new Object[invalidTexts.size()];
+        Object[][] data = new Object[invalidTexts.size()][1];
         for (int i = 0; i < invalidTexts.size(); i++) {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("invalid_text", invalidTexts.get(i));
-            data[i] = hashMap;
+            data[i][0] = hashMap;
         }
         return data;
     }
+
 }
 
 
