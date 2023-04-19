@@ -63,7 +63,6 @@ public class ArticleTest extends AbstractTest {
                 getResponse.getBody().jsonPath().get("articles[0].slug");
         log.info("slug: " + slug);
         rememberThat(SLUG, slug);
-
     }
 
     @Test(description = "UI: Add a valid article", dataProvider = "ymlArticleDataProvider", priority = 0)
@@ -71,6 +70,7 @@ public class ArticleTest extends AbstractTest {
     @Description("UI: Add a valid article from YAML file")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiAddValidArticle(String tag) throws IOException {
+
         loginPage.clickSignInLink()
                 .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
@@ -94,6 +94,7 @@ public class ArticleTest extends AbstractTest {
     @Description("UI: Edit an existing article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiEditExistingArticle() throws IOException {
+
         loginPage.clickSignInLink()
                 .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
@@ -118,6 +119,7 @@ public class ArticleTest extends AbstractTest {
     @Description("UI: Delete an article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiDeleteArticle() {
+
         loginPage.clickSignInLink()
                 .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
@@ -141,6 +143,7 @@ public class ArticleTest extends AbstractTest {
     @Description("UI: Add an article with empty fields")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiAddEmptyArticle() {
+
         loginPage.clickSignInLink()
                 .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
@@ -170,7 +173,6 @@ public class ArticleTest extends AbstractTest {
         Assert.assertEquals(articleResponseDTO.getArticle().getDescription(), articleDTO.getDescription());
         Assert.assertEquals(articleResponseDTO.getArticle().getBody(), articleDTO.getBody());
         Assert.assertTrue(articleResponseDTO.getArticle().getTagList().containsAll(articleDTO.getTagList()));
-
     }
 
     @Test(description = "API: Read all articles with authorization", priority = 4)
@@ -187,7 +189,6 @@ public class ArticleTest extends AbstractTest {
 
         Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_OK);
         Assert.assertTrue(articlesCount > 0);
-
     }
 
     @Test(description = "API: Update an existing article", priority = 5)
@@ -204,7 +205,6 @@ public class ArticleTest extends AbstractTest {
 
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(articleResponseDTO.getArticle().getBody(), updatedBody);
-
     }
 
     @Test(description = "API: Delete an existing article", priority = 6)
@@ -218,7 +218,6 @@ public class ArticleTest extends AbstractTest {
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
 
         Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_NO_CONTENT);
-
     }
 
 }
