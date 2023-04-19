@@ -58,6 +58,13 @@ abstract public class AbstractTest {
     protected HomePage homePage;
     protected CelebPage celebPage;
     protected ArticlePage articlePage;
+    protected static LoginPage loginPage = new LoginPage(baseUrl, log);
+    protected static HomePage homePage = new HomePage(log);
+    protected static CelebPage celebPage = new CelebPage(log);
+    protected static ArticlePage articlePage = new ArticlePage(log);
+    protected static SettingsPage settingPage = new SettingsPage(log);
+    protected static UserProfilePage userProfilePage = new UserProfilePage(log);
+    public static final String SLUG = "SLUG";
 
     Redirection redirection = new Redirection();
 
