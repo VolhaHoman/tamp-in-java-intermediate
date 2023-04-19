@@ -7,6 +7,7 @@ import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
 import com.epam.mentoring.taf.ui.page.*;
 import com.epam.mentoring.taf.util.Redirection;
+import com.epam.mentoring.taf.util.StorageHelper;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -19,9 +20,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
 import static com.epam.mentoring.taf.CommentTest.SLUG;
+import static com.epam.mentoring.taf.CommentUITest.ALL_COMMENT;
 import static com.epam.mentoring.taf.FollowUserTest.*;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
@@ -75,8 +78,13 @@ abstract public class AbstractTest {
         rememberThat(ADMIN_EMAIL, adminUserEmail);
         rememberThat(ADMIN_PASSWORD, adminUserPassword);
         rememberThat(ADMIN_USERNAME, adminUserName);
+    }
 
-        Response getResponse = client.sendGetRequest(API_ARTICLES);
+    @BeforeClass
+    public void getSlug() {
+        Response getResponse = client.sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(
+                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest")));
         String slug =
                 getResponse.getBody().jsonPath().get("articles[0].slug");
         log.info("slug: " + slug);
