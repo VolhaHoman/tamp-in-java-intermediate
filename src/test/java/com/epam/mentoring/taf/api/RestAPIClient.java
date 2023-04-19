@@ -10,7 +10,9 @@ import org.apache.logging.log4j.Logger;
 import static io.restassured.RestAssured.given;
 
 public class RestAPIClient {
+
     private static final String ARTICLES_BY_TAG_URL = "/api/articles?tag={tag}&limit=10&offset=0";
+
     public final Logger logger = LogManager.getRootLogger();
 
     @Step("Send API request to endpoint")

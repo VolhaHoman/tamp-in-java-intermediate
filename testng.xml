@@ -5,7 +5,7 @@
     <classes>
       <class name="com.epam.mentoring.taf.SearchingByTagTest"/>
 	  <class name="com.epam.mentoring.taf.UserSignInTest"/>
-	  <class name="com.epam.mentoring.taf.UserSignUpTest"/>
+	  <class name="com.epam.mentoring.taf.UserSignUpUITest"/>
     </classes>
   </test>
 </suite>
