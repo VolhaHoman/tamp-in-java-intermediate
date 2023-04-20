@@ -1,5 +1,6 @@
-package com.epam.mentoring.taf;
+package com.epam.mentoring.taf.tests.ui;
 
+import com.epam.mentoring.taf.AbstractTest;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
