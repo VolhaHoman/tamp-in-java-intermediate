@@ -22,9 +22,9 @@ import org.testng.annotations.BeforeMethod;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.epam.mentoring.taf.CommentUITest.ALL_COMMENT;
 import static com.epam.mentoring.taf.FollowUserTest.*;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
+import static com.epam.mentoring.taf.tests.ui.CommentUITest.ALL_COMMENT;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
@@ -56,7 +56,7 @@ abstract public class AbstractTest implements ApiURLs {
 
     Redirection redirection = new Redirection();
 
-    @BeforeClass
+    @BeforeClass(groups = {"smoke", "regression"})
     public void authorization() {
         try {
             defaultUserData = UserData.getUserDataFromYaml("adminUser");
@@ -85,7 +85,7 @@ abstract public class AbstractTest implements ApiURLs {
 
     }
 
-    @BeforeClass
+    @BeforeClass(groups = {"smoke", "regression"})
     public void getSlug() {
         Response getResponse = client.sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(
                 Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
@@ -99,7 +99,7 @@ abstract public class AbstractTest implements ApiURLs {
         rememberThat(ALL_COMMENT, allCommentPath);
     }
 
-    @BeforeMethod
+    @BeforeMethod(groups = {"smoke", "regression"})
     public void initialisation() {
         // TODO: Remove after migration to Page Object Pattern.
         driver = WebDriverCreate.getWebDriverInstance();
@@ -107,20 +107,6 @@ abstract public class AbstractTest implements ApiURLs {
 
         driver.get(baseUrl);
         driver.manage().window().maximize();
-    }
-
-    public void login() {
-        loginPage.clickSignInLink()
-                .fillInEmail(whatIsThe(ADMIN_EMAIL))
-                .fillInPassword(whatIsThe(ADMIN_PASSWORD))
-                .clickSignInBtn();
-        homePage.navToUser();
-        userProfilePage.selectArt();
-    }
-
-    public static void logOut() {
-        homePage.navToSetting();
-        settingPage.logout();
     }
 
     @AfterClass
