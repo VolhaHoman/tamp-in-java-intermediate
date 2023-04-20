@@ -55,7 +55,7 @@ abstract public class AbstractTest implements ApiURLs {
 
     Redirection redirection = new Redirection();
 
-    @BeforeClass()
+    @BeforeClass
     public void authorization() {
         try {
             defaultUserData = UserData.getUserDataFromYaml("adminUser");
@@ -83,7 +83,7 @@ abstract public class AbstractTest implements ApiURLs {
         rememberThat(ADMIN_USERNAME, adminUserName);
     }
 
-    @BeforeClass()
+    @BeforeClass
     public void getSlug() {
         Response getResponse = client.sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(
                 Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
@@ -97,7 +97,7 @@ abstract public class AbstractTest implements ApiURLs {
         rememberThat(ALL_COMMENT, allCommentPath);
     }
 
-    @BeforeMethod()
+    @BeforeMethod
     public void initialisation() {
         // TODO: Remove after migration to Page Object Pattern.
         driver = WebDriverCreate.getWebDriverInstance();
