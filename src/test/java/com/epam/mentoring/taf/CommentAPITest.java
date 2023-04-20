@@ -79,7 +79,7 @@ public class CommentAPITest extends AbstractTest {
         for (int i = 0; i < id.size(); i++) {
             String uniqueCommentPath = whatIsThe(ALL_COMMENT) + "/" + id.get(i);
 
-            Response response = client.sendDeleteRequestWithHeaders(uniqueCommentPath, Map.ofEntries(
+            Response response = client.sendDeleteRequestWithHeaders(uniqueCommentPath,"", Map.ofEntries(
                     Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
                     Map.entry("X-Requested-With", "XMLHttpRequest")
             ));

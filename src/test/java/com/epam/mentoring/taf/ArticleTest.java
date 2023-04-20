@@ -203,7 +203,7 @@ public class ArticleTest extends AbstractTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void apiDeleteArticle() {
 
-        Response response = client.sendDeleteRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), Map.ofEntries(
+        Response response = client.sendDeleteRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), "", Map.ofEntries(
                 Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
 
