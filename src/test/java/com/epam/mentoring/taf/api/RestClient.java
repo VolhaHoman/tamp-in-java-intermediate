@@ -78,6 +78,7 @@ public class RestClient {
                                       Map<String, String> headers,
                                       Map<String, String> params) {
         Response result = getRequestSpecification(headers, params)
+                .body(body)
                 .delete(path)
                 .then()
                 .extract().response();
