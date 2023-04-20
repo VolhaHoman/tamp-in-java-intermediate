@@ -4,6 +4,7 @@ import com.epam.mentoring.taf.api.*;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.mapper.ArticleResponseMapper;
+import com.epam.mentoring.taf.model.ArticleModel;
 import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import com.epam.mentoring.taf.util.StorageHelper;
@@ -14,7 +15,6 @@ import org.apache.hc.core5.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -22,7 +22,6 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
@@ -48,22 +47,13 @@ public class ArticleTest extends AbstractTest {
 
     private Object[][] getTags() throws IOException {
         try {
-            return DataProviderHelper.mapToProviderArray(READER.readArticleTags("article"));
+            ArticleModel articlModel = READER.readArticle("article");;
+            return DataProviderHelper.mapToProviderArray(articlModel.getTagList());
         } catch (IOException e) {
             throw new IOException("Failed to load file.");
         }
     }
 
-    @BeforeClass
-    public void getSlug() {
-        Response getResponse = client.sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(
-                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
-                Map.entry("X-Requested-With", "XMLHttpRequest")));
-        String slug =
-                getResponse.getBody().jsonPath().get("articles[0].slug");
-        log.info("slug: " + slug);
-        rememberThat(SLUG, slug);
-    }
 
     @Test(description = "UI: Add a valid article", dataProvider = "ymlArticleDataProvider", priority = 0)
     @Severity(SeverityLevel.BLOCKER)

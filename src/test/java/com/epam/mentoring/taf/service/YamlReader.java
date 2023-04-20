@@ -49,11 +49,4 @@ public class YamlReader {
         return articleReader.readValue(file);
     }
 
-    public String[] readArticleTags(String path) throws IOException {
-        File file = new File("src/test/resources/testData.yml");
-        ObjectReader tagReader = mapper.readerFor(ArticleTagConfiguration.class)
-                .at("/" + path);
-        return tagReader.readValue(file);
-    }
-
 }
