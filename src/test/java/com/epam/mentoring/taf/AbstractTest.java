@@ -22,9 +22,6 @@ import org.testng.annotations.BeforeMethod;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
-import static com.epam.mentoring.taf.CommentTest.SLUG;
-import static com.epam.mentoring.taf.CommentUITest.ALL_COMMENT;
 import static com.epam.mentoring.taf.FollowUserTest.*;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;

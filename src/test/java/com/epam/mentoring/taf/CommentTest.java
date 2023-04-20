@@ -1,8 +1,10 @@
-package com.epam.mentoring.taf.tests.api;
+package com.epam.mentoring.taf;
 
-import com.epam.mentoring.taf.AbstractTest;
 import com.epam.mentoring.taf.api.CommentDTO;
 import com.epam.mentoring.taf.api.CommentResponseDTO;
+import com.epam.mentoring.taf.data.UserData;
+import com.epam.mentoring.taf.data.UserDataDTO;
+import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.mapper.ResponseDataTransferMapper;
@@ -15,27 +17,98 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.epam.mentoring.taf.tests.ui.CommentUITest.ALL_COMMENT;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
-@Feature("API: Comments Tests")
-public class CommentAPITest extends AbstractTest {
+@Feature("Comments Tests")
+public class CommentTest extends AbstractTest {
 
     public static final String AUTH_TOKEN = "AUTH_TOKEN";
     public static final String COM_ID = "ID";
+    public static final String ALL_COMMENT = "ALL_COMMENT";
+    public static final String ERROR_MESSAGE = "body can't be blank";
+    public static final String COMMENT = "Test";
 
     private static Logger log = LogManager.getLogger();
 
-    @Test(description = "API: add multiple valid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForValidComments", priority = 0, groups = {"smoke"})
+    private UserDataDTO adminUser;
+
+    @BeforeMethod(description = "Get admin User")
+    public void getAdminUser() {
+        try {
+            adminUser = UserData.getUserDataFromYaml("adminUser");
+        } catch (IOException e) {
+            throw new ConfigurationSetupException("Can't load default user data", e);
+        }
+    }
+
+    @Test(description = "UI: add comment to article", priority = 2)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("UI verification of adding comments")
+    @Story("Create new tests for comments functionality")
+    public void uiSubmittedCommentVerification() {
+        loginPage.clickSignInLink()
+                .fillInEmail(adminUser.getUserEmail())
+                .fillInPassword(adminUser.getUserPassword())
+                .clickSignInBtn();
+        homePage.navToUser();
+        userProfilePage.selectArt();
+        articlePage.enterComment(COMMENT)
+                .sendComment();
+
+        Assert.assertEquals(articlePage.getComment(), COMMENT);
+        homePage.navToSetting();
+        settingPage.logout();
+    }
+
+    @Test(description = "UI: add empty comment", priority = 3)
+    @Severity(SeverityLevel.MINOR)
+    @Story("Create new tests for comments")
+    @Description("UI add empty comment")
+    public void uiEmptyCommentVerification() {
+        loginPage.clickSignInLink()
+                .fillInEmail(adminUser.getUserEmail())
+                .fillInPassword(adminUser.getUserPassword())
+                .clickSignInBtn();
+        homePage.navToUser();
+        userProfilePage.selectArt();
+        articlePage.enterComment("")
+                .sendComment();
+
+        Assert.assertEquals(articlePage.getError(), ERROR_MESSAGE);
+        homePage.navToSetting();
+        settingPage.logout();
+    }
+
+    @Test(description = "UI: delete comment from article", priority = 4)
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("UI verification of deleting comments")
+    @Story("Create new tests for comments functionality")
+    public void uiDeleteCommentVerification() {
+        loginPage.clickSignInLink()
+                .fillInEmail(adminUser.getUserEmail())
+                .fillInPassword(adminUser.getUserPassword())
+                .clickSignInBtn();
+        homePage.navToUser();
+        userProfilePage.selectArt();
+        articlePage.deleteComment();
+
+        Assert.assertFalse(articlePage.commentIsNotDisplayed());
+        homePage.navToSetting();
+        settingPage.logout();
+    }
+
+    @Test(description = "API: add multiple valid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForValidComments", priority = 0)
     @Severity(SeverityLevel.BLOCKER)
     @Description("API add comments to article from json file")
     @Story("Create new tests for comments functionality")
@@ -52,7 +125,7 @@ public class CommentAPITest extends AbstractTest {
         Assert.assertEquals(responseDTO.getComment().getBody(), data.get("body"));
     }
 
-    @Test(description = "API: add invalid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForInvalidComments", priority = 1, groups = {"regression"})
+    @Test(description = "API: add invalid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForInvalidComments", priority = 1)
     @Severity(SeverityLevel.NORMAL)
     @Description("API add invalid comments to article from json file")
     @Story("Create new tests for comments functionality")
@@ -65,7 +138,7 @@ public class CommentAPITest extends AbstractTest {
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
-    @AfterTest(description = "Post-condition: delete all comments", groups = {"smoke", "regression"})
+    @AfterTest(description = "Post-condition: delete all comments")
     public void cleanComments() {
         Response getResponse = client.sendGetRequestWithHeaders(whatIsThe(ALL_COMMENT), Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
