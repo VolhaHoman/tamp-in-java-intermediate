@@ -30,10 +30,10 @@ public class RestAPIClient {
     }
 
     @Step("Transform API response to DTO")
-    public SignInResponseDTO transformToDto(Response response, Logger logger) {
-        SignInResponseDTO signInResponseDTO = response.body().as(SignInResponseDTO.class);
-        logger.info("Response message: " + signInResponseDTO.getErrors().getUsername().get(0));
-        return signInResponseDTO;
+    public ResponseDTO transformToDto(Response response, Logger logger) {
+        ResponseDTO responseDTO = response.body().as(ResponseDTO.class);
+        logger.info("Response message: " + responseDTO.getErrors().getUsername().get(0));
+        return responseDTO;
     }
 
     @Step("Send Get request for the given tag")

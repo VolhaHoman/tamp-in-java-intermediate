@@ -54,7 +54,6 @@ public class ArticleTest extends AbstractTest {
         }
     }
 
-
     @Test(description = "UI: Add a valid article", dataProvider = "ymlArticleDataProvider", priority = 0)
     @Severity(SeverityLevel.BLOCKER)
     @Description("UI: Add a valid article from YAML file")
@@ -77,6 +76,9 @@ public class ArticleTest extends AbstractTest {
 
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
+
+        homePage.navToSetting();
+        settingPage.logout();
     }
 
     @Test(description = "UI: Edit an existing article", priority = 1)
@@ -102,6 +104,9 @@ public class ArticleTest extends AbstractTest {
 
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
+
+        homePage.navToSetting();
+        settingPage.logout();
     }
 
     @Test(description = "UI: Delete an article", priority = 2)
@@ -126,6 +131,9 @@ public class ArticleTest extends AbstractTest {
         userProfilePage.selectArt();
 
         Assert.assertNotEquals(articlePage.getArticleTitle(), articleTobeDeleted);
+
+        homePage.navToSetting();
+        settingPage.logout();
     }
 
     @Test(description = "UI: Add an article with empty fields", priority = 7)
@@ -143,6 +151,9 @@ public class ArticleTest extends AbstractTest {
         appEditorPage.publishArticle();
 
         Assert.assertEquals(appEditorPage.getError(), ERROR_MESSAGE);
+
+        homePage.navToSetting();
+        settingPage.logout();
     }
 
     @Test(description = "API: Add a valid article", priority = 3)
