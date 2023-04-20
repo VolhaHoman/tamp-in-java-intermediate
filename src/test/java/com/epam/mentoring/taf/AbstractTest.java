@@ -106,7 +106,7 @@ abstract public class AbstractTest implements ApiURLs {
         driver.get(baseUrl);
     }
 
-    @AfterClass()
+    @AfterClass
     public void terminate() {
         driver.quit();
     }

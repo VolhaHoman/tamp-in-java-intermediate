@@ -6,16 +6,13 @@ import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import com.epam.mentoring.taf.ui.config.WebDriverCreate;
 import io.qameta.allure.*;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
-
-import static com.epam.mentoring.taf.FollowUserTest.ADMIN_EMAIL;
-import static com.epam.mentoring.taf.FollowUserTest.ADMIN_PASSWORD;
-import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("UI: Comments Tests")
@@ -73,6 +70,7 @@ public class CommentUITest extends AbstractTest {
         homePage.navToSetting();
         settingPage.logout();
     }
+
 
     @Test(description = "UI: delete comment from article", priority = 3, groups = {"regression"})
     @Severity(SeverityLevel.CRITICAL)
