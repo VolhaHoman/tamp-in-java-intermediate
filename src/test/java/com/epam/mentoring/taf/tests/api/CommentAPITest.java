@@ -1,12 +1,12 @@
-package com.epam.mentoring.taf;
+package com.epam.mentoring.taf.tests.api;
 
+import com.epam.mentoring.taf.AbstractTest;
 import com.epam.mentoring.taf.api.CommentDTO;
 import com.epam.mentoring.taf.api.CommentResponseDTO;
-import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
+import com.epam.mentoring.taf.mapper.ResponseDataTransferMapper;
 import com.epam.mentoring.taf.util.DataUtil;
-import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpHeaders;
@@ -15,7 +15,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -23,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.epam.mentoring.taf.CommentUITest.ALL_COMMENT;
+import static com.epam.mentoring.taf.tests.ui.CommentUITest.ALL_COMMENT;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
@@ -47,8 +46,8 @@ public class CommentAPITest extends AbstractTest {
                 Map.entry("X-Requested-With", "XMLHttpRequest")
         ));
 
-        RestAPIClient restAPIClient = new RestAPIClient();
-        CommentDTO responseDTO = restAPIClient.transformToDtoCom(response);
+        ResponseDataTransferMapper restAPIClient = new ResponseDataTransferMapper();
+        CommentDTO responseDTO = restAPIClient.transformToDtoCom(response, log);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(responseDTO.getComment().getBody(), data.get("body"));
     }
@@ -84,10 +83,11 @@ public class CommentAPITest extends AbstractTest {
                     Map.entry("X-Requested-With", "XMLHttpRequest")
             ));
 
-            RestAPIClient restAPIClient = new RestAPIClient();
-            CommentDTO responseDTO = restAPIClient.transformToDtoCom(response);
+            ResponseDataTransferMapper restAPIClient = new ResponseDataTransferMapper();
+            CommentDTO responseDTO = restAPIClient.transformToDtoCom(response, log);
             Assert.assertEquals(response.getStatusCode(), org.apache.hc.core5.http.HttpStatus.SC_OK);
             Assert.assertEquals(responseDTO.getComment(), null);
         }
     }
+
 }

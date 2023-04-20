@@ -47,9 +47,4 @@ public class RestAPIClient {
         return response;
     }
 
-    @Step("Transform API response to DTO for comment")
-    public CommentDTO transformToDtoCom(Response response) {
-        CommentDTO commentDTO = response.body().as(CommentDTO.class);
-        return commentDTO;
-    }
 }
