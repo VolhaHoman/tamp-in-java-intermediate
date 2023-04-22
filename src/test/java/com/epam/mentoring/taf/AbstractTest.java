@@ -28,7 +28,7 @@ import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
-abstract public class AbstractTest implements ApiURLs {
+abstract public class AbstractTest {
 
     protected final static String baseUrl = "https://angular.realworld.io";
     public final static String API_URL = "https://conduit.productionready.io";
@@ -37,6 +37,8 @@ abstract public class AbstractTest implements ApiURLs {
     public static final String API_LOGIN = API_URL + LOGIN_URL;
     public static final String API_PROFILES = "https://api.realworld.io/api/profiles/";
     public static final String FOLLOW_PATH = "/follow";
+    public static final String API_ARTICLES = "https://api.realworld.io/api/articles/";
+    public static final String COMMENT_PATH = "/comments";
 
     protected WebDriver driver;
     protected WebDriverWait wait;

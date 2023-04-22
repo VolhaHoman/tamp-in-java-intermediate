@@ -2,9 +2,6 @@ package com.epam.mentoring.taf;
 
 import com.epam.mentoring.taf.api.CommentDTO;
 import com.epam.mentoring.taf.api.CommentResponseDTO;
-import com.epam.mentoring.taf.data.UserData;
-import com.epam.mentoring.taf.data.UserDataDTO;
-import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.mapper.ResponseDataTransferMapper;
@@ -17,11 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +26,7 @@ import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Comments Tests")
-public class CommentTest extends AbstractTest {
+public class CommentTest extends UiBaseTest {
 
     public static final String AUTH_TOKEN = "AUTH_TOKEN";
     public static final String COM_ID = "ID";
@@ -41,34 +36,18 @@ public class CommentTest extends AbstractTest {
 
     private static Logger log = LogManager.getLogger();
 
-    private UserDataDTO adminUser;
-
-    @BeforeMethod(description = "Get admin User")
-    public void getAdminUser() {
-        try {
-            adminUser = UserData.getUserDataFromYaml("adminUser");
-        } catch (IOException e) {
-            throw new ConfigurationSetupException("Can't load default user data", e);
-        }
-    }
-
     @Test(description = "UI: add comment to article", priority = 2)
     @Severity(SeverityLevel.BLOCKER)
     @Description("UI verification of adding comments")
     @Story("Create new tests for comments functionality")
     public void uiSubmittedCommentVerification() {
-        loginPage.clickSignInLink()
-                .fillInEmail(adminUser.getUserEmail())
-                .fillInPassword(adminUser.getUserPassword())
-                .clickSignInBtn();
-        homePage.navToUser();
-        userProfilePage.selectArt();
+        logIn();
+        selectArticle();
         articlePage.enterComment(COMMENT)
                 .sendComment();
 
         Assert.assertEquals(articlePage.getComment(), COMMENT);
-        homePage.navToSetting();
-        settingPage.logout();
+        logOut();
     }
 
     @Test(description = "UI: add empty comment", priority = 3)
@@ -76,18 +55,13 @@ public class CommentTest extends AbstractTest {
     @Story("Create new tests for comments")
     @Description("UI add empty comment")
     public void uiEmptyCommentVerification() {
-        loginPage.clickSignInLink()
-                .fillInEmail(adminUser.getUserEmail())
-                .fillInPassword(adminUser.getUserPassword())
-                .clickSignInBtn();
-        homePage.navToUser();
-        userProfilePage.selectArt();
+        logIn();
+        selectArticle();
         articlePage.enterComment("")
                 .sendComment();
 
         Assert.assertEquals(articlePage.getError(), ERROR_MESSAGE);
-        homePage.navToSetting();
-        settingPage.logout();
+        logOut();
     }
 
     @Test(description = "UI: delete comment from article", priority = 4)
@@ -95,17 +69,12 @@ public class CommentTest extends AbstractTest {
     @Description("UI verification of deleting comments")
     @Story("Create new tests for comments functionality")
     public void uiDeleteCommentVerification() {
-        loginPage.clickSignInLink()
-                .fillInEmail(adminUser.getUserEmail())
-                .fillInPassword(adminUser.getUserPassword())
-                .clickSignInBtn();
-        homePage.navToUser();
-        userProfilePage.selectArt();
+        logIn();
+        selectArticle();
         articlePage.deleteComment();
 
         Assert.assertFalse(articlePage.commentIsNotDisplayed());
-        homePage.navToSetting();
-        settingPage.logout();
+        logOut();
     }
 
     @Test(description = "API: add multiple valid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForValidComments", priority = 0)
@@ -138,6 +107,7 @@ public class CommentTest extends AbstractTest {
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
+
     @AfterTest(description = "Post-condition: delete all comments")
     public void cleanComments() {
         Response getResponse = client.sendGetRequestWithHeaders(whatIsThe(ALL_COMMENT), Map.ofEntries(
@@ -159,7 +129,7 @@ public class CommentTest extends AbstractTest {
             ResponseDataTransferMapper restAPIClient = new ResponseDataTransferMapper();
             CommentDTO responseDTO = restAPIClient.transformToDtoCom(response, log);
             Assert.assertEquals(response.getStatusCode(), org.apache.hc.core5.http.HttpStatus.SC_OK);
-            Assert.assertEquals(responseDTO.getComment(), null);
+            Assert.assertNull(responseDTO.getComment());
         }
     }
 
