@@ -50,10 +50,9 @@ public class LoginPage extends BasePage {
     }
 
     @Step("Click on 'Sign In' button")
-    public LoginPage clickSignInBtn() {
+    public void clickSignInBtn() {
         signInButton.click();
         logger.info("Click on 'Sign In' button");
-        return this;
     }
 
 }
