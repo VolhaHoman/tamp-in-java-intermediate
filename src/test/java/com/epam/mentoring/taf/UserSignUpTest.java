@@ -8,8 +8,6 @@ import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import com.epam.mentoring.taf.ui.page.HomePage;
-import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -47,13 +45,11 @@ public class UserSignUpTest extends AbstractTest {
     @Description("UI Sign Up with new credentials")
     @Story("Investigate the issues and fix UserSignUpTest")
     public void signUpVerification() {
-        LoginPage loginPage = new LoginPage(baseUrl, log);
-        loginPage.clickSignUpLink()
-                .fillInUsername(userDataDTO.getUserName())
-                .fillInEmail(userDataDTO.getUserEmail())
-                .fillInPassword(userDataDTO.getUserPassword())
-                .clickSignUpBtn();
-        HomePage homePage = new HomePage(log);
+        homePage.clickSignUpLink();
+        registerPage.fillInUsername(userDataDTO.getUserName())
+                    .fillInEmail(userDataDTO.getUserEmail())
+                    .fillInPassword(userDataDTO.getUserPassword());
+        registerPage.clickSignUpBtn();
         Assert.assertEquals(homePage.getUsernameAccountNav(), userDataDTO.getUserName());
     }
 

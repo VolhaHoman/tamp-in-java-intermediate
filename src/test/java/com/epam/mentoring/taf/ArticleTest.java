@@ -22,23 +22,20 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.epam.mentoring.taf.SearchingByTagTest.ARTICLES_COUNT_JSON_PATH;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Article handling Tests")
-public class ArticleTest extends AbstractTest {
+public class ArticleTest extends UiBaseTest {
 
     public static final YamlReader READER = new YamlReader();
     private static Logger log = LogManager.getLogger();
     protected static RestClient client = new RestClient(log);
     public static final String AUTH_TOKEN = "AUTH_TOKEN";
-    public static final String ADMIN_EMAIL = "ADMIN_EMAIL";
-    public static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
-    public static final String SLUG = "SLUG";
-    public static final String ERROR_MESSAGE = "title can't be blank";
-    public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
+    public static final String ERROR_MESSAGE_TITLE_BLANK = "title can't be blank";
     public static final String updatedBody = "With two hands";
-    public static final String JSON_BODY = "{\"article\":{\"body\":\"%s\"}}";
+    public static final String JSON_BODY_UPDATE = "{\"article\":{\"body\":\"%s\"}}";
 
     @DataProvider(name = "ymlArticleDataProvider")
     public Object[][] dataProviderMethod() throws IOException {
@@ -47,7 +44,7 @@ public class ArticleTest extends AbstractTest {
 
     private Object[][] getTags() throws IOException {
         try {
-            ArticleModel articlModel = READER.readArticle("article");;
+            ArticleModel articlModel = READER.readArticle("article");
             return DataProviderHelper.mapToProviderArray(articlModel.getTagList());
         } catch (IOException e) {
             throw new IOException("Failed to load file.");
@@ -60,10 +57,7 @@ public class ArticleTest extends AbstractTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiAddValidArticle(String tag) throws IOException {
 
-        loginPage.clickSignInLink()
-                .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
-                .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
-                .clickSignInBtn();
+        logIn();
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
 
@@ -77,8 +71,7 @@ public class ArticleTest extends AbstractTest {
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
 
-        homePage.navToSetting();
-        settingPage.logout();
+        logOut();
     }
 
     @Test(description = "UI: Edit an existing article", priority = 1)
@@ -87,13 +80,8 @@ public class ArticleTest extends AbstractTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiEditExistingArticle() throws IOException {
 
-        loginPage.clickSignInLink()
-                .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
-                .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
-                .clickSignInBtn();
-
-        homePage.navToUser();
-        userProfilePage.selectArt();
+        logIn();
+        selectArticle();
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
 
@@ -105,8 +93,7 @@ public class ArticleTest extends AbstractTest {
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
 
-        homePage.navToSetting();
-        settingPage.logout();
+        logOut();
     }
 
     @Test(description = "UI: Delete an article", priority = 2)
@@ -115,13 +102,8 @@ public class ArticleTest extends AbstractTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiDeleteArticle() {
 
-        loginPage.clickSignInLink()
-                .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
-                .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
-                .clickSignInBtn();
-
-        homePage.navToUser();
-        userProfilePage.selectArt();
+        logIn();
+        selectArticle();
 
         String articleTobeDeleted = articlePage.getArticleTitle();
 
@@ -132,8 +114,7 @@ public class ArticleTest extends AbstractTest {
 
         Assert.assertNotEquals(articlePage.getArticleTitle(), articleTobeDeleted);
 
-        homePage.navToSetting();
-        settingPage.logout();
+        logOut();
     }
 
     @Test(description = "UI: Add an article with empty fields", priority = 7)
@@ -142,18 +123,13 @@ public class ArticleTest extends AbstractTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiAddEmptyArticle() {
 
-        loginPage.clickSignInLink()
-                .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
-                .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
-                .clickSignInBtn();
-
+        logIn();
         homePage.navToEditorPage();
         appEditorPage.publishArticle();
 
-        Assert.assertEquals(appEditorPage.getError(), ERROR_MESSAGE);
+        Assert.assertEquals(appEditorPage.getError(), ERROR_MESSAGE_TITLE_BLANK);
 
-        homePage.navToSetting();
-        settingPage.logout();
+        logOut();
     }
 
     @Test(description = "API: Add a valid article", priority = 3)
@@ -198,7 +174,7 @@ public class ArticleTest extends AbstractTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void apiUpdateArticle() {
 
-        Response response = client.sendPutRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), String.format(JSON_BODY, updatedBody), Map.ofEntries(
+        Response response = client.sendPutRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), String.format(JSON_BODY_UPDATE, updatedBody), Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
         ArticleResponseMapper articleResponseMapper = new ArticleResponseMapper();

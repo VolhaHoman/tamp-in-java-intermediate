@@ -44,7 +44,16 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//ul[contains(@class,'navbar-nav')]/li[3]/a")
     private WebElement settingNav;
 
-    public HomePage(Logger logger) {
+    @FindBy(xpath = "//li/a[contains(text(),'Sign up')]")
+    public WebElement signUpLink;
+
+    @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
+    public WebElement signInLink;
+
+    private final String baseUrl;
+
+    public HomePage(String baseUrl, Logger logger) {
+        this.baseUrl = baseUrl;
         PageFactory.initElements(driver, this);
         this.logger = logger;
     }
@@ -108,11 +117,10 @@ public class HomePage extends BasePage {
     }
 
     @Step("Navigate to User page")
-    public HomePage navToUser() {
+    public void navToUser() {
         wait.until(ExpectedConditions.visibilityOfAllElements(tagPills));
         userIcon.click();
         logger.info("Navigate to User page");
-        return this;
     }
 
     @Step("Navigate to Global feed")
@@ -131,11 +139,24 @@ public class HomePage extends BasePage {
     }
 
     @Step("Navigate to Setting page")
-    public HomePage navToSetting() {
+    public void navToSetting() {
         wait.until(ExpectedConditions.visibilityOf(settingNav));
         settingNav.click();
         logger.info("Navigate to Setting page");
-        return this;
+    }
+
+    @Step("Click on 'Sign In' link")
+    public void clickSignInLink() {
+        driver.get(baseUrl);
+        signInLink.click();
+        logger.info("Click on 'Sign In' link");
+    }
+
+    @Step("Click on 'Sign Up' link")
+    public void clickSignUpLink() {
+        driver.get(baseUrl);
+        signUpLink.click();
+        logger.info("Click on 'Sign Up' link");
     }
 
 }

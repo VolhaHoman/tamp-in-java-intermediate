@@ -8,10 +8,10 @@ import static com.epam.mentoring.taf.FollowUserTest.ADMIN_PASSWORD;
 public class UiBaseTest extends AbstractTest {
 
     public void logIn() {
-        loginPage.clickSignInLink()
-                .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
-                .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
-                .clickSignInBtn();
+        homePage.clickSignInLink();
+        loginPage.fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
+                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD));
+        loginPage.clickSignInBtn();
     }
 
     public void selectArticle() {

@@ -47,13 +47,15 @@ abstract public class AbstractTest {
     private static Logger log = LogManager.getLogger();
 
     protected static RestClient client = new RestClient(log);
-    protected static LoginPage loginPage = new LoginPage(baseUrl, log);
-    protected static HomePage homePage = new HomePage(log);
+    protected static LoginPage loginPage = new LoginPage(log);
+    protected static HomePage homePage = new HomePage(baseUrl, log);
     protected static CelebPage celebPage = new CelebPage(log);
     protected static ArticlePage articlePage = new ArticlePage(log);
     protected static AppEditorPage appEditorPage = new AppEditorPage(log);
     protected static SettingsPage settingPage = new SettingsPage(log);
     protected static UserProfilePage userProfilePage = new UserProfilePage(log);
+
+    protected static RegisterPage registerPage = new RegisterPage(log);
     public static final String SLUG = "SLUG";
 
     Redirection redirection = new Redirection();

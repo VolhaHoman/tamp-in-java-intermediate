@@ -23,7 +23,7 @@ import java.util.Map;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Follow User Functionality")
-public class FollowUserTest extends AbstractTest {
+public class FollowUserTest extends UiBaseTest {
 
     public static final String AUTH_TOKEN = "AUTH_TOKEN";
     public static final String ADMIN_EMAIL = "ADMIN_EMAIL";
@@ -59,10 +59,7 @@ public class FollowUserTest extends AbstractTest {
     @Story("Create new tests for users following functionality")
     public void uiSignInAsAdminUser(UserDataModel model) {
 
-        loginPage.clickSignInLink()
-                .fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
-                .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
-                .clickSignInBtn();
+        logIn();
 
         Assert.assertEquals(homePage.getUsernameAccountNav(), StorageHelper.whatIsThe(ADMIN_USERNAME));
         Assert.assertEquals(homePage.getYourFeedNav(), "Your Feed");

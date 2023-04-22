@@ -9,9 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends BasePage {
 
-    @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
-    public WebElement signInLink;
-
     @FindBy(xpath = "//input[@placeholder='Email']")
     public WebElement emailField;
 
@@ -26,19 +23,7 @@ public class LoginPage extends BasePage {
 
     public static final String CREDENTIALS_ERROR_TEXT = "email or password is invalid";
 
-    @FindBy(xpath = "//li/a[contains(text(),'Sign up')]")
-    public WebElement signUpLink;
-
-    @FindBy(xpath = "//input[@placeholder='Username']")
-    public WebElement usernameField;
-
-    @FindBy(xpath = "//button[contains(text(),'Sign up')]")
-    public WebElement signUpButton;
-
-    private final String baseUrl;
-
-    public LoginPage(String baseUrl, Logger logger) {
-        this.baseUrl = baseUrl;
+    public LoginPage(Logger logger) {
         PageFactory.initElements(driver, this);
         this.logger = logger;
     }
@@ -50,7 +35,7 @@ public class LoginPage extends BasePage {
         return invalidCredentialsMessage.getText();
     }
 
-    @Step("Fill in email")
+    @Step("Fill in email {0}")
     public LoginPage fillInEmail(String email) {
         emailField.sendKeys(email);
         logger.info("Fill in email: " + email);
@@ -64,40 +49,10 @@ public class LoginPage extends BasePage {
         return this;
     }
 
-    @Step("Click on 'Sign In' link")
-    public LoginPage clickSignInLink() {
-        driver.get(baseUrl);
-        signInLink.click();
-        logger.info("Click on 'Sign In' link");
-        return this;
-    }
-
     @Step("Click on 'Sign In' button")
     public LoginPage clickSignInBtn() {
         signInButton.click();
         logger.info("Click on 'Sign In' button");
-        return this;
-    }
-
-    @Step("Click on 'Sign Up' link")
-    public LoginPage clickSignUpLink() {
-        driver.get(baseUrl);
-        signUpLink.click();
-        logger.info("Click on 'Sign Up' link");
-        return this;
-    }
-
-    @Step("Click on 'Sign Up' button")
-    public LoginPage clickSignUpBtn() {
-        signUpButton.click();
-        logger.info("Click on 'Sign Up' button");
-        return this;
-    }
-
-    @Step("Fill in username")
-    public LoginPage fillInUsername(String username) {
-        usernameField.sendKeys(username);
-        logger.info("Fill in username: " + username);
         return this;
     }
 
