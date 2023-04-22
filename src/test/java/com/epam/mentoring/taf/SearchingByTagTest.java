@@ -23,7 +23,6 @@ public class SearchingByTagTest extends UiBaseTest {
 
     public static final String INVALID_TAG = "invalid_tag_name";
     public static final String TAG_LIST_JSON_PATH = "articles.tagList";
-    private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "apiDataProvider")
     public Object[][] apiDataProviderMethod() throws IOException {

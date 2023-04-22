@@ -26,7 +26,6 @@ import static com.epam.mentoring.taf.ui.page.LoginPage.CREDENTIALS_ERROR_TEXT;
 public class UserSignInTest extends UiBaseTest  {
 
     private UserDataDTO defaultUserData;
-    private Logger log = LogManager.getLogger();
 
     @BeforeMethod(description = "Generate default Sign in User")
     public void generateUserData() {
