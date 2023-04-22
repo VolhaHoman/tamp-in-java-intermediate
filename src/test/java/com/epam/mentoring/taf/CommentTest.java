@@ -6,6 +6,7 @@ import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.mapper.ResponseDataTransferMapper;
 import com.epam.mentoring.taf.util.DataUtil;
+import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpHeaders;
@@ -28,7 +29,6 @@ import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 @Feature("Comments Tests")
 public class CommentTest extends UiBaseTest {
 
-    public static final String AUTH_TOKEN = "AUTH_TOKEN";
     public static final String COM_ID = "ID";
     public static final String ALL_COMMENT = "ALL_COMMENT";
     public static final String ERROR_MESSAGE = "body can't be blank";
@@ -41,7 +41,7 @@ public class CommentTest extends UiBaseTest {
     @Description("UI verification of adding comments")
     @Story("Create new tests for comments functionality")
     public void uiSubmittedCommentVerification() {
-        logIn();
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
         articlePage.enterComment(COMMENT)
                 .sendComment();
@@ -55,7 +55,7 @@ public class CommentTest extends UiBaseTest {
     @Story("Create new tests for comments")
     @Description("UI add empty comment")
     public void uiEmptyCommentVerification() {
-        logIn();
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
         articlePage.enterComment("")
                 .sendComment();
@@ -69,7 +69,7 @@ public class CommentTest extends UiBaseTest {
     @Description("UI verification of deleting comments")
     @Story("Create new tests for comments functionality")
     public void uiDeleteCommentVerification() {
-        logIn();
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
         articlePage.deleteComment();
 

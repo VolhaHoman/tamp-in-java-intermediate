@@ -4,7 +4,6 @@ import com.epam.mentoring.taf.api.RestClient;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
-import com.epam.mentoring.taf.ui.config.WebDriverCreate;
 import com.epam.mentoring.taf.ui.page.*;
 import com.epam.mentoring.taf.util.Redirection;
 import com.epam.mentoring.taf.util.StorageHelper;
@@ -15,15 +14,14 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
 import java.util.Map;
 
 import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
-import static com.epam.mentoring.taf.FollowUserTest.*;
+
+import static com.epam.mentoring.taf.FollowUserTest.ADMIN_USERNAME;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
@@ -39,6 +37,11 @@ abstract public class AbstractTest {
     public static final String FOLLOW_PATH = "/follow";
     public static final String API_ARTICLES = "https://api.realworld.io/api/articles/";
     public static final String COMMENT_PATH = "/comments";
+    public static final String ADMIN_EMAIL = "ADMIN_EMAIL";
+    public static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
+    public static final String AUTH_TOKEN = "AUTH_TOKEN";
+    public static final String SLUG = "SLUG";
+    public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
 
     protected WebDriver driver;
     protected WebDriverWait wait;
@@ -56,7 +59,6 @@ abstract public class AbstractTest {
     protected static UserProfilePage userProfilePage = new UserProfilePage(log);
 
     protected static RegisterPage registerPage = new RegisterPage(log);
-    public static final String SLUG = "SLUG";
 
     Redirection redirection = new Redirection();
 
@@ -103,18 +105,4 @@ abstract public class AbstractTest {
         rememberThat(ALL_COMMENT, allCommentPath);
     }
 
-    @BeforeMethod
-    public void initialisation() {
-        // TODO: Remove after migration to Page Object Pattern.
-        driver = WebDriverCreate.getWebDriverInstance();
-        wait = WebDriverCreate.getWebDriverWaitInstance();
-
-        driver.get(baseUrl);
-        driver.manage().window().maximize();
-    }
-
-    @AfterClass
-    public void terminate() {
-        driver.quit();
-    }
 }

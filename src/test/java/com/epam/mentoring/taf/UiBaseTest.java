@@ -1,16 +1,25 @@
 package com.epam.mentoring.taf;
 
-import com.epam.mentoring.taf.util.StorageHelper;
-
-import static com.epam.mentoring.taf.FollowUserTest.ADMIN_EMAIL;
-import static com.epam.mentoring.taf.FollowUserTest.ADMIN_PASSWORD;
+import com.epam.mentoring.taf.ui.config.WebDriverCreate;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeMethod;
 
 public class UiBaseTest extends AbstractTest {
 
-    public void logIn() {
+    @BeforeMethod
+    public void initialisation() {
+        // TODO: Remove after migration to Page Object Pattern.
+        driver = WebDriverCreate.getWebDriverInstance();
+        wait = WebDriverCreate.getWebDriverWaitInstance();
+
+        driver.get(baseUrl);
+        driver.manage().window().maximize();
+    }
+
+    public void logIn(String email, String password) {
         homePage.clickSignInLink();
-        loginPage.fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
-                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
+        loginPage.fillInEmail(email)
+                 .fillInPassword(password)
                  .clickSignInBtn();
     }
 
@@ -22,6 +31,11 @@ public class UiBaseTest extends AbstractTest {
     public void logOut() {
         homePage.navToSetting();
         settingPage.logout();
+    }
+
+    @AfterClass
+    public void terminate() {
+        driver.quit();
     }
 
 }

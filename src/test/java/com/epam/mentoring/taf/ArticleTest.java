@@ -22,7 +22,6 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.epam.mentoring.taf.SearchingByTagTest.ARTICLES_COUNT_JSON_PATH;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
@@ -57,7 +56,7 @@ public class ArticleTest extends UiBaseTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiAddValidArticle(String tag) throws IOException {
 
-        logIn();
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
 
@@ -80,7 +79,7 @@ public class ArticleTest extends UiBaseTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiEditExistingArticle() throws IOException {
 
-        logIn();
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
@@ -102,7 +101,7 @@ public class ArticleTest extends UiBaseTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiDeleteArticle() {
 
-        logIn();
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
 
         String articleTobeDeleted = articlePage.getArticleTitle();
@@ -123,7 +122,7 @@ public class ArticleTest extends UiBaseTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiAddEmptyArticle() {
 
-        logIn();
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         homePage.navToEditorPage();
         appEditorPage.publishArticle();
 

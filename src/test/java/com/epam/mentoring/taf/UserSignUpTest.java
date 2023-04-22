@@ -22,7 +22,7 @@ import java.io.IOException;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Sign Up Tests")
-public class UserSignUpTest extends AbstractTest {
+public class UserSignUpTest extends UiBaseTest {
 
     public static final String BLANK_ERROR_TEXT = "can't be blank";
     public static final String ALREADY_TAKEN_ERROR_TEXT = "has already been taken";

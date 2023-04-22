@@ -4,7 +4,6 @@ import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.service.YamlReader;
-import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
@@ -21,12 +20,11 @@ import java.util.List;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Searching By Tag Tests")
-public class SearchingByTagTest extends AbstractTest {
+public class SearchingByTagTest extends UiBaseTest {
 
     public static final YamlReader READER = new YamlReader();
     public static final String INVALID_TAG = "invalid_tag_name";
     public static final String TAG_LIST_JSON_PATH = "articles.tagList";
-    public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
     private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "apiDataProvider")
