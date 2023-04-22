@@ -2,10 +2,10 @@ package com.epam.mentoring.taf;
 
 import com.epam.mentoring.taf.util.StorageHelper;
 
-public class UiBaseTest extends AbstractTest {
+import static com.epam.mentoring.taf.FollowUserTest.ADMIN_EMAIL;
+import static com.epam.mentoring.taf.FollowUserTest.ADMIN_PASSWORD;
 
-    public static final String ADMIN_EMAIL = "ADMIN_EMAIL";
-    public static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
+public class UiBaseTest extends AbstractTest {
 
     public void logIn() {
         loginPage.clickSignInLink()
