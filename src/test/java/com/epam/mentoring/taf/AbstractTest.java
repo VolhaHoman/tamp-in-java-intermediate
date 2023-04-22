@@ -4,15 +4,13 @@ import com.epam.mentoring.taf.api.RestClient;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
-import com.epam.mentoring.taf.ui.page.*;
+import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.util.Redirection;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 
@@ -43,22 +41,12 @@ abstract public class AbstractTest {
     public static final String SLUG = "SLUG";
     public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
 
-    protected WebDriver driver;
-    protected WebDriverWait wait;
     protected UserDataDTO defaultUserData;
 
-    private static Logger log = LogManager.getLogger();
+    protected static Logger log = LogManager.getLogger();
 
     protected static RestClient client = new RestClient(log);
-    protected static LoginPage loginPage = new LoginPage(log);
-    protected static HomePage homePage = new HomePage(baseUrl, log);
-    protected static CelebPage celebPage = new CelebPage(log);
-    protected static ArticlePage articlePage = new ArticlePage(log);
-    protected static AppEditorPage appEditorPage = new AppEditorPage(log);
-    protected static SettingsPage settingPage = new SettingsPage(log);
-    protected static UserProfilePage userProfilePage = new UserProfilePage(log);
-
-    protected static RegisterPage registerPage = new RegisterPage(log);
+    protected static final YamlReader READER = new YamlReader();
 
     Redirection redirection = new Redirection();
 

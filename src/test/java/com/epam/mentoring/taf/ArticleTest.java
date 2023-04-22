@@ -5,7 +5,6 @@ import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.mapper.ArticleResponseMapper;
 import com.epam.mentoring.taf.model.ArticleModel;
-import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
@@ -28,10 +27,7 @@ import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 @Feature("Article handling Tests")
 public class ArticleTest extends UiBaseTest {
 
-    public static final YamlReader READER = new YamlReader();
-    private static Logger log = LogManager.getLogger();
-    protected static RestClient client = new RestClient(log);
-    public static final String AUTH_TOKEN = "AUTH_TOKEN";
+    private Logger log = LogManager.getLogger();
     public static final String ERROR_MESSAGE_TITLE_BLANK = "title can't be blank";
     public static final String updatedBody = "With two hands";
     public static final String JSON_BODY_UPDATE = "{\"article\":{\"body\":\"%s\"}}";

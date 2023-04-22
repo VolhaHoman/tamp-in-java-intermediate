@@ -11,8 +11,6 @@ import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Listeners;
@@ -33,8 +31,6 @@ public class CommentTest extends UiBaseTest {
     public static final String ALL_COMMENT = "ALL_COMMENT";
     public static final String ERROR_MESSAGE = "body can't be blank";
     public static final String COMMENT = "Test";
-
-    private static Logger log = LogManager.getLogger();
 
     @Test(description = "UI: add comment to article", priority = 2)
     @Severity(SeverityLevel.BLOCKER)
