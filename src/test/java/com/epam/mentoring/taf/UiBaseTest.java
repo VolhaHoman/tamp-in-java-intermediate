@@ -10,8 +10,8 @@ public class UiBaseTest extends AbstractTest {
     public void logIn() {
         homePage.clickSignInLink();
         loginPage.fillInEmail(StorageHelper.whatIsThe(ADMIN_EMAIL))
-                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD));
-        loginPage.clickSignInBtn();
+                 .fillInPassword(StorageHelper.whatIsThe(ADMIN_PASSWORD))
+                 .clickSignInBtn();
     }
 
     public void selectArticle() {

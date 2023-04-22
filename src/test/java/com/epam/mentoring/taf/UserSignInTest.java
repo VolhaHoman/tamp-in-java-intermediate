@@ -42,7 +42,10 @@ public class UserSignInTest extends UiBaseTest  {
     @Description("UI Sign In with valid credentials")
     @Story("Create layers for UI tests")
     public void uiSignInWithValidCredentialsVerification() {
-        logIn();
+        homePage.clickSignInLink();
+        loginPage.fillInEmail(defaultUserData.getUserEmail())
+                 .fillInPassword(defaultUserData.getUserPassword())
+                 .clickSignInBtn();
         Assert.assertEquals(homePage.getUsernameAccountNav(), defaultUserData.getUserName());
     }
 
@@ -51,9 +54,12 @@ public class UserSignInTest extends UiBaseTest  {
     @Description("UI Sign In with invalid credentials")
     @Story("Investigate the issues and fix UserSignInTest")
     public void uiSignInWithInvalidCredentialsVerification() {
-        logIn();
-        Assert.assertEquals(loginPage.getInvalidCredentialsMessage(), CREDENTIALS_ERROR_TEXT);
-    }
+            homePage.clickSignInLink();
+            loginPage.fillInEmail(defaultUserData.getUserEmail())
+                     .fillInPassword(defaultUserData.getUserPassword() + "1")
+                     .clickSignInBtn();
+            Assert.assertEquals(loginPage.getInvalidCredentialsMessage(), CREDENTIALS_ERROR_TEXT);
+        }
 
     @Test(description = "API Sign In with valid credentials")
     @Severity(SeverityLevel.CRITICAL)
