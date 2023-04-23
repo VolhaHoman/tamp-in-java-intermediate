@@ -45,8 +45,8 @@ public class UserSignUpTest extends UiBaseTest {
         homePage.clickSignUpLink();
         registerPage.fillInUsername(userDataDTO.getUserName())
                     .fillInEmail(userDataDTO.getUserEmail())
-                    .fillInPassword(userDataDTO.getUserPassword());
-        registerPage.clickSignUpBtn();
+                    .fillInPassword(userDataDTO.getUserPassword())
+                    .clickSignUpBtn();
         Assert.assertEquals(homePage.getUsernameAccountNav(), userDataDTO.getUserName());
     }
 
