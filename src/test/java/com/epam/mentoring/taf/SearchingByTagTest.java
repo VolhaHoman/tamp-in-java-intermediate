@@ -7,8 +7,6 @@ import com.epam.mentoring.taf.util.DataProviderHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;

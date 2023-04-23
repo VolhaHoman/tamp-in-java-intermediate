@@ -11,8 +11,6 @@ import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
@@ -27,7 +25,6 @@ import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 @Feature("Article handling Tests")
 public class ArticleTest extends UiBaseTest {
 
-    private Logger log = LogManager.getLogger();
     public static final String ERROR_MESSAGE_TITLE_BLANK = "title can't be blank";
     public static final String updatedBody = "With two hands";
     public static final String JSON_BODY_UPDATE = "{\"article\":{\"body\":\"%s\"}}";

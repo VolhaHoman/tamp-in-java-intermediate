@@ -10,8 +10,6 @@ import com.epam.mentoring.taf.listeners.TestListener;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
