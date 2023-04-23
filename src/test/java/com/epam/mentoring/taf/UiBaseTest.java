@@ -13,7 +13,7 @@ public class UiBaseTest extends AbstractTest {
     protected WebDriverWait wait;
 
     protected static LoginPage loginPage = new LoginPage(log);
-    protected static HomePage homePage = new HomePage(baseUrl, log);
+    protected static HomePage homePage = new HomePage(log);
     protected static CelebPage celebPage = new CelebPage(log);
     protected static ArticlePage articlePage = new ArticlePage(log);
     protected static AppEditorPage appEditorPage = new AppEditorPage(log);

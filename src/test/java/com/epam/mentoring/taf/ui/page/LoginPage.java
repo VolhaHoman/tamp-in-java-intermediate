@@ -35,7 +35,7 @@ public class LoginPage extends BasePage {
         return invalidCredentialsMessage.getText();
     }
 
-    @Step("Fill in email {0}")
+    @Step("Fill in email")
     public LoginPage fillInEmail(String email) {
         emailField.sendKeys(email);
         logger.info("Fill in email: " + email);

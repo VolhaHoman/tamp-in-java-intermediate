@@ -32,7 +32,7 @@ public class RegisterPage extends BasePage {
         return this;
     }
 
-    @Step("Fill in email {0}")
+    @Step("Fill in email")
     public RegisterPage fillInEmail(String email) {
         emailField.sendKeys(email);
         logger.info("Fill in email: " + email);

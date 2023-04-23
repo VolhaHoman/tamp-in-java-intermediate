@@ -50,10 +50,7 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
     public WebElement signInLink;
 
-    private final String baseUrl;
-
-    public HomePage(String baseUrl, Logger logger) {
-        this.baseUrl = baseUrl;
+    public HomePage(Logger logger) {
         PageFactory.initElements(driver, this);
         this.logger = logger;
     }
@@ -147,14 +144,12 @@ public class HomePage extends BasePage {
 
     @Step("Click on 'Sign In' link")
     public void clickSignInLink() {
-        driver.get(baseUrl);
         signInLink.click();
         logger.info("Click on 'Sign In' link");
     }
 
     @Step("Click on 'Sign Up' link")
     public void clickSignUpLink() {
-        driver.get(baseUrl);
         signUpLink.click();
         logger.info("Click on 'Sign Up' link");
     }

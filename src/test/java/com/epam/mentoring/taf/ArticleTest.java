@@ -55,10 +55,10 @@ public class ArticleTest extends UiBaseTest {
 
         homePage.navToEditorPage();
         appEditorPage.enterTitle(articleDTO.getTitle())
-                .enterDescription(articleDTO.getDescription())
-                .enterBody(articleDTO.getBody());
-        appEditorPage.enterTag(tag);
-        appEditorPage.publishArticle();
+                     .enterDescription(articleDTO.getDescription())
+                     .enterBody(articleDTO.getBody())
+                     .enterTag(tag)
+                     .publishArticle();
 
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
@@ -79,8 +79,8 @@ public class ArticleTest extends UiBaseTest {
 
         articlePage.clickEditArticleBtn();
         appEditorPage.enterTitle(articleDTO.getTitle())
-                .enterBody(articleDTO.getBody())
-                .publishArticle();
+                     .enterBody(articleDTO.getBody())
+                     .publishArticle();
 
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
@@ -96,13 +96,9 @@ public class ArticleTest extends UiBaseTest {
 
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
-
         String articleTobeDeleted = articlePage.getArticleTitle();
-
         articlePage.clickDeleteArticleBtn();
-
-        homePage.navToUser();
-        userProfilePage.selectArt();
+        selectArticle();
 
         Assert.assertNotEquals(articlePage.getArticleTitle(), articleTobeDeleted);
 
