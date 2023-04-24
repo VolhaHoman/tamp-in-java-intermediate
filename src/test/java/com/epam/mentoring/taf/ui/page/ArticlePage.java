@@ -38,19 +38,17 @@ public class ArticlePage extends BasePage {
     }
 
     @Step("Send comment")
-    public ArticlePage sendComment() {
+    public void sendComment() {
         wait.until(ExpectedConditions.visibilityOf(sendBtn));
         sendBtn.click();
         logger.info("Send comment");
-        return this;
     }
 
     @Step("Delete comment")
-    public ArticlePage deleteComment() {
+    public void deleteComment() {
         wait.until(ExpectedConditions.visibilityOf(trashBtn));
         trashBtn.click();
         logger.info("Delete comment");
-        return this;
     }
 
     @Step("Get text of comment")

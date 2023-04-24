@@ -18,11 +18,10 @@ public class SettingsPage extends BasePage {
     }
 
     @Step("Log out")
-    public SettingsPage logout() {
+    public void logout() {
         wait.until(ExpectedConditions.visibilityOf(logoutBtn));
         logoutBtn.click();
         logger.info("Log out");
-        return this;
     }
 
 }
