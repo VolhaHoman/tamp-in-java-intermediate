@@ -5,7 +5,9 @@ import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
-import com.epam.mentoring.taf.ui.page.*;
+import com.epam.mentoring.taf.ui.page.CelebPage;
+import com.epam.mentoring.taf.ui.page.HomePage;
+import com.epam.mentoring.taf.ui.page.LoginPage;
 import com.epam.mentoring.taf.util.Redirection;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.restassured.response.Response;
@@ -47,13 +49,10 @@ abstract public class AbstractTest {
     private static Logger log = LogManager.getLogger();
 
     protected static RestClient client = new RestClient(log);
-    protected static LoginPage loginPage = new LoginPage(baseUrl, log);
-    protected static HomePage homePage = new HomePage(log);
-    protected static CelebPage celebPage = new CelebPage(log);
-    protected static ArticlePage articlePage = new ArticlePage(log);
-    protected static SettingsPage settingPage = new SettingsPage(log);
-    protected static UserProfilePage userProfilePage = new UserProfilePage(log);
-    public static final String SLUG = "SLUG";
+
+    protected LoginPage loginPage;
+    protected HomePage homePage;
+    protected CelebPage celebPage;
 
     Redirection redirection = new Redirection();
 
@@ -104,6 +103,10 @@ abstract public class AbstractTest {
         // TODO: Remove after migration to Page Object Pattern.
         driver = WebDriverCreate.getWebDriverInstance();
         wait = WebDriverCreate.getWebDriverWaitInstance();
+
+        loginPage = new LoginPage(baseUrl, log, driver, wait);
+        homePage = new HomePage(log, driver, wait);
+        celebPage = new CelebPage(log, driver, wait);
 
         driver.get(baseUrl);
     }

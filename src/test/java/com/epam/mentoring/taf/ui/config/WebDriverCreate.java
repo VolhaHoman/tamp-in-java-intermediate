@@ -63,7 +63,7 @@ public class WebDriverCreate {
     }
 
     private static void setupDriver(WebDriver webDriver) {
-        driver = webDriver;
+        driver =webDriver;
     }
 
     private static WebDriver getChrome() {
@@ -83,7 +83,7 @@ public class WebDriverCreate {
     private static void initProps() {
         if (Objects.isNull(driver) || isDriverSessionNotPresent()) {
             initDriver();
-            wait = new WebDriverWait(getWebDriverInstance(), 2);
+            wait =new WebDriverWait(getWebDriverInstance(), 2);
         }
     }
 
