@@ -42,9 +42,9 @@ abstract public class AbstractTest {
     private static Logger log = LogManager.getLogger();
     protected static RestClient client = new RestClient(log);
 
-    protected static LoginPage loginPage = new LoginPage(baseUrl, log);
-    protected static HomePage homePage = new HomePage(log);
-    protected static CelebPage celebPage = new CelebPage(log);
+    protected LoginPage loginPage;
+    protected HomePage homePage;
+    protected CelebPage celebPage;
 
     Redirection redirection = new Redirection();
 
@@ -81,6 +81,10 @@ abstract public class AbstractTest {
         // TODO: Remove after migration to Page Object Pattern.
         driver = WebDriverCreate.getWebDriverInstance();
         wait = WebDriverCreate.getWebDriverWaitInstance();
+
+        loginPage = new LoginPage(baseUrl, log, driver, wait);
+        homePage = new HomePage(log, driver, wait);
+        celebPage = new CelebPage(log, driver, wait);
 
         driver.get(baseUrl);
     }
