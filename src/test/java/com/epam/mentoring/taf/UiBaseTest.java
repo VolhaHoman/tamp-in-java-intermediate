@@ -2,6 +2,8 @@ package com.epam.mentoring.taf;
 
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
 import com.epam.mentoring.taf.ui.page.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
@@ -11,21 +13,31 @@ public class UiBaseTest extends AbstractTest {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
+    private Logger log = LogManager.getLogger();
 
-    protected static LoginPage loginPage = new LoginPage(log);
-    protected static HomePage homePage = new HomePage(log);
-    protected static CelebPage celebPage = new CelebPage(log);
-    protected static ArticlePage articlePage = new ArticlePage(log);
-    protected static AppEditorPage appEditorPage = new AppEditorPage(log);
-    protected static SettingsPage settingPage = new SettingsPage(log);
-    protected static UserProfilePage userProfilePage = new UserProfilePage(log);
-    protected static RegisterPage registerPage = new RegisterPage(log);
+    protected HomePage homePage;
+    protected LoginPage loginPage;
+    protected CelebPage celebPage;
+    protected ArticlePage articlePage;
+    protected AppEditorPage appEditorPage;
+    protected SettingsPage settingPage;
+    protected UserProfilePage userProfilePage;
+    protected RegisterPage registerPage;
 
     @BeforeMethod
     public void initialisation() {
         // TODO: Remove after migration to Page Object Pattern.
         driver = WebDriverCreate.getWebDriverInstance();
         wait = WebDriverCreate.getWebDriverWaitInstance();
+
+        homePage = new HomePage(log, driver, wait);
+        loginPage = new LoginPage(log, driver, wait);
+        celebPage = new CelebPage(log, driver, wait);
+        articlePage = new ArticlePage(log, driver, wait);
+        appEditorPage = new AppEditorPage(log, driver, wait);
+        settingPage = new SettingsPage(log, driver, wait);
+        userProfilePage = new UserProfilePage(log, driver, wait);
+        registerPage = new RegisterPage(log, driver, wait);
 
         driver.get(baseUrl);
         driver.manage().window().maximize();

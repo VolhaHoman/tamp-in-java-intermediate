@@ -10,6 +10,8 @@ import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
@@ -24,6 +26,8 @@ import java.util.Map;
 public class FollowUserTest extends UiBaseTest {
 
     public static final String ADMIN_USERNAME = "ADMIN_USERNAME";
+
+    private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "csvDataProvider")
     public Object[][] csvDataProvider() throws IOException {

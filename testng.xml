@@ -6,6 +6,9 @@
             <class name="com.epam.mentoring.taf.SearchingByTagTest"/>
             <class name="com.epam.mentoring.taf.UserSignInTest"/>
             <class name="com.epam.mentoring.taf.UserSignUpTest"/>
+            <class name="com.epam.mentoring.taf.FollowUserTest"/>
+            <class name="com.epam.mentoring.taf.ArticleTest"/>
+            <class name="com.epam.mentoring.taf.CommentTest"/>
         </classes>
     </test>
 </suite>

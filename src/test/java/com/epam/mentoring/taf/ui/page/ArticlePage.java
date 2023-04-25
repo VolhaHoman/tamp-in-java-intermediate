@@ -2,10 +2,12 @@ package com.epam.mentoring.taf.ui.page;
 
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ArticlePage extends BasePage {
 
@@ -36,8 +38,10 @@ public class ArticlePage extends BasePage {
     @FindBy(xpath = "//button[contains(text(),'Delete Article')]")
     private WebElement deleteArticleBtn;
 
-    public ArticlePage(Logger logger) {
+    public ArticlePage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
+        this.wait = wait;
+        this.driver = driver;
         this.logger = logger;
     }
 

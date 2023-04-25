@@ -3,10 +3,12 @@ package com.epam.mentoring.taf.ui.page;
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AppEditorPage extends BasePage {
 
@@ -28,8 +30,10 @@ public class AppEditorPage extends BasePage {
     @FindBy(xpath = "//app-list-errors/ul/li")
     public WebElement errorMsg;
 
-    public AppEditorPage(Logger logger) {
+    public AppEditorPage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
+        this.wait = wait;
+        this.driver = driver;
         this.logger = logger;
     }
 

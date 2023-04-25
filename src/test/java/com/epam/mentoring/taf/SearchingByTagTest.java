@@ -3,10 +3,13 @@ package com.epam.mentoring.taf;
 import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
+import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
@@ -19,8 +22,10 @@ import java.util.List;
 @Feature("Searching By Tag Tests")
 public class SearchingByTagTest extends UiBaseTest {
 
+    public static final YamlReader READER = new YamlReader();
     public static final String INVALID_TAG = "invalid_tag_name";
     public static final String TAG_LIST_JSON_PATH = "articles.tagList";
+    private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "apiDataProvider")
     public Object[][] apiDataProviderMethod() throws IOException {

@@ -42,11 +42,8 @@ abstract public class AbstractTest {
     public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
 
     protected UserDataDTO defaultUserData;
-
-    protected static Logger log = LogManager.getLogger();
-
+    private static Logger log = LogManager.getLogger();
     protected static RestClient client = new RestClient(log);
-    protected static final YamlReader READER = new YamlReader();
 
     Redirection redirection = new Redirection();
 

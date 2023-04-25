@@ -2,9 +2,11 @@ package com.epam.mentoring.taf.ui.page;
 
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RegisterPage extends BasePage {
 
@@ -20,8 +22,10 @@ public class RegisterPage extends BasePage {
     @FindBy(xpath = "//button[contains(text(),'Sign up')]")
     public WebElement signUpButton;
 
-    public RegisterPage(Logger logger) {
+    public RegisterPage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
+        this.wait = wait;
+        this.driver = driver;
         this.logger = logger;
     }
 

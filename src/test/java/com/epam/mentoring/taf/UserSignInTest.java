@@ -10,6 +10,8 @@ import com.epam.mentoring.taf.listeners.TestListener;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -24,6 +26,8 @@ import static com.epam.mentoring.taf.ui.page.LoginPage.CREDENTIALS_ERROR_TEXT;
 public class UserSignInTest extends UiBaseTest  {
 
     private UserDataDTO defaultUserData;
+
+    private Logger log = LogManager.getLogger();
 
     @BeforeMethod(description = "Generate default Sign in User")
     public void generateUserData() {

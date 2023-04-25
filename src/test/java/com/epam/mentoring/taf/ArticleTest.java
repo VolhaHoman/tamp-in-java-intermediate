@@ -5,12 +5,15 @@ import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.mapper.ArticleResponseMapper;
 import com.epam.mentoring.taf.model.ArticleModel;
+import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
@@ -28,6 +31,8 @@ public class ArticleTest extends UiBaseTest {
     public static final String ERROR_MESSAGE_TITLE_BLANK = "title can't be blank";
     public static final String updatedBody = "With two hands";
     public static final String JSON_BODY_UPDATE = "{\"article\":{\"body\":\"%s\"}}";
+    public static final YamlReader READER = new YamlReader();
+    private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "ymlArticleDataProvider")
     public Object[][] dataProviderMethod() throws IOException {
@@ -36,8 +41,8 @@ public class ArticleTest extends UiBaseTest {
 
     private Object[][] getTags() throws IOException {
         try {
-            ArticleModel articlModel = READER.readArticle("article");
-            return DataProviderHelper.mapToProviderArray(articlModel.getTagList());
+            ArticleModel articleModel = READER.readArticle("article");
+            return DataProviderHelper.mapToProviderArray(articleModel.getTagList());
         } catch (IOException e) {
             throw new IOException("Failed to load file.");
         }
