@@ -39,12 +39,6 @@ public class LoginPage extends BasePage {
 
     private final String baseUrl;
 
-    public LoginPage(String baseUrl, Logger logger) {
-        this.baseUrl = baseUrl;
-        PageFactory.initElements(driver, this);
-        this.logger = logger;
-    }
-
     public LoginPage(String baseUrl, Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
         this.baseUrl = baseUrl;
@@ -110,5 +104,4 @@ public class LoginPage extends BasePage {
         logger.info("Fill in username: " + username);
         return this;
     }
-
 }
