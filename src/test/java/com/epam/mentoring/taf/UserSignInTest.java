@@ -44,7 +44,6 @@ public class UserSignInTest extends AbstractTest {
     @Description("UI Sign In with valid credentials")
     @Story("Create layers for UI tests")
     public void uiSignInWithValidCredentialsVerification() {
-        LoginPage loginPage = new LoginPage(baseUrl, log);
         loginPage.clickSignInLink()
                 .fillInEmail(defaultUserData.getUserEmail())
                 .fillInPassword(defaultUserData.getUserPassword())
@@ -58,7 +57,6 @@ public class UserSignInTest extends AbstractTest {
     @Description("UI Sign In with invalid credentials")
     @Story("Investigate the issues and fix UserSignInTest")
     public void uiSignInWithInvalidCredentialsVerification() {
-        LoginPage loginPage = new LoginPage(baseUrl, log);
         loginPage.clickSignInLink()
                 .fillInEmail(defaultUserData.getUserEmail())
                 .fillInPassword(defaultUserData.getUserPassword() + "1")
