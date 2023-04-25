@@ -69,7 +69,7 @@ public class AppEditorPage extends BasePage {
         return this;
     }
 
-    @Step("Enter the body")
+    @Step("Click on 'Publish' button")
     public void publishArticle() {
         publishBtn.click();
         logger.info("Publish the article");

@@ -58,20 +58,17 @@ public class ArticlePage extends BasePage {
         return this;
     }
 
-    @Step("Send comment")
-    public ArticlePage sendComment() {
+    @Step("Click on 'Send comment' button")
+    public void clickSendCommentBtn() {
         wait.until(ExpectedConditions.visibilityOf(sendBtn));
         sendBtn.click();
         logger.info("Send comment");
-        return this;
     }
-
-    @Step("Delete comment")
-    public ArticlePage deleteComment() {
+    @Step("Click on 'Delete comment' button")
+    public void clickDeleteCommentBtn() {
         wait.until(ExpectedConditions.visibilityOf(trashBtn));
         trashBtn.click();
         logger.info("Delete comment");
-        return this;
     }
 
     @Step("Get text of comment")

@@ -44,7 +44,7 @@ public class CommentTest extends UiBaseTest {
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
         articlePage.enterComment(COMMENT)
-                .sendComment();
+                .clickSendCommentBtn();
 
         Assert.assertEquals(articlePage.getComment(), COMMENT);
         logOut();
@@ -58,7 +58,7 @@ public class CommentTest extends UiBaseTest {
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
         articlePage.enterComment("")
-                .sendComment();
+                .clickSendCommentBtn();
 
         Assert.assertEquals(articlePage.getError(), ERROR_MESSAGE);
         logOut();
@@ -71,7 +71,7 @@ public class CommentTest extends UiBaseTest {
     public void uiDeleteCommentVerification() {
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
-        articlePage.deleteComment();
+        articlePage.clickDeleteCommentBtn();
 
         Assert.assertFalse(articlePage.commentIsNotDisplayed());
         logOut();
