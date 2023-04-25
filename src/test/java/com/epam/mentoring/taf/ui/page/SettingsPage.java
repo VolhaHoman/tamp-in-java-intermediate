@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class SettingsPage extends BasePage {
 
     @FindBy(xpath = "//button[contains(text(),'Or click here to logout.')]")
-    public WebElement logoutBtn;
+    private WebElement logoutBtn;
 
     public SettingsPage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);

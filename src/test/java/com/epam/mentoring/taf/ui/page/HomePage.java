@@ -47,10 +47,10 @@ public class HomePage extends BasePage {
     private WebElement settingNav;
 
     @FindBy(xpath = "//li/a[contains(text(),'Sign up')]")
-    public WebElement signUpLink;
+    private WebElement signUpLink;
 
     @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
-    public WebElement signInLink;
+    private WebElement signInLink;
 
     public HomePage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);

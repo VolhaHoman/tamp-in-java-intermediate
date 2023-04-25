@@ -4,7 +4,6 @@ import com.epam.mentoring.taf.api.RestClient;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
-import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.util.Redirection;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.restassured.response.Response;

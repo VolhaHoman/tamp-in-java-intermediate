@@ -11,16 +11,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class RegisterPage extends BasePage {
 
     @FindBy(xpath = "//input[@placeholder='Username']")
-    public WebElement usernameField;
+    private WebElement usernameField;
 
     @FindBy(xpath = "//input[@placeholder='Email']")
-    public WebElement emailField;
+    private WebElement emailField;
 
     @FindBy(xpath = "//input[@placeholder='Password']")
-    public WebElement passwordField;
+    private WebElement passwordField;
 
     @FindBy(xpath = "//button[contains(text(),'Sign up')]")
-    public WebElement signUpButton;
+    private WebElement signUpButton;
 
     public RegisterPage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);

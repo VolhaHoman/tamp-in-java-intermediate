@@ -28,7 +28,7 @@ public class AppEditorPage extends BasePage {
     private WebElement publishBtn;
 
     @FindBy(xpath = "//app-list-errors/ul/li")
-    public WebElement errorMsg;
+    private WebElement errorMsg;
 
     public AppEditorPage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);

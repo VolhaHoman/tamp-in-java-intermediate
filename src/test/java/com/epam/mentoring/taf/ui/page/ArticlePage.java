@@ -18,13 +18,13 @@ public class ArticlePage extends BasePage {
     private WebElement cardArea;
 
     @FindBy(xpath = "//button[contains(text(),'Post Comment')]")
-    public WebElement sendBtn;
+    private WebElement sendBtn;
 
     @FindBy(xpath = "(//span/i[contains(@class, 'ion-trash-a')])[1]")
-    public WebElement trashBtn;
+    private WebElement trashBtn;
 
     @FindBy(xpath = "//ul[contains(@class, 'error-messages')]")
-    public WebElement errorMsg;
+    private WebElement errorMsg;
 
     @FindBy(xpath = "//h1")
     private WebElement articleTitle;
@@ -37,6 +37,11 @@ public class ArticlePage extends BasePage {
 
     @FindBy(xpath = "//button[contains(text(),'Delete Article')]")
     private WebElement deleteArticleBtn;
+
+    @FindBy(xpath = "//li[contains(@class,'tag-outline')]")
+    private WebElement tagPill;
+
+    public String slug;
 
     public ArticlePage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
@@ -102,6 +107,13 @@ public class ArticlePage extends BasePage {
         return articleBody.getText();
     }
 
+    @Step("Get the article's tag")
+    public String getArticleTag() {
+        wait.until(ExpectedConditions.visibilityOf(tagPill));
+        logger.info("The following tag is displayed: " + tagPill.getText());
+        return tagPill.getText();
+    }
+
     @Step("Click on 'Edit Article' button")
     public void clickEditArticleBtn() {
         wait.until(ExpectedConditions.visibilityOf(editArticleBtn));
@@ -116,4 +128,11 @@ public class ArticlePage extends BasePage {
         logger.info("Delete an article");
     }
 
+    @Step("Get the article's slug from URL")
+    public String getSlugFromUrl() {
+        wait.until(ExpectedConditions.visibilityOf(articleTitle));
+        slug = driver.getCurrentUrl().replace("https://angular.realworld.io/article/", "");
+        logger.info("The slug to delete is: " + slug);
+        return slug;
+    }
 }

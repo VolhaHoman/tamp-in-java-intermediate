@@ -12,16 +12,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class LoginPage extends BasePage {
 
     @FindBy(xpath = "//input[@placeholder='Email']")
-    public WebElement emailField;
+    private WebElement emailField;
 
     @FindBy(xpath = "//input[@placeholder='Password']")
-    public WebElement passwordField;
+    private WebElement passwordField;
 
     @FindBy(xpath = "//button[contains(text(),'Sign in')]")
-    public WebElement signInButton;
+    private WebElement signInButton;
 
     @FindBy(xpath = "//ul[@class='error-messages']/li")
-    public WebElement invalidCredentialsMessage;
+    private WebElement invalidCredentialsMessage;
 
     public static final String CREDENTIALS_ERROR_TEXT = "email or password is invalid";
 

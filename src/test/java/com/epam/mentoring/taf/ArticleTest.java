@@ -67,7 +67,9 @@ public class ArticleTest extends UiBaseTest {
 
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
+        Assert.assertEquals(articlePage.getArticleTag(), tag);
 
+        deleteArticle(articlePage.getSlugFromUrl());
         logOut();
     }
 
@@ -97,15 +99,22 @@ public class ArticleTest extends UiBaseTest {
     @Severity(SeverityLevel.CRITICAL)
     @Description("UI: Delete an article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
-    public void uiDeleteArticle() {
+    public void uiDeleteArticle() throws IOException {
+
+        String articleSlugToBeDeleted = createArticle();
 
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
         String articleTobeDeleted = articlePage.getArticleTitle();
         articlePage.clickDeleteArticleBtn();
+
         selectArticle();
 
         Assert.assertNotEquals(articlePage.getArticleTitle(), articleTobeDeleted);
+        Assert.assertEquals(client.sendGetRequestWithHeaders(API_ARTICLES + articleSlugToBeDeleted, Map.ofEntries(
+                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest"))).getStatusCode(),
+                    org.apache.http.HttpStatus.SC_NOT_FOUND);
 
         logOut();
     }
@@ -143,6 +152,8 @@ public class ArticleTest extends UiBaseTest {
         Assert.assertEquals(articleResponseDTO.getArticle().getDescription(), articleDTO.getDescription());
         Assert.assertEquals(articleResponseDTO.getArticle().getBody(), articleDTO.getBody());
         Assert.assertTrue(articleResponseDTO.getArticle().getTagList().containsAll(articleDTO.getTagList()));
+
+        deleteArticle(articleResponseDTO.getArticle().getSlug());
     }
 
     @Test(description = "API: Read all articles with authorization", priority = 4)
@@ -165,9 +176,11 @@ public class ArticleTest extends UiBaseTest {
     @Severity(SeverityLevel.BLOCKER)
     @Description("API: Update an existing article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
-    public void apiUpdateArticle() {
+    public void apiUpdateArticle() throws IOException {
 
-        Response response = client.sendPutRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), String.format(JSON_BODY_UPDATE, updatedBody), Map.ofEntries(
+        String slug = createArticle();
+
+        Response response = client.sendPutRequestWithHeaders(API_ARTICLES +  slug, String.format(JSON_BODY_UPDATE, updatedBody), Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
         ArticleResponseMapper articleResponseMapper = new ArticleResponseMapper();
@@ -175,19 +188,38 @@ public class ArticleTest extends UiBaseTest {
 
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(articleResponseDTO.getArticle().getBody(), updatedBody);
+
+        deleteArticle(slug);
     }
 
     @Test(description = "API: Delete an existing article", priority = 6)
     @Severity(SeverityLevel.CRITICAL)
     @Description("API: Delete an existing article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
-    public void apiDeleteArticle() {
+    public void apiDeleteArticle() throws IOException {
 
-        Response response = client.sendDeleteRequestWithHeaders(API_ARTICLES +  whatIsThe(SLUG), "", Map.ofEntries(
-                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
-                Map.entry("X-Requested-With", "XMLHttpRequest")));
+        String slug = createArticle();
+
+        Response response = deleteArticle(slug);
 
         Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_NO_CONTENT);
+    }
+
+    public String createArticle() throws IOException {
+        ArticleDTO articleDTO = ArticleRequest.generateArticle();
+        Response response = client.sendPostRequestWithHeaders(API_ARTICLES, articleDTO.articleToString(), Map.ofEntries(
+                Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest")));
+        ArticleResponseMapper articleResponseMapper = new ArticleResponseMapper();
+        ArticleResponseDTO articleResponseDTO = articleResponseMapper.articleToDto(response, log);
+        return articleResponseDTO.getArticle().getSlug();
+
+    }
+
+    public Response deleteArticle(String slug) {
+        return client.sendDeleteRequestWithHeaders(API_ARTICLES + slug, "", Map.ofEntries(
+                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest")));
     }
 
 }
