@@ -11,5 +11,4 @@ public abstract class BasePage {
     protected WebDriverWait wait = WebDriverCreate.getWebDriverWaitInstance();
 
     protected Logger logger;
-
 }

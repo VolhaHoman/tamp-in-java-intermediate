@@ -46,11 +46,13 @@ public class UserSignUpTest extends UiBaseTest {
     @Description("UI Sign Up with new credentials")
     @Story("Investigate the issues and fix UserSignUpTest")
     public void signUpVerification() {
+
         homePage.clickSignUpLink();
         registerPage.fillInUsername(userDataDTO.getUserName())
                     .fillInEmail(userDataDTO.getUserEmail())
                     .fillInPassword(userDataDTO.getUserPassword())
                     .clickSignUpBtn();
+
         Assert.assertEquals(homePage.getUsernameAccountNav(), userDataDTO.getUserName());
     }
 
