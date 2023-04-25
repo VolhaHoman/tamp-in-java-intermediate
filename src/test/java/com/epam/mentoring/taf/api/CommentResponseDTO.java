@@ -1,9 +1,7 @@
 package com.epam.mentoring.taf.api;
 
 public class CommentResponseDTO {
-
     private String body;
-
     private static final String JSON_BODY = "{\"comment\":{\"body\":\"%s\"}}";
 
     CommentResponseDTO(CommentResponseDTOBuilder builder) {
@@ -34,5 +32,4 @@ public class CommentResponseDTO {
             return new CommentResponseDTO(this);
         }
     }
-
 }

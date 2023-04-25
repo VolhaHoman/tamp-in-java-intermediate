@@ -5,11 +5,7 @@ import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
-import com.epam.mentoring.taf.ui.page.ArticlePage;
-import com.epam.mentoring.taf.ui.page.ArticlePage;
-import com.epam.mentoring.taf.ui.page.CelebPage;
-import com.epam.mentoring.taf.ui.page.HomePage;
-import com.epam.mentoring.taf.ui.page.LoginPage;
+import com.epam.mentoring.taf.ui.page.*;
 import com.epam.mentoring.taf.util.Redirection;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.restassured.response.Response;
@@ -27,8 +23,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
-import static com.epam.mentoring.taf.CommentTest.SLUG;
-import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
 import static com.epam.mentoring.taf.FollowUserTest.*;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
@@ -45,6 +39,7 @@ abstract public class AbstractTest {
     public static final String FOLLOW_PATH = "/follow";
     public static final String API_ARTICLES = "https://api.realworld.io/api/articles/";
     public static final String COMMENT_PATH = "/comments";
+    public static final String SLUG = "SLUG";
 
     protected WebDriver driver;
     protected WebDriverWait wait;
@@ -58,13 +53,8 @@ abstract public class AbstractTest {
     protected HomePage homePage;
     protected CelebPage celebPage;
     protected ArticlePage articlePage;
-    protected static LoginPage loginPage = new LoginPage(baseUrl, log);
-    protected static HomePage homePage = new HomePage(log);
-    protected static CelebPage celebPage = new CelebPage(log);
-    protected static ArticlePage articlePage = new ArticlePage(log);
-    protected static SettingsPage settingPage = new SettingsPage(log);
-    protected static UserProfilePage userProfilePage = new UserProfilePage(log);
-    public static final String SLUG = "SLUG";
+    protected SettingsPage settingPage;
+    protected UserProfilePage userProfilePage;
 
     Redirection redirection = new Redirection();
 
@@ -118,6 +108,9 @@ abstract public class AbstractTest {
         loginPage = new LoginPage(baseUrl, log, driver, wait);
         homePage = new HomePage(log, driver, wait);
         celebPage = new CelebPage(log, driver, wait);
+        articlePage = new ArticlePage(log, driver, wait);
+        settingPage = new SettingsPage(log, driver, wait);
+        userProfilePage = new UserProfilePage(log, driver, wait);
 
         driver.get(baseUrl);
     }

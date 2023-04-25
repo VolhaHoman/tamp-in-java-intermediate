@@ -4,7 +4,6 @@ import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.service.YamlReader;
-import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;

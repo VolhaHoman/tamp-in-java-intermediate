@@ -33,7 +33,6 @@ public class CommentTest extends UiBaseTest {
     public static final String ALL_COMMENT = "ALL_COMMENT";
     public static final String ERROR_MESSAGE = "body can't be blank";
     public static final String COMMENT = "Test";
-
     private static Logger log = LogManager.getLogger();
 
     @Test(description = "UI: add comment to article", priority = 2)
@@ -44,8 +43,7 @@ public class CommentTest extends UiBaseTest {
         logIn();
         selectArticle();
         articlePage.enterComment(COMMENT)
-                .sendComment();
-
+                .clickSendCommentBtn();
         Assert.assertEquals(articlePage.getComment(), COMMENT);
         logOut();
     }
@@ -58,8 +56,7 @@ public class CommentTest extends UiBaseTest {
         logIn();
         selectArticle();
         articlePage.enterComment("")
-                .sendComment();
-
+                .clickSendCommentBtn();
         Assert.assertEquals(articlePage.getError(), ERROR_MESSAGE);
         logOut();
     }
@@ -71,8 +68,7 @@ public class CommentTest extends UiBaseTest {
     public void uiDeleteCommentVerification() {
         logIn();
         selectArticle();
-        articlePage.deleteComment();
-
+        articlePage.clickDeleteCommentBtn();
         Assert.assertFalse(articlePage.commentIsNotDisplayed());
         logOut();
     }
@@ -87,7 +83,6 @@ public class CommentTest extends UiBaseTest {
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
                 Map.entry("X-Requested-With", "XMLHttpRequest")
         ));
-
         ResponseDataTransferMapper restAPIClient = new ResponseDataTransferMapper();
         CommentDTO responseDTO = restAPIClient.transformToDtoCom(response, log);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
@@ -107,7 +102,6 @@ public class CommentTest extends UiBaseTest {
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
-
     @AfterTest(description = "Post-condition: delete all comments")
     public void cleanComments() {
         Response getResponse = client.sendGetRequestWithHeaders(whatIsThe(ALL_COMMENT), Map.ofEntries(
@@ -117,20 +111,16 @@ public class CommentTest extends UiBaseTest {
         List<String> id =
                 getResponse.getBody().jsonPath().getList("comments.id", String.class);
         rememberThat(COM_ID, String.valueOf(id));
-
         for (int i = 0; i < id.size(); i++) {
             String uniqueCommentPath = whatIsThe(ALL_COMMENT) + "/" + id.get(i);
-
             Response response = client.sendDeleteRequestWithHeaders(uniqueCommentPath, "", Map.ofEntries(
                     Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
                     Map.entry("X-Requested-With", "XMLHttpRequest")
             ));
-
             ResponseDataTransferMapper restAPIClient = new ResponseDataTransferMapper();
             CommentDTO responseDTO = restAPIClient.transformToDtoCom(response, log);
             Assert.assertEquals(response.getStatusCode(), org.apache.hc.core5.http.HttpStatus.SC_OK);
             Assert.assertNull(responseDTO.getComment());
         }
     }
-
 }

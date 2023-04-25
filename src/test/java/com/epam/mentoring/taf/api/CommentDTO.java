@@ -3,7 +3,6 @@ package com.epam.mentoring.taf.api;
 import java.util.Date;
 
 public class CommentDTO {
-
     private CommentBody comment;
 
     public CommentBody getComment() {
