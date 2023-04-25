@@ -47,7 +47,6 @@ public class UserSignUpTest extends AbstractTest {
     @Description("UI Sign Up with new credentials")
     @Story("Investigate the issues and fix UserSignUpTest")
     public void signUpVerification() {
-        LoginPage loginPage = new LoginPage(baseUrl, log);
         loginPage.clickSignUpLink()
                 .fillInUsername(userDataDTO.getUserName())
                 .fillInEmail(userDataDTO.getUserEmail())
