@@ -46,10 +46,10 @@ public class LoginPage extends BasePage {
     }
 
     public LoginPage(String baseUrl, Logger logger, WebDriver driver, WebDriverWait wait) {
+        PageFactory.initElements(driver, this);
         this.baseUrl = baseUrl;
         this.wait = wait;
         this.driver = driver;
-        PageFactory.initElements(driver, this);
         this.logger = logger;
     }
 
