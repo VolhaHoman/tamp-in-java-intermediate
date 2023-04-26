@@ -5,10 +5,9 @@ import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
-import com.epam.mentoring.taf.ui.page.CelebPage;
-import com.epam.mentoring.taf.ui.page.HomePage;
-import com.epam.mentoring.taf.ui.page.LoginPage;
+import com.epam.mentoring.taf.ui.page.*;
 import com.epam.mentoring.taf.util.Redirection;
+import com.epam.mentoring.taf.util.StorageHelper;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -21,10 +20,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
+import java.util.Map;
 
+import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
 import static com.epam.mentoring.taf.FollowUserTest.*;
-import static com.epam.mentoring.taf.mapper.UserDataMapper.*;
+import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
+import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 abstract public class AbstractTest {
 
@@ -35,16 +37,24 @@ abstract public class AbstractTest {
     public static final String API_LOGIN = API_URL + LOGIN_URL;
     public static final String API_PROFILES = "https://api.realworld.io/api/profiles/";
     public static final String FOLLOW_PATH = "/follow";
+    public static final String API_ARTICLES = "https://api.realworld.io/api/articles/";
+    public static final String COMMENT_PATH = "/comments";
+    public static final String SLUG = "SLUG";
 
     protected WebDriver driver;
     protected WebDriverWait wait;
     protected UserDataDTO defaultUserData;
+
     private static Logger log = LogManager.getLogger();
+
     protected static RestClient client = new RestClient(log);
 
     protected LoginPage loginPage;
     protected HomePage homePage;
     protected CelebPage celebPage;
+    protected ArticlePage articlePage;
+    protected SettingsPage settingPage;
+    protected UserProfilePage userProfilePage;
 
     Redirection redirection = new Redirection();
 
@@ -76,6 +86,19 @@ abstract public class AbstractTest {
         rememberThat(ADMIN_USERNAME, adminUserName);
     }
 
+    @BeforeClass
+    public void getSlug() {
+        Response getResponse = client.sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(
+                Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
+                Map.entry("X-Requested-With", "XMLHttpRequest")));
+        String slug =
+                getResponse.getBody().jsonPath().get("articles[0].slug");
+        log.info("slug: " + slug);
+        rememberThat(SLUG, slug);
+        String allCommentPath = API_ARTICLES + whatIsThe(SLUG) + COMMENT_PATH;
+        rememberThat(ALL_COMMENT, allCommentPath);
+    }
+
     @BeforeMethod
     public void initialisation() {
         // TODO: Remove after migration to Page Object Pattern.
@@ -85,6 +108,9 @@ abstract public class AbstractTest {
         loginPage = new LoginPage(baseUrl, log, driver, wait);
         homePage = new HomePage(log, driver, wait);
         celebPage = new CelebPage(log, driver, wait);
+        articlePage = new ArticlePage(log, driver, wait);
+        settingPage = new SettingsPage(log, driver, wait);
+        userProfilePage = new UserProfilePage(log, driver, wait);
 
         driver.get(baseUrl);
     }

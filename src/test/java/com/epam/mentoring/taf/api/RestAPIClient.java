@@ -10,12 +10,13 @@ import org.apache.logging.log4j.Logger;
 import static io.restassured.RestAssured.given;
 
 public class RestAPIClient {
+
     private static final String ARTICLES_BY_TAG_URL = "/api/articles?tag={tag}&limit=10&offset=0";
+
     public final Logger logger = LogManager.getRootLogger();
 
     @Step("Send API request to endpoint")
     public Response sendApiRequest(ApiUserDTO apiUserDTO, String url, Logger logger) {
-
         Response response = given()
                 .when()
                 .contentType(ContentType.JSON)
@@ -41,8 +42,9 @@ public class RestAPIClient {
                 .baseUri(AbstractTest.API_URL)
                 .when()
                 .get(ARTICLES_BY_TAG_URL, tag);
-                logger.info("Request sent for: " + tag);
-                logger.info("Response status: " + response.getStatusCode());
+        logger.info("Request sent for: " + tag);
+        logger.info("Response status: " + response.getStatusCode());
         return response;
     }
+
 }

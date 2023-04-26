@@ -9,9 +9,9 @@ import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.ui.page.HomePage;
-import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
@@ -24,6 +24,9 @@ import java.io.IOException;
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Sign Up Tests")
 public class UserSignUpTest extends AbstractTest {
+
+    public static final String BLANK_ERROR_TEXT = "can't be blank";
+    public static final String ALREADY_TAKEN_ERROR_TEXT = "has already been taken";
     private UserDataDTO userDataDTO;
     private UserDataDTO defaultUserData;
     private Logger log = LogManager.getLogger();
@@ -63,7 +66,7 @@ public class UserSignUpTest extends AbstractTest {
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
-        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
     @Test(description = "API Sign Up with existing credentials")
@@ -78,8 +81,8 @@ public class UserSignUpTest extends AbstractTest {
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
         ResponseDTO responseDTO = restAPIClient.transformToDto(response, log);
-        Assert.assertEquals(response.getStatusCode(), 422);
-        Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "has already been taken");
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
+        Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), ALREADY_TAKEN_ERROR_TEXT);
     }
 
     @Test(description = "API Sign Up with empty username")
@@ -94,8 +97,7 @@ public class UserSignUpTest extends AbstractTest {
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
         ResponseDTO responseDTO = restAPIClient.transformToDto(response, log);
-        Assert.assertEquals(response.getStatusCode(), 422);
-        Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), "can't be blank");
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
+        Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), BLANK_ERROR_TEXT);
     }
-
 }
