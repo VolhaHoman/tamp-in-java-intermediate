@@ -72,6 +72,8 @@ public class CommentTest extends UiBaseTest {
     public void uiDeleteCommentVerification() {
         logIn();
         selectArticle();
+        articlePage.enterComment(COMMENT)
+                .clickSendCommentBtn();
         articlePage.clickDeleteCommentBtn();
 
         Assert.assertFalse(articlePage.commentIsNotDisplayed());
