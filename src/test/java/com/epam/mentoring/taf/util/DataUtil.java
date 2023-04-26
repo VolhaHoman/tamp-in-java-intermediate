@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DataUtil {
+
     private static final Logger log = LogManager.getLogger();
     public static final String TEST_DATA_JSON = "src/test/resources/testData.json";
 

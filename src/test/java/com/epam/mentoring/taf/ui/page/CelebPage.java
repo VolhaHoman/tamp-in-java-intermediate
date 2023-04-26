@@ -57,4 +57,5 @@ public class CelebPage extends BasePage {
         logger.info("Unfollow button has text: " + unfollowBtn.getText());
         return unfollowBtn.getText();
     }
+
 }

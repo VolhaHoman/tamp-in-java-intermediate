@@ -16,17 +16,16 @@ public class SettingsPage extends BasePage {
 
     public SettingsPage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
-        this.wait = wait;
         this.driver = driver;
+        this.wait = wait;
         this.logger = logger;
     }
 
-    @Step("Log out")
-    public SettingsPage logout() {
+    @Step("Click 'Log out' button")
+    public void clickLogOutBtn() {
         wait.until(ExpectedConditions.visibilityOf(logoutBtn));
         logoutBtn.click();
         logger.info("Log out");
-        return this;
     }
 
 }

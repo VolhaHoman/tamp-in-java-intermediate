@@ -45,8 +45,8 @@ public class ArticlePage extends BasePage {
 
     public ArticlePage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
-        this.wait = wait;
         this.driver = driver;
+        this.wait = wait;
         this.logger = logger;
     }
 
@@ -64,6 +64,7 @@ public class ArticlePage extends BasePage {
         sendBtn.click();
         logger.info("Send comment");
     }
+
     @Step("Click on 'Delete comment' button")
     public void clickDeleteCommentBtn() {
         wait.until(ExpectedConditions.visibilityOf(trashBtn));
@@ -132,4 +133,5 @@ public class ArticlePage extends BasePage {
         logger.info("The slug to delete is: " + slug);
         return slug;
     }
+
 }

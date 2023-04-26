@@ -84,7 +84,6 @@ abstract public class AbstractTest {
                 getResponse.getBody().jsonPath().get("articles[0].slug");
         log.info("slug: " + slug);
         rememberThat(SLUG, slug);
-
         String allCommentPath = API_ARTICLES + whatIsThe(SLUG) + COMMENT_PATH;
         rememberThat(ALL_COMMENT, allCommentPath);
 

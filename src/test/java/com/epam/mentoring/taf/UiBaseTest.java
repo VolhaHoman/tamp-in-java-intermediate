@@ -57,7 +57,7 @@ public class UiBaseTest extends AbstractTest {
 
     public void logOut() {
         homePage.navToSetting();
-        settingPage.logout();
+        settingPage.clickLogOutBtn();
     }
 
     @AfterClass

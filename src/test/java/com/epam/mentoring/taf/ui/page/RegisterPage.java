@@ -55,4 +55,5 @@ public class RegisterPage extends BasePage {
         signUpButton.click();
         logger.info("Click on 'Sign Up' button");
     }
+
 }

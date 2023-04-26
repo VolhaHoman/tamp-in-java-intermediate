@@ -16,8 +16,8 @@ public class UserProfilePage extends BasePage {
 
     public UserProfilePage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
-        this.wait = wait;
         this.driver = driver;
+        this.wait = wait;
         this.logger = logger;
     }
 

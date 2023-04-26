@@ -23,7 +23,7 @@ import static com.epam.mentoring.taf.ui.page.LoginPage.CREDENTIALS_ERROR_TEXT;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Sign In Tests")
-public class UserSignInTest extends UiBaseTest  {
+public class UserSignInTest extends UiBaseTest {
 
     private UserDataDTO defaultUserData;
 

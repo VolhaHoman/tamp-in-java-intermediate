@@ -71,6 +71,8 @@ public class CommentTest extends UiBaseTest {
     public void uiDeleteCommentVerification() {
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
+        articlePage.enterComment(COMMENT)
+                .clickSendCommentBtn();
         articlePage.clickDeleteCommentBtn();
 
         Assert.assertFalse(articlePage.commentIsNotDisplayed());
@@ -107,7 +109,6 @@ public class CommentTest extends UiBaseTest {
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
     }
 
-
     @AfterTest(description = "Post-condition: delete all comments")
     public void cleanComments() {
         Response getResponse = client.sendGetRequestWithHeaders(whatIsThe(ALL_COMMENT), Map.ofEntries(
@@ -117,11 +118,9 @@ public class CommentTest extends UiBaseTest {
         List<String> id =
                 getResponse.getBody().jsonPath().getList("comments.id", String.class);
         rememberThat(COM_ID, String.valueOf(id));
-
         for (int i = 0; i < id.size(); i++) {
             String uniqueCommentPath = whatIsThe(ALL_COMMENT) + "/" + id.get(i);
-
-            Response response = client.sendDeleteRequestWithHeaders(uniqueCommentPath,"", Map.ofEntries(
+            Response response = client.sendDeleteRequestWithHeaders(uniqueCommentPath, "", Map.ofEntries(
                     Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
                     Map.entry("X-Requested-With", "XMLHttpRequest")
             ));
