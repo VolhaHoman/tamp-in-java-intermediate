@@ -86,7 +86,6 @@ abstract public class AbstractTest {
         rememberThat(SLUG, slug);
         String allCommentPath = API_ARTICLES + whatIsThe(SLUG) + COMMENT_PATH;
         rememberThat(ALL_COMMENT, allCommentPath);
-
     }
 
 }

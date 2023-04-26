@@ -28,7 +28,6 @@ public class UserSignUpTest extends UiBaseTest {
     public static final String ALREADY_TAKEN_ERROR_TEXT = "has already been taken";
     private UserDataDTO userDataDTO;
     private UserDataDTO defaultUserData;
-
     private Logger log = LogManager.getLogger();
 
     @BeforeMethod(description = "Generate Test User")

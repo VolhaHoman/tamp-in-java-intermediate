@@ -79,6 +79,8 @@ public class ArticleTest extends UiBaseTest {
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiEditExistingArticle() throws IOException {
 
+        String slug = createArticle();
+
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
 
@@ -92,6 +94,7 @@ public class ArticleTest extends UiBaseTest {
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
 
+        deleteArticle(slug);
         logOut();
     }
 
