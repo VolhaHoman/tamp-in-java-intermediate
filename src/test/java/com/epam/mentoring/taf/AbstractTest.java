@@ -72,7 +72,6 @@ abstract public class AbstractTest {
         rememberThat(ADMIN_EMAIL, adminUserEmail);
         rememberThat(ADMIN_PASSWORD, adminUserPassword);
         rememberThat(ADMIN_USERNAME, adminUserName);
-
     }
 
     @BeforeClass

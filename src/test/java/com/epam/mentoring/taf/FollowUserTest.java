@@ -26,7 +26,6 @@ import java.util.Map;
 public class FollowUserTest extends UiBaseTest {
 
     public static final String ADMIN_USERNAME = "ADMIN_USERNAME";
-
     private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "csvDataProvider")

@@ -216,7 +216,6 @@ public class ArticleTest extends UiBaseTest {
         ArticleResponseMapper articleResponseMapper = new ArticleResponseMapper();
         ArticleResponseDTO articleResponseDTO = articleResponseMapper.articleToDto(response, log);
         return articleResponseDTO.getArticle().getSlug();
-
     }
 
     public Response deleteArticle(String slug) {
