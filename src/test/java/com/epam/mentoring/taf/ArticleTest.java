@@ -15,11 +15,14 @@ import org.apache.hc.core5.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
@@ -33,6 +36,8 @@ public class ArticleTest extends UiBaseTest {
     public static final String JSON_BODY_UPDATE = "{\"article\":{\"body\":\"%s\"}}";
     public static final YamlReader READER = new YamlReader();
     private Logger log = LogManager.getLogger();
+
+    List<String> id = new ArrayList<>();
 
     @DataProvider(name = "ymlArticleDataProvider")
     public Object[][] dataProviderMethod() throws IOException {
@@ -65,12 +70,12 @@ public class ArticleTest extends UiBaseTest {
                      .enterTag(tag)
                      .publishArticle();
 
+        id.add(articlePage.getSlugFromUrl());
+
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
         Assert.assertEquals(articlePage.getArticleTag(), tag);
 
-        deleteArticle(articlePage.getSlugFromUrl());
-        logOut();
     }
 
     @Test(description = "UI: Edit an existing article", priority = 1)
@@ -80,6 +85,7 @@ public class ArticleTest extends UiBaseTest {
     public void uiEditExistingArticle() throws IOException {
 
         String slug = createArticle();
+        id.add(slug);
 
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
@@ -94,8 +100,6 @@ public class ArticleTest extends UiBaseTest {
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
 
-        deleteArticle(slug);
-        logOut();
     }
 
     @Test(description = "UI: Delete an article", priority = 2)
@@ -105,6 +109,7 @@ public class ArticleTest extends UiBaseTest {
     public void uiDeleteArticle() throws IOException {
 
         String articleSlugToBeDeleted = createArticle();
+        id.add(articleSlugToBeDeleted);
 
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
@@ -119,7 +124,6 @@ public class ArticleTest extends UiBaseTest {
                 Map.entry("X-Requested-With", "XMLHttpRequest"))).getStatusCode(),
                     org.apache.http.HttpStatus.SC_NOT_FOUND);
 
-        logOut();
     }
 
     @Test(description = "UI: Add an article with empty fields", priority = 7)
@@ -134,7 +138,6 @@ public class ArticleTest extends UiBaseTest {
 
         Assert.assertEquals(appEditorPage.getError(), ERROR_MESSAGE_TITLE_BLANK);
 
-        logOut();
     }
 
     @Test(description = "API: Add a valid article", priority = 3)
@@ -149,6 +152,7 @@ public class ArticleTest extends UiBaseTest {
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
         ArticleResponseMapper articleResponseMapper = new ArticleResponseMapper();
         ArticleResponseDTO articleResponseDTO = articleResponseMapper.articleToDto(response, log);
+        id.add(articleResponseDTO.getArticle().getSlug());
 
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(articleResponseDTO.getArticle().getTitle(), articleDTO.getTitle());
@@ -156,7 +160,6 @@ public class ArticleTest extends UiBaseTest {
         Assert.assertEquals(articleResponseDTO.getArticle().getBody(), articleDTO.getBody());
         Assert.assertTrue(articleResponseDTO.getArticle().getTagList().containsAll(articleDTO.getTagList()));
 
-        deleteArticle(articleResponseDTO.getArticle().getSlug());
     }
 
     @Test(description = "API: Read all articles with authorization", priority = 4)
@@ -182,6 +185,7 @@ public class ArticleTest extends UiBaseTest {
     public void apiUpdateArticle() throws IOException {
 
         String slug = createArticle();
+        id.add(slug);
 
         Response response = client.sendPutRequestWithHeaders(API_ARTICLES +  slug, String.format(JSON_BODY_UPDATE, updatedBody), Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
@@ -192,7 +196,6 @@ public class ArticleTest extends UiBaseTest {
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(articleResponseDTO.getArticle().getBody(), updatedBody);
 
-        deleteArticle(slug);
     }
 
     @Test(description = "API: Delete an existing article", priority = 6)
@@ -202,6 +205,7 @@ public class ArticleTest extends UiBaseTest {
     public void apiDeleteArticle() throws IOException {
 
         String slug = createArticle();
+        id.add(slug);
 
         Response response = deleteArticle(slug);
 
@@ -209,6 +213,7 @@ public class ArticleTest extends UiBaseTest {
     }
 
     public String createArticle() throws IOException {
+
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
         Response response = client.sendPostRequestWithHeaders(API_ARTICLES, articleDTO.articleToString(), Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
@@ -219,9 +224,22 @@ public class ArticleTest extends UiBaseTest {
     }
 
     public Response deleteArticle(String slug) {
+
         return client.sendDeleteRequestWithHeaders(API_ARTICLES + slug, "", Map.ofEntries(
                 Map.entry(org.apache.http.HttpHeaders.AUTHORIZATION, "Token " + StorageHelper.whatIsThe(AUTH_TOKEN)),
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
     }
 
+    @AfterMethod(description = "Post-condition: delete the test article and log out")
+    public void cleanArticle() {
+
+        if (!id.isEmpty()) {
+            for (String s : id) {
+                deleteArticle(s);
+            }
+        }
+        if (homePage.userIconIsDisplayed()) {
+            logOut();
+        }
+    }
 }

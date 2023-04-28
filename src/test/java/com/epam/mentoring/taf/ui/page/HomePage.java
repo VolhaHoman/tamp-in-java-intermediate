@@ -2,6 +2,7 @@ package com.epam.mentoring.taf.ui.page;
 
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -43,7 +44,7 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//a[contains(text(),'New Article')]")
     private WebElement newArticle;
 
-    @FindBy(xpath = "//ul[contains(@class,'navbar-nav')]/li[3]/a")
+    @FindBy(xpath = "//li/a[contains(text(),'Settings')]")
     private WebElement settingNav;
 
     @FindBy(xpath = "//li/a[contains(text(),'Sign up')]")
@@ -156,6 +157,16 @@ public class HomePage extends BasePage {
     public void clickSignUpLink() {
         signUpLink.click();
         logger.info("Click on 'Sign Up' link");
+    }
+
+    @Step("Verify that user is logged in")
+    public boolean userIconIsDisplayed() {
+        try {
+            return userIcon.isDisplayed();
+        }
+        catch(NoSuchElementException e) {
+            return false;
+        }
     }
 
 }

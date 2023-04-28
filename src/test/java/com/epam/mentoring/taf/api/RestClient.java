@@ -55,11 +55,10 @@ public class RestClient {
 
     @Step("Send PUT API request to endpoint")
     public Response sendPutRequest(String path, String body,
-                                    Map<String, String> headers,
-                                    Map<String, String> params) {
+                                    Map<String, String> headers) {
 
 
-        Response result = getRequestSpecification(headers, params)
+        Response result = getRequestSpecification(headers)
                 .body(body)
                 .put(path)
                 .then()
@@ -104,6 +103,12 @@ public class RestClient {
         return response;
     }
 
+    private RequestSpecification getRequestSpecification(Map<String, String> headers) {
+        RequestSpecification response = prepareRequest();
+        fillHeaders(headers, response);
+        return response;
+    }
+
     private void fillHeaders(Map<String, String> headers, RequestSpecification response) {
         if (!headers.isEmpty()) {
             response.headers(headers);
@@ -143,7 +148,7 @@ public class RestClient {
     }
 
     public Response sendPutRequestWithHeaders(String path, String body, Map<String, String> headers) {
-        return sendPutRequest(path, body, headers, Map.of());
+        return sendPutRequest(path, body, headers);
     }
 
     public Response sendDeleteRequestWithHeaders(String path, String body, Map<String, String> headers) {
