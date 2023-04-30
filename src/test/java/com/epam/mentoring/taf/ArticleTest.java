@@ -37,7 +37,7 @@ public class ArticleTest extends UiBaseTest {
     public static final YamlReader READER = new YamlReader();
     private Logger log = LogManager.getLogger();
 
-    List<String> id = new ArrayList<>();
+    List<String> createdArticles = new ArrayList<>();
 
     @DataProvider(name = "ymlArticleDataProvider")
     public Object[][] dataProviderMethod() throws IOException {
@@ -70,7 +70,7 @@ public class ArticleTest extends UiBaseTest {
                      .enterTag(tag)
                      .publishArticle();
 
-        id.add(articlePage.getSlugFromUrl());
+        createdArticles.add(articlePage.getSlugFromUrl());
 
         Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
         Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
@@ -85,7 +85,7 @@ public class ArticleTest extends UiBaseTest {
     public void uiEditExistingArticle() throws IOException {
 
         String slug = createArticle();
-        id.add(slug);
+        createdArticles.add(slug);
 
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
@@ -109,7 +109,7 @@ public class ArticleTest extends UiBaseTest {
     public void uiDeleteArticle() throws IOException {
 
         String articleSlugToBeDeleted = createArticle();
-        id.add(articleSlugToBeDeleted);
+        createdArticles.add(articleSlugToBeDeleted);
 
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
@@ -152,7 +152,7 @@ public class ArticleTest extends UiBaseTest {
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
         ArticleResponseMapper articleResponseMapper = new ArticleResponseMapper();
         ArticleResponseDTO articleResponseDTO = articleResponseMapper.articleToDto(response, log);
-        id.add(articleResponseDTO.getArticle().getSlug());
+        createdArticles.add(articleResponseDTO.getArticle().getSlug());
 
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(articleResponseDTO.getArticle().getTitle(), articleDTO.getTitle());
@@ -185,7 +185,7 @@ public class ArticleTest extends UiBaseTest {
     public void apiUpdateArticle() throws IOException {
 
         String slug = createArticle();
-        id.add(slug);
+        createdArticles.add(slug);
 
         Response response = client.sendPutRequestWithHeaders(API_ARTICLES +  slug, String.format(JSON_BODY_UPDATE, updatedBody), Map.ofEntries(
                 Map.entry(HttpHeaders.AUTHORIZATION, "Token " + whatIsThe(AUTH_TOKEN)),
@@ -205,7 +205,7 @@ public class ArticleTest extends UiBaseTest {
     public void apiDeleteArticle() throws IOException {
 
         String slug = createArticle();
-        id.add(slug);
+        createdArticles.add(slug);
 
         Response response = deleteArticle(slug);
 
@@ -233,11 +233,12 @@ public class ArticleTest extends UiBaseTest {
     @AfterMethod(description = "Post-condition: delete the test article and log out")
     public void cleanArticle() {
 
-        if (!id.isEmpty()) {
-            for (String s : id) {
+        if (!createdArticles.isEmpty()) {
+            for (String s : createdArticles) {
                 deleteArticle(s);
             }
         }
+        createdArticles.clear();
         if (homePage.userIconIsDisplayed()) {
             logOut();
         }
