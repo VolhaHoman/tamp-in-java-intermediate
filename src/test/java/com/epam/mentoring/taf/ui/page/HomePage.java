@@ -2,6 +2,7 @@ package com.epam.mentoring.taf.ui.page;
 
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -40,13 +41,17 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//a[contains(@class,'nav-link')]/img")
     private WebElement userIcon;
 
-    @FindBy(xpath = "//ul[contains(@class,'navbar-nav')]/li[3]/a")
+    @FindBy(xpath = "//a[contains(text(),'New Article')]")
+    private WebElement newArticle;
+
+    @FindBy(xpath = "//li/a[contains(text(),'Settings')]")
     private WebElement settingNav;
 
-    public HomePage(Logger logger) {
-        PageFactory.initElements(driver, this);
-        this.logger = logger;
-    }
+    @FindBy(xpath = "//li/a[contains(text(),'Sign up')]")
+    private WebElement signUpLink;
+
+    @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
+    private WebElement signInLink;
 
     public HomePage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
@@ -114,11 +119,10 @@ public class HomePage extends BasePage {
     }
 
     @Step("Navigate to User page")
-    public HomePage navToUser() {
-        wait.until(ExpectedConditions.visibilityOf(userIcon));
+    public void navToUser() {
+        wait.until(ExpectedConditions.visibilityOfAllElements(tagPills));
         userIcon.click();
         logger.info("Navigate to User page");
-        return this;
     }
 
     @Step("Navigate to Global feed")
@@ -129,11 +133,40 @@ public class HomePage extends BasePage {
         return this;
     }
 
+    @Step("Navigate to AppEditor page")
+    public void navToEditorPage() {
+        wait.until(ExpectedConditions.visibilityOf(newArticle));
+        newArticle.click();
+        logger.info("Navigate to AppEditor page");
+    }
+
     @Step("Navigate to Setting page")
-    public HomePage navToSetting() {
+    public void navToSetting() {
         wait.until(ExpectedConditions.visibilityOf(settingNav));
         settingNav.click();
         logger.info("Navigate to Setting page");
-        return this;
     }
+
+    @Step("Click on 'Sign In' link")
+    public void clickSignInLink() {
+        signInLink.click();
+        logger.info("Click on 'Sign In' link");
+    }
+
+    @Step("Click on 'Sign Up' link")
+    public void clickSignUpLink() {
+        signUpLink.click();
+        logger.info("Click on 'Sign Up' link");
+    }
+
+    @Step("Verify that user is logged in")
+    public boolean userIconIsDisplayed() {
+        try {
+            return userIcon.isDisplayed();
+        }
+        catch(NoSuchElementException e) {
+            return false;
+        }
+    }
+
 }

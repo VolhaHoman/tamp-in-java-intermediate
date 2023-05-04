@@ -7,6 +7,7 @@ import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.apache.hc.core5.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
@@ -19,12 +20,11 @@ import java.util.List;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Searching By Tag Tests")
-public class SearchingByTagTest extends AbstractTest {
+public class SearchingByTagTest extends UiBaseTest {
 
     public static final YamlReader READER = new YamlReader();
     public static final String INVALID_TAG = "invalid_tag_name";
     public static final String TAG_LIST_JSON_PATH = "articles.tagList";
-    public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
     private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "apiDataProvider")
@@ -51,7 +51,7 @@ public class SearchingByTagTest extends AbstractTest {
         RestAPIClient RestAPIClient = new RestAPIClient();
         Response response = RestAPIClient.sendGetTagRequest(tag, log);
         List<String> tagList = response.getBody().jsonPath().get(TAG_LIST_JSON_PATH);
-        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertTrue(tagList.toString().contains(tag));
     }
 
@@ -63,7 +63,7 @@ public class SearchingByTagTest extends AbstractTest {
         RestAPIClient RestAPIClient = new RestAPIClient();
         Response response = RestAPIClient.sendGetTagRequest(INVALID_TAG, log);
         int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
-        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(articlesCount, 0);
     }
 

@@ -18,13 +18,30 @@ public class ArticlePage extends BasePage {
     private WebElement cardArea;
 
     @FindBy(xpath = "//button[contains(text(),'Post Comment')]")
-    public WebElement sendBtn;
+    private WebElement sendBtn;
 
     @FindBy(xpath = "(//span/i[contains(@class, 'ion-trash-a')])[1]")
-    public WebElement trashBtn;
+    private WebElement trashBtn;
 
     @FindBy(xpath = "//ul[contains(@class, 'error-messages')]")
-    public WebElement errorMsg;
+    private WebElement errorMsg;
+
+    @FindBy(xpath = "//h1")
+    private WebElement articleTitle;
+
+    @FindBy(xpath = "//div[contains(@class, 'row article-content')]/div[contains(@class, 'col-md-12')]/div")
+    private WebElement articleBody;
+
+    @FindBy(xpath = "//a[contains(text(),'Edit Article')]")
+    private WebElement editArticleBtn;
+
+    @FindBy(xpath = "//button[contains(text(),'Delete Article')]")
+    private WebElement deleteArticleBtn;
+
+    @FindBy(xpath = "//li[contains(@class,'tag-outline')]")
+    private WebElement tagPill;
+
+    public String slug;
 
     public ArticlePage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
@@ -73,7 +90,48 @@ public class ArticlePage extends BasePage {
     public boolean commentIsNotDisplayed() {
         return !cardArea.isDisplayed();
     }
+
+    @Step("Get the article's title")
+    public String getArticleTitle() {
+        wait.until(ExpectedConditions.visibilityOf(articleTitle));
+        logger.info("The following title is displayed: " + articleTitle.getText());
+        return articleTitle.getText();
+    }
+
+    @Step("Get the article's text")
+    public String getArticleBody() {
+        wait.until(ExpectedConditions.visibilityOf(articleBody));
+        logger.info("The following article text is displayed: " + articleBody.getText());
+        return articleBody.getText();
+    }
+
+    @Step("Get the article's tag")
+    public String getArticleTag() {
+        wait.until(ExpectedConditions.visibilityOf(tagPill));
+        logger.info("The following tag is displayed: " + tagPill.getText());
+        return tagPill.getText();
+    }
+
+    @Step("Click on 'Edit Article' button")
+    public void clickEditArticleBtn() {
+        wait.until(ExpectedConditions.visibilityOf(editArticleBtn));
+        editArticleBtn.click();
+        logger.info("Edit an article");
+    }
+
+    @Step("Click on 'Delete Article' button")
+    public void clickDeleteArticleBtn() {
+        wait.until(ExpectedConditions.visibilityOf(deleteArticleBtn));
+        deleteArticleBtn.click();
+        logger.info("Delete an article");
+    }
+
+    @Step("Get the article's slug from URL")
+    public String getSlugFromUrl() {
+        wait.until(ExpectedConditions.visibilityOf(articleTitle));
+        slug = driver.getCurrentUrl().replace("https://angular.realworld.io/article/", "");
+        logger.info("The slug to delete is: " + slug);
+        return slug;
+    }
+
 }
-
-
-

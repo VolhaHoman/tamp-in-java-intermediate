@@ -27,4 +27,5 @@ public class UserProfilePage extends BasePage {
         article.click();
         logger.info("Select article");
     }
+
 }

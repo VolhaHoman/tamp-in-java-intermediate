@@ -11,37 +11,22 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage extends BasePage {
 
-    @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
-    public WebElement signInLink;
-
     @FindBy(xpath = "//input[@placeholder='Email']")
-    public WebElement emailField;
+    private WebElement emailField;
 
     @FindBy(xpath = "//input[@placeholder='Password']")
-    public WebElement passwordField;
+    private WebElement passwordField;
 
     @FindBy(xpath = "//button[contains(text(),'Sign in')]")
-    public WebElement signInButton;
+    private WebElement signInButton;
 
     @FindBy(xpath = "//ul[@class='error-messages']/li")
-    public WebElement invalidCredentialsMessage;
+    private WebElement invalidCredentialsMessage;
 
     public static final String CREDENTIALS_ERROR_TEXT = "email or password is invalid";
 
-    @FindBy(xpath = "//li/a[contains(text(),'Sign up')]")
-    public WebElement signUpLink;
-
-    @FindBy(xpath = "//input[@placeholder='Username']")
-    public WebElement usernameField;
-
-    @FindBy(xpath = "//button[contains(text(),'Sign up')]")
-    public WebElement signUpButton;
-
-    private final String baseUrl;
-
-    public LoginPage(String baseUrl, Logger logger, WebDriver driver, WebDriverWait wait) {
+    public LoginPage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
-        this.baseUrl = baseUrl;
         this.wait = wait;
         this.driver = driver;
         this.logger = logger;
@@ -68,40 +53,10 @@ public class LoginPage extends BasePage {
         return this;
     }
 
-    @Step("Click on 'Sign In' link")
-    public LoginPage clickSignInLink() {
-        driver.get(baseUrl);
-        signInLink.click();
-        logger.info("Click on 'Sign In' link");
-        return this;
-    }
-
     @Step("Click on 'Sign In' button")
-    public LoginPage clickSignInBtn() {
+    public void clickSignInBtn() {
         signInButton.click();
         logger.info("Click on 'Sign In' button");
-        return this;
     }
 
-    @Step("Click on 'Sign Up' link")
-    public LoginPage clickSignUpLink() {
-        driver.get(baseUrl);
-        signUpLink.click();
-        logger.info("Click on 'Sign Up' link");
-        return this;
-    }
-
-    @Step("Click on 'Sign Up' button")
-    public LoginPage clickSignUpBtn() {
-        signUpButton.click();
-        logger.info("Click on 'Sign Up' button");
-        return this;
-    }
-
-    @Step("Fill in username")
-    public LoginPage fillInUsername(String username) {
-        usernameField.sendKeys(username);
-        logger.info("Fill in username: " + username);
-        return this;
-    }
 }

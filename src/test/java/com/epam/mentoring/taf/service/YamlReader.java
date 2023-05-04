@@ -1,8 +1,6 @@
 package com.epam.mentoring.taf.service;
 
-import com.epam.mentoring.taf.model.BrowserConfiguration;
-import com.epam.mentoring.taf.model.TagConfiguration;
-import com.epam.mentoring.taf.model.UserDataModel;
+import com.epam.mentoring.taf.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -42,6 +40,13 @@ public class YamlReader {
         ObjectReader userReader = mapper.readerFor(UserDataModel.class)
                 .at("/" + path);
         return userReader.readValue(file);
+    }
+
+    public ArticleModel readArticle(String path) throws IOException {
+        File file = new File("src/test/resources/testData.yml");
+        ObjectReader articleReader = mapper.readerFor(ArticleModel.class)
+                .at("/" + path);
+        return articleReader.readValue(file);
     }
 
 }

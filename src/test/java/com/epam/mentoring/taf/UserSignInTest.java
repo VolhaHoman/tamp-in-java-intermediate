@@ -7,7 +7,6 @@ import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import com.epam.mentoring.taf.ui.page.HomePage;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -24,7 +23,7 @@ import static com.epam.mentoring.taf.ui.page.LoginPage.CREDENTIALS_ERROR_TEXT;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Sign In Tests")
-public class UserSignInTest extends AbstractTest {
+public class UserSignInTest extends UiBaseTest {
 
     private UserDataDTO defaultUserData;
     private Logger log = LogManager.getLogger();
@@ -43,11 +42,8 @@ public class UserSignInTest extends AbstractTest {
     @Description("UI Sign In with valid credentials")
     @Story("Create layers for UI tests")
     public void uiSignInWithValidCredentialsVerification() {
-        loginPage.clickSignInLink()
-                .fillInEmail(defaultUserData.getUserEmail())
-                .fillInPassword(defaultUserData.getUserPassword())
-                .clickSignInBtn();
-        HomePage homePage = new HomePage(log);
+
+        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword());
         Assert.assertEquals(homePage.getUsernameAccountNav(), defaultUserData.getUserName());
     }
 
@@ -56,10 +52,8 @@ public class UserSignInTest extends AbstractTest {
     @Description("UI Sign In with invalid credentials")
     @Story("Investigate the issues and fix UserSignInTest")
     public void uiSignInWithInvalidCredentialsVerification() {
-        loginPage.clickSignInLink()
-                .fillInEmail(defaultUserData.getUserEmail())
-                .fillInPassword(defaultUserData.getUserPassword() + "1")
-                .clickSignInBtn();
+
+        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword() + "1");
         Assert.assertEquals(loginPage.getInvalidCredentialsMessage(), CREDENTIALS_ERROR_TEXT);
     }
 

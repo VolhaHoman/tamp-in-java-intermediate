@@ -22,11 +22,6 @@ public class CelebPage extends BasePage {
     @FindBy(xpath = "//button[contains(text(),'Unfollow celeb_Hamster_Boss')]")
     private WebElement unfollowBtn;
 
-    public CelebPage(Logger logger) {
-        PageFactory.initElements(driver, this);
-        this.logger = logger;
-    }
-
     public CelebPage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
@@ -62,4 +57,5 @@ public class CelebPage extends BasePage {
         logger.info("Unfollow button has text: " + unfollowBtn.getText());
         return unfollowBtn.getText();
     }
+
 }

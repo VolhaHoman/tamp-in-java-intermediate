@@ -53,6 +53,25 @@ public class RestClient {
         return result;
     }
 
+    @Step("Send PUT API request to endpoint")
+    public Response sendPutRequest(String path, String body,
+                                    Map<String, String> headers) {
+
+
+        Response result = getRequestSpecification(headers)
+                .body(body)
+                .put(path)
+                .then()
+                .extract().response();
+
+        log.info("Request body: " + body);
+        log.info("Request path: " + path);
+
+        log.info("Response status: " + result.getStatusCode());
+        log.info("Response body: " + result.getBody().asString());
+        return result;
+    }
+
     @Step("Send DELETE API request to endpoint")
     public Response sendDeleteRequest(String path, String body,
                                       Map<String, String> headers,
@@ -81,6 +100,12 @@ public class RestClient {
         RequestSpecification response = prepareRequest();
         fillHeaders(headers, response);
         fillParams(params, response);
+        return response;
+    }
+
+    private RequestSpecification getRequestSpecification(Map<String, String> headers) {
+        RequestSpecification response = prepareRequest();
+        fillHeaders(headers, response);
         return response;
     }
 
@@ -120,6 +145,10 @@ public class RestClient {
 
     public Response sendPostRequestWithParams(String path, String body, Map<String, String> params) {
         return sendPostRequest(path, body, Map.of(), params);
+    }
+
+    public Response sendPutRequestWithHeaders(String path, String body, Map<String, String> headers) {
+        return sendPutRequest(path, body, headers);
     }
 
     public Response sendDeleteRequestWithHeaders(String path, String body, Map<String, String> headers) {

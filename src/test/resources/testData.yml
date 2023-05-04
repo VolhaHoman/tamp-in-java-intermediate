@@ -17,3 +17,12 @@ adminUser:
   userName: Fox_Tribb
   userEmail: fox_teddy@example.com
   userPassword: 662goqOO07^
+
+article:
+  title: How to train your dragon
+  description: Ever wonder how?
+  body: Very carefully.
+  tagList:
+    - training
+    - dragons
+    - how
