@@ -1,12 +1,12 @@
-package com.epam.mentoring.taf;
+package com.epam.mentoring.taf.tests.api;
 
+import com.epam.mentoring.taf.UiBaseTest;
 import com.epam.mentoring.taf.api.CommentDTO;
 import com.epam.mentoring.taf.api.CommentResponseDTO;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.mapper.ResponseDataTransferMapper;
 import com.epam.mentoring.taf.util.DataUtil;
-import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpHeaders;
@@ -26,58 +26,14 @@ import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
-@Feature("Comments Tests")
-public class CommentTest extends UiBaseTest {
+@Feature("API: Comments Tests")
+public class CommentAPITest extends UiBaseTest {
 
+    public static final String AUTH_TOKEN = "AUTH_TOKEN";
     public static final String COM_ID = "ID";
     public static final String ALL_COMMENT = "ALL_COMMENT";
-    public static final String ERROR_MESSAGE = "body can't be blank";
-    public static final String COMMENT = "Test";
 
-    private Logger log = LogManager.getLogger();
-
-    @Test(description = "UI: add comment to article", priority = 2)
-    @Severity(SeverityLevel.BLOCKER)
-    @Description("UI verification of adding comments")
-    @Story("Create new tests for comments functionality")
-    public void uiSubmittedCommentVerification() {
-        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
-        selectArticle();
-        articlePage.enterComment(COMMENT)
-                .clickSendCommentBtn();
-
-        Assert.assertEquals(articlePage.getComment(), COMMENT);
-        logOut();
-    }
-
-    @Test(description = "UI: add empty comment", priority = 3)
-    @Severity(SeverityLevel.MINOR)
-    @Story("Create new tests for comments")
-    @Description("UI add empty comment")
-    public void uiEmptyCommentVerification() {
-        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
-        selectArticle();
-        articlePage.enterComment("")
-                .clickSendCommentBtn();
-
-        Assert.assertEquals(articlePage.getError(), ERROR_MESSAGE);
-        logOut();
-    }
-
-    @Test(description = "UI: delete comment from article", priority = 4)
-    @Severity(SeverityLevel.CRITICAL)
-    @Description("UI verification of deleting comments")
-    @Story("Create new tests for comments functionality")
-    public void uiDeleteCommentVerification() {
-        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
-        selectArticle();
-        articlePage.enterComment(COMMENT)
-                .clickSendCommentBtn();
-        articlePage.clickDeleteCommentBtn();
-
-        Assert.assertFalse(articlePage.commentIsNotDisplayed());
-        logOut();
-    }
+    private static Logger log = LogManager.getLogger();
 
     @Test(description = "API: add multiple valid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForValidComments", priority = 0)
     @Severity(SeverityLevel.BLOCKER)
