@@ -5,6 +5,7 @@ import com.epam.mentoring.taf.api.CommentDTO;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.mapper.ResponseDataTransferMapper;
+import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpHeaders;
@@ -38,7 +39,7 @@ public class CommentUITest extends UiBaseTest {
     @Description("UI verification of adding comments")
     @Story("Create new tests for comments functionality")
     public void uiSubmittedCommentVerification() {
-        logIn();
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
         articlePage.enterComment(COMMENT)
                 .clickSendCommentBtn();
@@ -52,7 +53,7 @@ public class CommentUITest extends UiBaseTest {
     @Story("Create new tests for comments")
     @Description("UI add empty comment")
     public void uiEmptyCommentVerification() {
-        logIn();
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
         articlePage.enterComment("")
                 .clickSendCommentBtn();
@@ -67,7 +68,7 @@ public class CommentUITest extends UiBaseTest {
     @Description("UI verification of deleting comments")
     @Story("Create new tests for comments functionality")
     public void uiDeleteCommentVerification() {
-        logIn();
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
         selectArticle();
         articlePage.enterComment(COMMENT)
                 .clickSendCommentBtn();

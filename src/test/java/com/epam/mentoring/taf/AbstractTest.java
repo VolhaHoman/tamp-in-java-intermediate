@@ -16,10 +16,7 @@ import org.testng.annotations.BeforeClass;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
-
 import static com.epam.mentoring.taf.FollowUserTest.ADMIN_USERNAME;
-import static com.epam.mentoring.taf.FollowUserTest.*;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.tests.api.CommentAPITest.ALL_COMMENT;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
