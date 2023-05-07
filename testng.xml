@@ -12,7 +12,7 @@
             <class name="com.epam.mentoring.taf.tests.ui.ArticleUITest">
                 <methods>
                     <include name="uiAddValidArticle"/>
-                    <include name="uiEditExistingArticle"/>
+                    <include name="uiEditArticle"/>
                 </methods>
             </class>
             <class name="com.epam.mentoring.taf.tests.ui.SearchingByTagUITest"/>
@@ -28,8 +28,11 @@
             </class>
             <class name="com.epam.mentoring.taf.tests.ui.ArticleUITest">
                 <methods>
+                    <include name="uiReadArticle"/>
                     <include name="uiDeleteArticle"/>
-                    <include name="uiAddEmptyArticle"/>
+                    <include name="uiAddArticleWithoutTitle"/>
+                    <include name="uiAddArticleWithoutDescription"/>
+                    <include name="uiAddArticleWithoutBody"/>
                 </methods>
             </class>
             <class name="com.epam.mentoring.taf.tests.api.SearchingByTagAPITest"/>

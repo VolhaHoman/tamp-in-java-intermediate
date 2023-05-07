@@ -10,14 +10,9 @@ import com.epam.mentoring.taf.util.DataProviderHelper;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
@@ -25,8 +20,8 @@ import java.util.Map;
 public class ArticleUITest extends ArticleBaseTest {
 
     public static final String ERROR_MESSAGE_TITLE_BLANK = "title can't be blank";
-
-    List<String> createdArticles = new ArrayList<>();
+    public static final String ERROR_MESSAGE_DESCRIPTION_BLANK = "description can't be blank";
+    public static final String ERROR_MESSAGE_BODY_BLANK = "body can't be blank";
 
     @DataProvider(name = "ymlArticleDataProvider")
     public Object[][] dataProviderMethod() throws IOException {
@@ -67,11 +62,26 @@ public class ArticleUITest extends ArticleBaseTest {
 
     }
 
-    @Test(description = "UI: Edit an existing article", priority = 1)
+    @Test(description = "UI: Read an existing article", priority = 1)
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("UI: Read an existing article")
+    @Story("Organise “Search By Tag” and “Articles Handling” tests into test suites")
+    public void uiReadArticle() {
+
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
+        homePage.navGlobalFeed();
+        String testArticle = homePage.getArticleTitle();
+        homePage.clickArticleLink();
+
+        Assert.assertEquals(articlePage.getArticleTitle(), testArticle);
+
+    }
+
+    @Test(description = "UI: Edit an existing article", priority = 2)
     @Severity(SeverityLevel.BLOCKER)
     @Description("UI: Edit an existing article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
-    public void uiEditExistingArticle() throws IOException {
+    public void uiEditArticle() throws IOException {
 
         String slug = createArticle();
         createdArticles.add(slug);
@@ -91,7 +101,7 @@ public class ArticleUITest extends ArticleBaseTest {
 
     }
 
-    @Test(description = "UI: Delete an article", priority = 2)
+    @Test(description = "UI: Delete an article", priority = 3)
     @Severity(SeverityLevel.CRITICAL)
     @Description("UI: Delete an article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
@@ -115,18 +125,60 @@ public class ArticleUITest extends ArticleBaseTest {
 
     }
 
-    @Test(description = "UI: Add an article with empty fields", priority = 3)
+    @Test(description = "UI: Add an article with no title", priority = 4)
     @Severity(SeverityLevel.MINOR)
-    @Description("UI: Add an article with empty fields")
-    @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
-    public void uiAddEmptyArticle() {
+    @Description("UI: Add an article with no title")
+    @Story("Organise “Search By Tag” and “Articles Handling” tests into test suites")
+    public void uiAddArticleWithoutTitle() throws IOException {
 
         logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
+
+        ArticleDTO articleDTO = ArticleRequest.generateArticle();
+
         homePage.navToEditorPage();
-        appEditorPage.publishArticle();
+        appEditorPage.enterDescription(articleDTO.getDescription())
+                .enterBody(articleDTO.getBody())
+                .publishArticle();
 
         Assert.assertEquals(appEditorPage.getError(), ERROR_MESSAGE_TITLE_BLANK);
     }
+
+    @Test(description = "UI: Add an article with no description", priority = 5)
+    @Severity(SeverityLevel.MINOR)
+    @Description("UI: Add an article with no description")
+    @Story("Organise “Search By Tag” and “Articles Handling” tests into test suites")
+    public void uiAddArticleWithoutDescription() throws IOException {
+
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
+
+        ArticleDTO articleDTO = ArticleRequest.generateArticle();
+
+        homePage.navToEditorPage();
+        appEditorPage.enterTitle(articleDTO.getTitle())
+                .enterBody(articleDTO.getBody())
+                .publishArticle();
+
+        Assert.assertEquals(appEditorPage.getError(), ERROR_MESSAGE_DESCRIPTION_BLANK);
+    }
+
+    @Test(description = "UI: Add an article with no body", priority = 6)
+    @Severity(SeverityLevel.MINOR)
+    @Description("UI: Add an article with no body")
+    @Story("Organise “Search By Tag” and “Articles Handling” tests into test suites")
+    public void uiAddArticleWithoutBody() throws IOException {
+
+        logIn(StorageHelper.whatIsThe(ADMIN_EMAIL), StorageHelper.whatIsThe(ADMIN_PASSWORD));
+
+        ArticleDTO articleDTO = ArticleRequest.generateArticle();
+
+        homePage.navToEditorPage();
+        appEditorPage.enterTitle(articleDTO.getTitle())
+                .enterDescription(articleDTO.getDescription())
+                .publishArticle();
+
+        Assert.assertEquals(appEditorPage.getError(), ERROR_MESSAGE_BODY_BLANK);
+    }
+
 
     @AfterMethod(description = "Post-condition: log out")
     public void articleLogOut() {

@@ -53,6 +53,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
     private WebElement signInLink;
 
+    @FindBy(xpath = "//h1")
+    private WebElement articleTitle;
+
     public HomePage(Logger logger, WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
@@ -167,6 +170,19 @@ public class HomePage extends BasePage {
         catch(NoSuchElementException e) {
             return false;
         }
+    }
+
+    @Step("Get an article title")
+    public String getArticleTitle() {
+        wait.until(ExpectedConditions.visibilityOf(articleTitle));
+        logger.info("The following title of the first article is displayed: " + articleTitle.getText());
+        return articleTitle.getText();
+    }
+
+    @Step("Click on the article")
+    public void clickArticleLink() {
+        articleTitle.click();
+        logger.info("Select article");
     }
 
 }
