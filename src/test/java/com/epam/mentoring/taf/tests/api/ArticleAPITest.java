@@ -102,5 +102,4 @@ public class ArticleAPITest extends ArticleBaseTest {
         Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_NO_CONTENT);
     }
 
-
 }

@@ -36,7 +36,7 @@ public class ArticleBaseTest extends UiBaseTest {
                 Map.entry("X-Requested-With", "XMLHttpRequest")));
     }
 
-    @AfterMethod(description = "Post-condition: delete the test article and log out")
+    @AfterMethod(description = "Post-condition: delete the test article")
     public void cleanArticle() {
         if (!createdArticles.isEmpty()) {
             for (String s : createdArticles) {
