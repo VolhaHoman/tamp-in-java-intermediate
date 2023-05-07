@@ -1,4 +1,4 @@
-package com.epam.mentoring.taf;
+package com.epam.mentoring.taf.tests;
 
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;

@@ -1,4 +1,4 @@
-package com.epam.mentoring.taf;
+package com.epam.mentoring.taf.tests;
 
 import com.epam.mentoring.taf.api.ApiUserDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;

@@ -1,9 +1,10 @@
-package com.epam.mentoring.taf;
+package com.epam.mentoring.taf.tests;
 
 import com.epam.mentoring.taf.api.RestClient;
 import com.epam.mentoring.taf.data.UserData;
 import com.epam.mentoring.taf.data.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
+import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.util.Redirection;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.restassured.response.Response;
@@ -16,9 +17,9 @@ import org.testng.annotations.BeforeClass;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.epam.mentoring.taf.CommentTest.ALL_COMMENT;
+import static com.epam.mentoring.taf.tests.CommentTest.ALL_COMMENT;
 
-import static com.epam.mentoring.taf.FollowUserTest.ADMIN_USERNAME;
+import static com.epam.mentoring.taf.tests.FollowUserTest.ADMIN_USERNAME;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
@@ -41,8 +42,9 @@ abstract public class AbstractTest {
     public static final String ARTICLES_COUNT_JSON_PATH = "articlesCount";
 
     protected UserDataDTO defaultUserData;
-    private static Logger log = LogManager.getLogger();
+    protected static Logger log = LogManager.getLogger();
     protected static RestClient client = new RestClient(log);
+    protected static final YamlReader READER = new YamlReader();
 
     Redirection redirection = new Redirection();
 
