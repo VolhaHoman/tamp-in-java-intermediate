@@ -1,4 +1,4 @@
-package com.epam.mentoring.taf.api;
+package com.epam.mentoring.taf.dataobject;
 
 import java.util.Date;
 

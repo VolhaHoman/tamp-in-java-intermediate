@@ -1,8 +1,8 @@
 package com.epam.mentoring.taf.tests;
 
-import com.epam.mentoring.taf.api.ArticleDTO;
-import com.epam.mentoring.taf.api.ArticleRequest;
-import com.epam.mentoring.taf.api.ArticleResponseDTO;
+import com.epam.mentoring.taf.dataobject.ArticleDTO;
+import com.epam.mentoring.taf.dataobject.ArticleRequest;
+import com.epam.mentoring.taf.dataobject.ArticleResponseDTO;
 import com.epam.mentoring.taf.mapper.ArticleResponseMapper;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.restassured.response.Response;

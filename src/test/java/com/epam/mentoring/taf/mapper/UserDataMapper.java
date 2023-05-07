@@ -1,7 +1,7 @@
 package com.epam.mentoring.taf.mapper;
 
-import com.epam.mentoring.taf.api.ApiUserDTO;
-import com.epam.mentoring.taf.data.UserDataDTO;
+import com.epam.mentoring.taf.dataobject.ApiUserDTO;
+import com.epam.mentoring.taf.dataobject.UserDataDTO;
 import com.epam.mentoring.taf.model.UserDataModel;
 
 public final class UserDataMapper {

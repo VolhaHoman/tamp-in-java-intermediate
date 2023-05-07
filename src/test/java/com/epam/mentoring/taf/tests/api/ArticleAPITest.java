@@ -1,6 +1,8 @@
 package com.epam.mentoring.taf.tests.api;
 
-import com.epam.mentoring.taf.api.*;
+import com.epam.mentoring.taf.dataobject.ArticleDTO;
+import com.epam.mentoring.taf.dataobject.ArticleRequest;
+import com.epam.mentoring.taf.dataobject.ArticleResponseDTO;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.mapper.ArticleResponseMapper;

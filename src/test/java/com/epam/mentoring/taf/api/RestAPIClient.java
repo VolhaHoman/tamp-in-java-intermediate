@@ -1,5 +1,7 @@
 package com.epam.mentoring.taf.api;
 
+import com.epam.mentoring.taf.dataobject.ApiUserDTO;
+import com.epam.mentoring.taf.dataobject.ResponseDTO;
 import com.epam.mentoring.taf.tests.AbstractTest;
 import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
