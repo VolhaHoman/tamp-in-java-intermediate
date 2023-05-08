@@ -125,14 +125,6 @@ public class HomePage extends BasePage {
         logger.info("Navigate to User page");
     }
 
-    @Step("Navigate to Global feed")
-    public HomePage navGlobalFeed() {
-        wait.until(ExpectedConditions.visibilityOf(globalLink));
-        globalLink.click();
-        logger.info("Navigate to Global feed");
-        return this;
-    }
-
     @Step("Navigate to AppEditor page")
     public void navToEditorPage() {
         wait.until(ExpectedConditions.visibilityOf(newArticle));

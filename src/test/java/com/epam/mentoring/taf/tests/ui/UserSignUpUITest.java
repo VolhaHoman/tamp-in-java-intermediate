@@ -20,11 +20,12 @@ public class UserSignUpUITest extends UiBaseTest {
 
     private UserDataDTO userDataDTO;
 
+    public static final String BLANK_ERROR_TEXT = "username can't be blank";
+
     @BeforeMethod(description = "Generate Test User")
     public void generateUserData() {
         try {
             userDataDTO = UserData.generateUserData();
-            defaultUserData = UserData.getUserDataFromYaml("testUser");
         } catch (IOException e) {
             throw new ConfigurationSetupException("Can't load default user data", e);
         }
@@ -42,6 +43,20 @@ public class UserSignUpUITest extends UiBaseTest {
                 .clickSignUpBtn();
 
         Assert.assertEquals(homePage.getUsernameAccountNav(), userDataDTO.getUserName());
+    }
+
+    @Test(description = "UI Sign Up with empty Username")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("UI Sign Up with empty Username")
+    @Story("Organise “User Sign Up” and “Comments” tests into test suites")
+    public void signUpBlankUserVerification() {
+        homePage.clickSignUpLink();
+        registerPage.fillInUsername("")
+                .fillInEmail(userDataDTO.getUserEmail())
+                .fillInPassword(userDataDTO.getUserPassword())
+                .clickSignUpBtn();
+
+        Assert.assertEquals(loginPage.getInvalidCredentialsMessage(), BLANK_ERROR_TEXT);
     }
 
 }
