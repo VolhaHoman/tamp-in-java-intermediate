@@ -24,7 +24,7 @@ import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
-abstract public class AbstractTest {
+public abstract class AbstractTest {
 
     protected final static String baseUrl = "https://angular.realworld.io";
     public final static String API_URL = "https://conduit.productionready.io";

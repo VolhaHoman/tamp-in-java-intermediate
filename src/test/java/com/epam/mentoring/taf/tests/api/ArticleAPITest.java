@@ -64,7 +64,7 @@ public class ArticleAPITest extends ArticleBaseTest {
 
         int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
 
-        Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_OK);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertTrue(articlesCount > 0);
     }
 
@@ -99,7 +99,7 @@ public class ArticleAPITest extends ArticleBaseTest {
 
         Response response = deleteArticle(slug);
 
-        Assert.assertEquals(response.getStatusCode(), org.apache.http.HttpStatus.SC_NO_CONTENT);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_NO_CONTENT);
     }
 
 }
