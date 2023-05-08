@@ -18,8 +18,7 @@ public class SearchingByTagUITest extends UiBaseTest {
     @Story("Add UI and API layers support to SearchByTagTest")
     public void uiSearchByRandomValidTag() {
         String tagName = homePage.getTagFromSidebar().getTagText();
-        homePage.clickTag();
-        String selectedTag = homePage.getNavLink();
+        String selectedTag = homePage.clickTag().getNavLink();
         Assert.assertEquals(selectedTag, tagName);
     }
 

@@ -66,6 +66,7 @@ public class ArticleAPITest extends ArticleBaseTest {
 
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertTrue(articlesCount > 0);
+        Assert.assertFalse(createdArticles.isEmpty());
     }
 
     @Test(description = "API: Update an existing article", priority = 2)
