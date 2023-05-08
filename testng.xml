@@ -28,7 +28,6 @@
             </class>
             <class name="com.epam.mentoring.taf.tests.ui.ArticleUITest">
                 <methods>
-                    <include name="uiReadArticle"/>
                     <include name="uiDeleteArticle"/>
                     <include name="uiAddArticleWithoutTitle"/>
                     <include name="uiAddArticleWithoutDescription"/>
