@@ -1,5 +1,6 @@
 package com.epam.mentoring.taf.tests.api;
 
+import com.epam.mentoring.taf.AbstractTest;
 import com.epam.mentoring.taf.UiBaseTest;
 import com.epam.mentoring.taf.api.CommentDTO;
 import com.epam.mentoring.taf.api.CommentResponseDTO;
@@ -27,7 +28,7 @@ import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("API: Comments Tests")
-public class CommentAPITest extends UiBaseTest {
+public class CommentAPITest extends AbstractTest {
 
     public static final String AUTH_TOKEN = "AUTH_TOKEN";
     public static final String COM_ID = "ID";

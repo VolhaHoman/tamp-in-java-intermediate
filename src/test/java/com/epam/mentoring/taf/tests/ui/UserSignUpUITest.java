@@ -7,8 +7,6 @@ import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import io.qameta.allure.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -21,8 +19,6 @@ import java.io.IOException;
 public class UserSignUpUITest extends UiBaseTest {
 
     private UserDataDTO userDataDTO;
-    private UserDataDTO defaultUserData;
-    private Logger log = LogManager.getLogger();
 
     @BeforeMethod(description = "Generate Test User")
     public void generateUserData() {
