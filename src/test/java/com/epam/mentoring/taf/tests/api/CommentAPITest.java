@@ -1,7 +1,6 @@
 package com.epam.mentoring.taf.tests.api;
 
 import com.epam.mentoring.taf.AbstractTest;
-import com.epam.mentoring.taf.UiBaseTest;
 import com.epam.mentoring.taf.api.CommentDTO;
 import com.epam.mentoring.taf.api.CommentResponseDTO;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
