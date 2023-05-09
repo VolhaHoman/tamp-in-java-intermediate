@@ -1,14 +1,14 @@
 package com.epam.mentoring.taf.tests.api;
 
-import com.epam.mentoring.taf.AbstractTest;
-import com.epam.mentoring.taf.api.ApiUserDTO;
-import com.epam.mentoring.taf.api.ResponseDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;
-import com.epam.mentoring.taf.data.UserData;
-import com.epam.mentoring.taf.data.UserDataDTO;
+import com.epam.mentoring.taf.dataobject.ApiUserDTO;
+import com.epam.mentoring.taf.dataobject.ResponseDTO;
+import com.epam.mentoring.taf.dataobject.UserData;
+import com.epam.mentoring.taf.dataobject.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
+import com.epam.mentoring.taf.tests.AbstractTest;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;

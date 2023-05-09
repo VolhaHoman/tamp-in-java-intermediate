@@ -1,4 +1,4 @@
-package com.epam.mentoring.taf.api;
+package com.epam.mentoring.taf.dataobject;
 
 public class ApiUserDTO {
     private String username;

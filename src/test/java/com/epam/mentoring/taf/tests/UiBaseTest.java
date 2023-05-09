@@ -1,9 +1,7 @@
-package com.epam.mentoring.taf;
+package com.epam.mentoring.taf.tests;
 
 import com.epam.mentoring.taf.ui.config.WebDriverCreate;
 import com.epam.mentoring.taf.ui.page.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
@@ -13,7 +11,6 @@ public class UiBaseTest extends AbstractTest {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
-    private Logger log = LogManager.getLogger();
 
     protected HomePage homePage;
     protected LoginPage loginPage;

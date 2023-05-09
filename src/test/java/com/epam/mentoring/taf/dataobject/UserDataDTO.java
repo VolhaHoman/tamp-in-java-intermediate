@@ -1,4 +1,4 @@
-package com.epam.mentoring.taf.data;
+package com.epam.mentoring.taf.dataobject;
 
 public class UserDataDTO {
 

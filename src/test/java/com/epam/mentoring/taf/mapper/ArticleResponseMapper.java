@@ -1,6 +1,6 @@
 package com.epam.mentoring.taf.mapper;
 
-import com.epam.mentoring.taf.api.ArticleResponseDTO;
+import com.epam.mentoring.taf.dataobject.ArticleResponseDTO;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

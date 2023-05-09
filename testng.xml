@@ -4,11 +4,24 @@
     <test name="Smoke Tests">
         <classes>
             <class name="com.epam.mentoring.taf.tests.ui.UserSignUpUITest"/>
+            <class name="com.epam.mentoring.taf.tests.api.ArticleAPITest">
+                <methods>
+                    <include name="apiAddValidArticle"/>
+                    <include name="apiDeleteArticle"/>
+                </methods>
+            </class>
+            <class name="com.epam.mentoring.taf.tests.ui.ArticleUITest">
+                <methods>
+                    <include name="uiAddValidArticle"/>
+                    <include name="uiEditArticle"/>
+                </methods>
+            </class>
             <class name="com.epam.mentoring.taf.tests.api.CommentAPITest">
                 <methods>
                     <include name="apiAddCommentWithValidText"/>
                 </methods>
             </class>
+            <class name="com.epam.mentoring.taf.tests.ui.SearchingByTagUITest"/>
         </classes>
     </test>
     <test name="Regression Tests">
@@ -19,7 +32,22 @@
                     <include name="apiBlankUserVerification"/>
                 </methods>
             </class>
+            <class name="com.epam.mentoring.taf.tests.api.ArticleAPITest">
+                <methods>
+                    <include name="apiReadAllArticles"/>
+                    <include name="apiUpdateArticle"/>
+                </methods>
+            </class>
+            <class name="com.epam.mentoring.taf.tests.ui.ArticleUITest">
+                <methods>
+                    <include name="uiDeleteArticle"/>
+                    <include name="uiAddArticleWithoutTitle"/>
+                    <include name="uiAddArticleWithoutDescription"/>
+                    <include name="uiAddArticleWithoutBody"/>
+                </methods>
+            </class>
             <class name="com.epam.mentoring.taf.tests.ui.CommentUITest"/>
+            <class name="com.epam.mentoring.taf.tests.api.SearchingByTagAPITest"/>
         </classes>
     </test>
 </suite>

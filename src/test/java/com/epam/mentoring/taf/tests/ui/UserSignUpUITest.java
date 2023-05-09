@@ -1,11 +1,11 @@
 package com.epam.mentoring.taf.tests.ui;
 
-import com.epam.mentoring.taf.UiBaseTest;
-import com.epam.mentoring.taf.data.UserData;
-import com.epam.mentoring.taf.data.UserDataDTO;
+import com.epam.mentoring.taf.dataobject.UserData;
+import com.epam.mentoring.taf.dataobject.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
+import com.epam.mentoring.taf.tests.UiBaseTest;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;

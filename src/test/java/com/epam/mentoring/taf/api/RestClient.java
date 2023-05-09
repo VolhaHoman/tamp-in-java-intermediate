@@ -37,8 +37,6 @@ public class RestClient {
     public Response sendPostRequest(String path, String body,
                                    Map<String, String> headers,
                                    Map<String, String> params) {
-
-
         Response result = getRequestSpecification(headers, params)
                 .body(body)
                 .post(path)
@@ -56,8 +54,6 @@ public class RestClient {
     @Step("Send PUT API request to endpoint")
     public Response sendPutRequest(String path, String body,
                                     Map<String, String> headers) {
-
-
         Response result = getRequestSpecification(headers)
                 .body(body)
                 .put(path)

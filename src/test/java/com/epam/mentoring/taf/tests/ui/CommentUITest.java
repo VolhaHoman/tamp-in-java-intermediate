@@ -1,10 +1,10 @@
 package com.epam.mentoring.taf.tests.ui;
 
-import com.epam.mentoring.taf.UiBaseTest;
-import com.epam.mentoring.taf.api.CommentDTO;
+import com.epam.mentoring.taf.dataobject.CommentDTO;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.mapper.ResponseDataTransferMapper;
+import com.epam.mentoring.taf.tests.UiBaseTest;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;

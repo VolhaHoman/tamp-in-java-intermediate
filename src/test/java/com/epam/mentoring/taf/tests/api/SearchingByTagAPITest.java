@@ -1,15 +1,13 @@
-package com.epam.mentoring.taf;
+package com.epam.mentoring.taf.tests.api;
 
 import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import com.epam.mentoring.taf.service.YamlReader;
+import com.epam.mentoring.taf.tests.AbstractTest;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
@@ -19,31 +17,18 @@ import java.io.IOException;
 import java.util.List;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
-@Feature("Searching By Tag Tests")
-public class SearchingByTagTest extends UiBaseTest {
+@Feature("Searching By Tag API Tests")
+public class SearchingByTagAPITest extends AbstractTest {
 
-    public static final YamlReader READER = new YamlReader();
     public static final String INVALID_TAG = "invalid_tag_name";
     public static final String TAG_LIST_JSON_PATH = "articles.tagList";
-    private Logger log = LogManager.getLogger();
 
     @DataProvider(name = "apiDataProvider")
     public Object[][] apiDataProviderMethod() throws IOException {
         return getTags();
     }
 
-    @Test(description = "UI Search by a valid tag")
-    @Severity(SeverityLevel.CRITICAL)
-    @Description("UI Search by a valid tag")
-    @Story("Add UI and API layers support to SearchByTagTest")
-    public void uiSearchByRandomValidTag() {
-        String tagName = homePage.getTagFromSidebar().getTagText();
-        homePage.clickTag();
-        String selectedTag = homePage.getNavLink();
-        Assert.assertEquals(selectedTag, tagName);
-    }
-
-    @Test(dataProvider = "apiDataProvider", description = "API Search by a valid tag")
+    @Test(dataProvider = "apiDataProvider", description = "API Search by a valid tag", priority = 0)
     @Severity(SeverityLevel.CRITICAL)
     @Description("API Search by a valid tag")
     @Story("Add UI and API layers support to SearchByTagTest")
@@ -55,7 +40,7 @@ public class SearchingByTagTest extends UiBaseTest {
         Assert.assertTrue(tagList.toString().contains(tag));
     }
 
-    @Test(description = "API Search by an invalid tag")
+    @Test(description = "API Search by an invalid tag", priority = 1)
     @Severity(SeverityLevel.MINOR)
     @Description("API Search by an invalid tag")
     @Story("Add UI and API layers support to SearchByTagTest")

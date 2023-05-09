@@ -1,4 +1,4 @@
-package com.epam.mentoring.taf.data;
+package com.epam.mentoring.taf.dataobject;
 
 import com.epam.mentoring.taf.model.UserDataModel;
 import com.epam.mentoring.taf.service.YamlReader;
