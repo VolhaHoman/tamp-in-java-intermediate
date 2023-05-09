@@ -83,7 +83,7 @@ public class CommentAPITest extends AbstractTest {
 
             ResponseDataTransferMapper restAPIClient = new ResponseDataTransferMapper();
             CommentDTO responseDTO = restAPIClient.transformToDtoCom(response, log);
-            Assert.assertEquals(response.getStatusCode(), org.apache.hc.core5.http.HttpStatus.SC_OK);
+            Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
             Assert.assertNull(responseDTO.getComment());
         }
     }

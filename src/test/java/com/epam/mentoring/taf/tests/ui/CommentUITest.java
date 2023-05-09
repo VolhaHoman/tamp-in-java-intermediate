@@ -9,6 +9,7 @@ import com.epam.mentoring.taf.util.StorageHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
@@ -58,7 +59,6 @@ public class CommentUITest extends UiBaseTest {
         articlePage.enterComment("")
                 .clickSendCommentBtn();
 
-
         Assert.assertEquals(articlePage.getError(), ERROR_MESSAGE);
         logOut();
     }
@@ -96,7 +96,7 @@ public class CommentUITest extends UiBaseTest {
 
             ResponseDataTransferMapper restAPIClient = new ResponseDataTransferMapper();
             CommentDTO responseDTO = restAPIClient.transformToDtoCom(response, log);
-            Assert.assertEquals(response.getStatusCode(), org.apache.hc.core5.http.HttpStatus.SC_OK);
+            Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
             Assert.assertNull(responseDTO.getComment());
         }
     }
