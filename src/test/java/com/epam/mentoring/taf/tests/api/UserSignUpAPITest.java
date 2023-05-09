@@ -1,13 +1,14 @@
-package com.epam.mentoring.taf.tests;
+package com.epam.mentoring.taf.tests.api;
 
+import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.dataobject.ApiUserDTO;
 import com.epam.mentoring.taf.dataobject.ResponseDTO;
-import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.dataobject.UserData;
 import com.epam.mentoring.taf.dataobject.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
+import com.epam.mentoring.taf.tests.AbstractTest;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -21,8 +22,8 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
-@Feature("Sign Up Tests")
-public class UserSignUpTest extends UiBaseTest {
+@Feature("API: Sign Up Tests")
+public class UserSignUpAPITest extends AbstractTest {
 
     public static final String BLANK_ERROR_TEXT = "can't be blank";
     public static final String ALREADY_TAKEN_ERROR_TEXT = "has already been taken";
@@ -38,21 +39,6 @@ public class UserSignUpTest extends UiBaseTest {
         } catch (IOException e) {
             throw new ConfigurationSetupException("Can't load default user data", e);
         }
-    }
-
-    @Test(description = "UI Sign Up with new credentials")
-    @Severity(SeverityLevel.BLOCKER)
-    @Description("UI Sign Up with new credentials")
-    @Story("Investigate the issues and fix UserSignUpTest")
-    public void signUpVerification() {
-
-        homePage.clickSignUpLink();
-        registerPage.fillInUsername(userDataDTO.getUserName())
-                    .fillInEmail(userDataDTO.getUserEmail())
-                    .fillInPassword(userDataDTO.getUserPassword())
-                    .clickSignUpBtn();
-
-        Assert.assertEquals(homePage.getUsernameAccountNav(), userDataDTO.getUserName());
     }
 
     @Test(description = "API Sign Up with new credentials")
@@ -100,4 +86,5 @@ public class UserSignUpTest extends UiBaseTest {
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), BLANK_ERROR_TEXT);
     }
+
 }
