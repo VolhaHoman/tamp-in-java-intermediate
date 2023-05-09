@@ -1,12 +1,13 @@
-package com.epam.mentoring.taf.tests;
+package com.epam.mentoring.taf.tests.api;
 
-import com.epam.mentoring.taf.dataobject.ApiUserDTO;
 import com.epam.mentoring.taf.api.RestAPIClient;
+import com.epam.mentoring.taf.dataobject.ApiUserDTO;
 import com.epam.mentoring.taf.dataobject.UserData;
 import com.epam.mentoring.taf.dataobject.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
+import com.epam.mentoring.taf.tests.UiBaseTest;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -19,14 +20,16 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static com.epam.mentoring.taf.ui.page.LoginPage.CREDENTIALS_ERROR_TEXT;
+import static com.epam.mentoring.taf.tests.ui.FollowUserTest.RESPONSE;
+import static com.epam.mentoring.taf.util.StorageHelper.rememberTheResponse;
+import static com.epam.mentoring.taf.util.StorageHelper.whatIsTheResponse;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Sign In Tests")
-public class UserSignInTest extends UiBaseTest {
+public class UserSignInTestApi extends UiBaseTest {
 
     private UserDataDTO defaultUserData;
-    private Logger log = LogManager.getLogger();
+    private final Logger log = LogManager.getLogger();
 
     @BeforeMethod(description = "Generate default Sign in User")
     public void generateUserData() {
@@ -35,26 +38,6 @@ public class UserSignInTest extends UiBaseTest {
         } catch (IOException e) {
             throw new ConfigurationSetupException("Can't load default user data", e);
         }
-    }
-
-    @Test(description = "UI Sign In with valid credentials")
-    @Severity(SeverityLevel.BLOCKER)
-    @Description("UI Sign In with valid credentials")
-    @Story("Create layers for UI tests")
-    public void uiSignInWithValidCredentialsVerification() {
-
-        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword());
-        Assert.assertEquals(homePage.getUsernameAccountNav(), defaultUserData.getUserName());
-    }
-
-    @Test(description = "UI Sign In with invalid credentials")
-    @Severity(SeverityLevel.CRITICAL)
-    @Description("UI Sign In with invalid credentials")
-    @Story("Investigate the issues and fix UserSignInTest")
-    public void uiSignInWithInvalidCredentialsVerification() {
-
-        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword() + "1");
-        Assert.assertEquals(loginPage.getInvalidCredentialsMessage(), CREDENTIALS_ERROR_TEXT);
     }
 
     @Test(description = "API Sign In with valid credentials")
@@ -67,7 +50,9 @@ public class UserSignInTest extends UiBaseTest {
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, redirection.getRedirectionUrl(API_LOGIN), log);
-        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
+        rememberTheResponse(RESPONSE, response);
+
+        verifyStatusCodeIsOk();
     }
 
     @Test(description = "API Sign In with invalid credentials")
@@ -80,7 +65,21 @@ public class UserSignInTest extends UiBaseTest {
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
         Response response = restAPIClient.sendApiRequest(apiUserDTO, redirection.getRedirectionUrl(API_LOGIN), log);
-        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_FORBIDDEN);
+        rememberTheResponse(RESPONSE, response);
+
+        verifyStatusCodeIsForbidden();
+    }
+
+    @Step
+    private void verifyStatusCodeIsOk() {
+        Response response = whatIsTheResponse(RESPONSE);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK, "Status code is ok");
+    }
+
+    @Step
+    private void verifyStatusCodeIsForbidden() {
+        Response response = whatIsTheResponse(RESPONSE);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_FORBIDDEN, "Status code is 403");
     }
 
 }
