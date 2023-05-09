@@ -30,7 +30,7 @@ public class WebDriverCreate {
     public static WebDriverWait getWebDriverWaitInstance() {
         initProps();
         if (wait == null) {
-            wait = new WebDriverWait(getWebDriverInstance(), 5);
+            wait = new WebDriverWait(getWebDriverInstance(), 7);
         }
         return wait;
     }
@@ -83,7 +83,7 @@ public class WebDriverCreate {
     private static void initProps() {
         if (Objects.isNull(driver) || isDriverSessionNotPresent()) {
             initDriver();
-            wait = new WebDriverWait(getWebDriverInstance(), 5);
+            wait = new WebDriverWait(getWebDriverInstance(), 7);
         }
     }
 
