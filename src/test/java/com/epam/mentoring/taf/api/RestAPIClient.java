@@ -2,10 +2,12 @@ package com.epam.mentoring.taf.api;
 
 import com.epam.mentoring.taf.dataobject.ApiUserDTO;
 import com.epam.mentoring.taf.dataobject.ResponseDTO;
+import com.epam.mentoring.taf.exception.ResponseCheckException;
 import com.epam.mentoring.taf.tests.AbstractTest;
 import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.http.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,14 +53,22 @@ public class RestAPIClient {
     }
 
     private ResponseDTO extractResponse(Response response) {
+        checkResponse(response);
         try {
-            if (response != null || response.body() != null) {
-                return response.body().as(ResponseDTO.class);
-            }
+            return response.body().as(ResponseDTO.class);
         } catch (Exception e) {
             throw new ParseException("Can't parse body");
         }
-        throw new ParseException("Can't parse body");
+    }
+
+    private void checkResponse(Response response) {
+        if (ObjectUtils.anyNull(response, response.body()) || !is2xxStatus(response)) {
+            throw new ResponseCheckException("Response error");
+        }
+    }
+
+    private boolean is2xxStatus(Response response) {
+        return response.getStatusCode() >= 200 && response.getStatusCode() < 300;
     }
 
     private void logUserName(ResponseDTO responseDTO) {
