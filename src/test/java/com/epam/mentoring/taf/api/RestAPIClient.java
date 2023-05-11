@@ -62,9 +62,13 @@ public class RestAPIClient {
     }
 
     private void checkResponse(Response response) {
-        if (ObjectUtils.anyNull(response, response.body()) || !is2xxStatus(response)) {
+        if (ObjectUtils.anyNull(response, response.body()) || !isInRightStatus(response)) {
             throw new ResponseCheckException("Response error");
         }
+    }
+
+    private boolean isInRightStatus(Response response) {
+        return is2xxStatus(response) || response.getStatusCode() == 422;
     }
 
     private boolean is2xxStatus(Response response) {
@@ -81,5 +85,4 @@ public class RestAPIClient {
         }
         return "UNKNOWN USER";
     }
-
 }
