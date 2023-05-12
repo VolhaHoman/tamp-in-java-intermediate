@@ -2,10 +2,13 @@ package com.epam.mentoring.taf.api;
 
 import com.epam.mentoring.taf.dataobject.ApiUserDTO;
 import com.epam.mentoring.taf.dataobject.ResponseDTO;
+import com.epam.mentoring.taf.exception.ResponseCheckException;
 import com.epam.mentoring.taf.tests.AbstractTest;
 import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.http.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,8 +36,8 @@ public class RestAPIClient {
 
     @Step("Transform API response to DTO")
     public ResponseDTO transformToDto(Response response, Logger logger) {
-        ResponseDTO responseDTO = response.body().as(ResponseDTO.class);
-        logger.info("Response message: " + responseDTO.getErrors().getUsername().get(0));
+        ResponseDTO responseDTO = extractResponse(response);
+        logUserName(responseDTO);
         return responseDTO;
     }
 
@@ -49,4 +52,37 @@ public class RestAPIClient {
         return response;
     }
 
+    private ResponseDTO extractResponse(Response response) {
+        checkResponse(response);
+        try {
+            return response.body().as(ResponseDTO.class);
+        } catch (Exception e) {
+            throw new ParseException("Can't parse body");
+        }
+    }
+
+    private void checkResponse(Response response) {
+        if (ObjectUtils.anyNull(response, response.body()) || !isInRightStatus(response)) {
+            throw new ResponseCheckException("Response error");
+        }
+    }
+
+    private boolean isInRightStatus(Response response) {
+        return is2xxStatus(response) || response.getStatusCode() == 422;
+    }
+
+    private boolean is2xxStatus(Response response) {
+        return response.getStatusCode() >= 200 && response.getStatusCode() < 300;
+    }
+
+    private void logUserName(ResponseDTO responseDTO) {
+        logger.info("Response message: " + extractUserName(responseDTO));
+    }
+
+    private String extractUserName(ResponseDTO dto) {
+        if (dto.getErrors() != null || !dto.getErrors().getUsername().isEmpty()) {
+            return dto.getErrors().getUsername().get(0);
+        }
+        return "UNKNOWN USER";
+    }
 }

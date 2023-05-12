@@ -22,6 +22,14 @@
                 </methods>
             </class>
             <class name="com.epam.mentoring.taf.tests.ui.SearchingByTagUITest"/>
+            <class name="com.epam.mentoring.taf.tests.api.UserSignInTestApi"/>
+            <class name="com.epam.mentoring.taf.tests.ui.FollowUserTest">
+                <methods>
+                    <include name="apiFollowUser"/>
+                    <include name="apiUnfollowUser"/>
+                    <include name="apiVerifyFollowIsFalse"/>
+                </methods>
+            </class>
         </classes>
     </test>
     <test name="Regression Tests">
@@ -48,6 +56,8 @@
             </class>
             <class name="com.epam.mentoring.taf.tests.ui.CommentUITest"/>
             <class name="com.epam.mentoring.taf.tests.api.SearchingByTagAPITest"/>
+            <class name="com.epam.mentoring.taf.tests.ui.FollowUserTest"/>
+            <class name="com.epam.mentoring.taf.tests.ui.UserSignInTestUI"/>
         </classes>
     </test>
 </suite>

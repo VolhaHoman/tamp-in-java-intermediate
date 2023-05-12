@@ -17,7 +17,7 @@ import org.testng.annotations.BeforeClass;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.epam.mentoring.taf.tests.FollowUserTest.ADMIN_USERNAME;
+import static com.epam.mentoring.taf.tests.ui.FollowUserTest.ADMIN_USERNAME;
 import static com.epam.mentoring.taf.mapper.UserDataMapper.mapToDTO;
 import static com.epam.mentoring.taf.tests.api.CommentAPITest.ALL_COMMENT;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberThat;
@@ -45,7 +45,7 @@ public abstract class AbstractTest {
     protected static RestClient client = new RestClient(log);
     protected static final YamlReader READER = new YamlReader();
 
-    Redirection redirection = new Redirection();
+    protected Redirection redirection = new Redirection();
 
     @BeforeClass
     public void authorization() {
@@ -87,5 +87,4 @@ public abstract class AbstractTest {
         String allCommentPath = API_ARTICLES + whatIsThe(SLUG) + COMMENT_PATH;
         rememberThat(ALL_COMMENT, allCommentPath);
     }
-
 }
