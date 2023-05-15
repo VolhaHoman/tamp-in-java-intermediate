@@ -92,6 +92,7 @@ public class WebDriverLoader implements ILoggerTest {
                     UnexpectedAlertBehaviour.IGNORE);
             chromeOptions.setCapability(CapabilityType.TAKES_SCREENSHOT,
                     true);
+            chromeOptions.addArguments("--headless");
             return new RemoteWebDriver(gridUrl, chromeOptions);
         }
         WebDriverManager.chromedriver().setup();
@@ -110,6 +111,7 @@ public class WebDriverLoader implements ILoggerTest {
                     UnexpectedAlertBehaviour.IGNORE);
             firefoxOptions.setCapability(CapabilityType.TAKES_SCREENSHOT,
                     true);
+            firefoxOptions.addArguments("--headless");
             return new RemoteWebDriver(gridUrl, firefoxOptions);
         }
 
