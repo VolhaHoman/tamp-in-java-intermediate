@@ -11,6 +11,7 @@ public interface OpenClose extends UIDriverTest {
     default void open() {
         try {
             DRIVER.get().getWebDriver().get(BASE_URL);
+            DRIVER.get().getWebDriver().manage().window().maximize();
         } catch (Exception e) {
             DRIVER.get().getWebDriver().quit();
         }

@@ -11,7 +11,8 @@ pipelines:
           artifacts:
             - target/surefire-reports/**
           script:
-            - mvn -Dgrid.url=http://localhost:4444/wd/hub -B verify --file pom.xml
+#            - mvn -Dgrid.url=http://localhost:4444/wd/hub -B verify --file pom.xml
+            - mvn -B verify --file pom.xml
           services:
             - selenium-grid
             - selenium-chrome
