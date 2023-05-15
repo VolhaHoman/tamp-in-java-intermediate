@@ -90,6 +90,8 @@ public class WebDriverLoader implements ILoggerTest {
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR,
                     UnexpectedAlertBehaviour.IGNORE);
+            chromeOptions.setCapability(CapabilityType.TAKES_SCREENSHOT,
+                    true);
             return new RemoteWebDriver(gridUrl, chromeOptions);
         }
         WebDriverManager.chromedriver().setup();
@@ -105,6 +107,8 @@ public class WebDriverLoader implements ILoggerTest {
             FirefoxOptions firefoxOptions = new FirefoxOptions();
             firefoxOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR,
                     UnexpectedAlertBehaviour.IGNORE);
+            firefoxOptions.setCapability(CapabilityType.TAKES_SCREENSHOT,
+                    true);
             return new RemoteWebDriver(gridUrl, firefoxOptions);
         }
 
