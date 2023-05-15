@@ -1,14 +1,13 @@
 package com.epam.mentoring.taf.ui.page;
 
+import com.epam.mentoring.taf.ui.config.WebDriverLoader;
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.Random;
@@ -53,23 +52,22 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
     private WebElement signInLink;
 
-    public HomePage(Logger logger, WebDriver driver, WebDriverWait wait) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        this.wait = wait;
+    public HomePage(Logger logger, WebDriverLoader loader) {
+        PageFactory.initElements(loader.getWebDriver(), this);
+        this.loader = loader;
         this.logger = logger;
     }
 
     @Step("Get username from navigation bar")
     public String getUsernameAccountNav() {
-        wait.until(ExpectedConditions.visibilityOf(usernameAccountNav));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(usernameAccountNav));
         logger.info("Get username from navigation bar: " + usernameAccountNav.getText());
         return usernameAccountNav.getText();
     }
 
     @Step("Get a tag from side bar")
     public HomePage getTagFromSidebar() {
-        wait.until(ExpectedConditions.visibilityOfAllElements(tagPills));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOfAllElements(tagPills));
         Random rand = new Random();
         tag = tagPills.get(rand.nextInt(tagPills.size()));
         logger.info("Get all tags from side bar: " + tagPills.size());
@@ -91,28 +89,28 @@ public class HomePage extends BasePage {
 
     @Step("Get the new tab title")
     public String getNavLink() {
-        wait.until(ExpectedConditions.visibilityOf(articlePreview));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(articlePreview));
         logger.info("Get the new tag tab title: " + navLink.getText());
         return navLink.getText();
     }
 
     @Step("Verify 'Your Feed' exists")
     public String getYourFeedNav() {
-        wait.until(ExpectedConditions.visibilityOf(userFeedNav));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(userFeedNav));
         logger.info("Get user feed: " + userFeedNav.getText());
         return userFeedNav.getText();
     }
 
     @Step("Verify 'Your Feed Author' exists")
     public String getYourFeedAuthor() {
-        wait.until(ExpectedConditions.visibilityOf(userFeedAuthor));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(userFeedAuthor));
         logger.info("Get user feed: " + userFeedAuthor.getText());
         return userFeedAuthor.getText();
     }
 
     @Step("Click on 'Celeb User' link")
     public HomePage clickCelebUserLink() {
-        wait.until(ExpectedConditions.elementToBeClickable(userFeedAuthor));
+        loader.getWebDriverWait().until(ExpectedConditions.elementToBeClickable(userFeedAuthor));
         userFeedAuthor.click();
         logger.info("Click on 'Celeb User' link");
         return this;
@@ -120,21 +118,21 @@ public class HomePage extends BasePage {
 
     @Step("Navigate to User page")
     public void navToUser() {
-        wait.until(ExpectedConditions.visibilityOfAllElements(tagPills));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOfAllElements(tagPills));
         userIcon.click();
         logger.info("Navigate to User page");
     }
 
     @Step("Navigate to AppEditor page")
     public void navToEditorPage() {
-        wait.until(ExpectedConditions.visibilityOf(newArticle));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(newArticle));
         newArticle.click();
         logger.info("Navigate to AppEditor page");
     }
 
     @Step("Navigate to Setting page")
     public void navToSetting() {
-        wait.until(ExpectedConditions.visibilityOf(settingNav));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(settingNav));
         settingNav.click();
         logger.info("Navigate to Setting page");
     }
@@ -155,8 +153,7 @@ public class HomePage extends BasePage {
     public boolean userIconIsDisplayed() {
         try {
             return userIcon.isDisplayed();
-        }
-        catch(NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             return false;
         }
     }

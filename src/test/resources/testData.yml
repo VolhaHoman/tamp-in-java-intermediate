@@ -13,10 +13,15 @@ signInUser:
   userPassword: Voldemort
   userName: Tom Marvolo Riddle
 
+adminUserFollow:
+  userName: Foxen_Ted
+  userEmail: foxen_ted@example.com
+  userPassword: 5tsl08*
+
 adminUser:
-  userName: Fox_Tribb
-  userEmail: fox_teddy@example.com
-  userPassword: 662goqOO07^
+  userName: Bossman
+  userEmail: bossman@example.com
+  userPassword: 72jal-r88
 
 article:
   title: How to train your dragon

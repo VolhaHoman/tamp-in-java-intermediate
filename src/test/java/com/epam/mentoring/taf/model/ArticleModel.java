@@ -19,6 +19,9 @@ public class ArticleModel {
         this.tagList = tagList;
     }
 
+    public ArticleModel() {
+    }
+
     public String getTitle() {
         return title;
     }
@@ -33,8 +36,5 @@ public class ArticleModel {
 
     public String[] getTagList() {
         return tagList;
-    }
-
-    public ArticleModel() {
     }
 }

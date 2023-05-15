@@ -10,32 +10,35 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.naming.ConfigurationException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Objects;
 
-public class WebDriverCreate {
+public class WebDriverLoader {
 
-    private static WebDriver driver;
+    private WebDriver driver;
 
-    private static WebDriverWait wait;
+    private WebDriverWait wait;
 
-    public static WebDriver getWebDriverInstance() {
+    public WebDriver getWebDriver() {
         initProps();
         return driver;
     }
 
-    public static WebDriverWait getWebDriverWaitInstance() {
+    public WebDriverWait getWebDriverWait() {
         initProps();
         if (wait == null) {
-            wait = new WebDriverWait(getWebDriverInstance(), 7);
+            wait = new WebDriverWait(getWebDriver(), 15);
         }
         return wait;
     }
 
-    public static void initDriver() {
+    public void initDriver() {
         try {
             YamlReader driver = new YamlReader();
             String driverType = driver.readBrowser();
@@ -47,7 +50,7 @@ public class WebDriverCreate {
         }
     }
 
-    private static void chooseBrowser(String browser) throws ParameterIsNullException {
+    private void chooseBrowser(String browser) throws ParameterIsNullException {
         switch (browser) {
             case "CHROME": {
                 setupDriver(getChrome());
@@ -62,17 +65,38 @@ public class WebDriverCreate {
         }
     }
 
-    private static void setupDriver(WebDriver webDriver) {
+    private void setupDriver(WebDriver webDriver) {
         driver = webDriver;
     }
 
-    private static WebDriver getChrome() {
+    private URL getGridUrl() {
+        try {
+            String gridUrl = System.getProperty("grid.url");
+            if (gridUrl != null && !gridUrl.isBlank()) {
+                return new URL(gridUrl);
+            }
+            return null;
+        } catch (MalformedURLException e) {
+            return null;
+        }
+    }
+
+    private WebDriver getChrome() {
+        URL gridUrl = getGridUrl();
+        if (Objects.nonNull(gridUrl)) {
+            return new RemoteWebDriver(gridUrl, DesiredCapabilities.chrome());
+        }
         WebDriverManager.chromedriver().setup();
         ChromeOptions chromeOptions = new ChromeOptions();
         return new ChromeDriver((chromeOptions));
     }
 
-    private static WebDriver getFireFox() {
+    private WebDriver getFireFox() {
+        URL gridUrl = getGridUrl();
+        if (Objects.nonNull(gridUrl)) {
+            return new RemoteWebDriver(gridUrl, DesiredCapabilities.firefox());
+        }
+
         FirefoxBinary firefoxBinary = new FirefoxBinary();
         System.setProperty("webdriver.gecko.driver", "geckodriver");
         FirefoxOptions firefoxOptions = new FirefoxOptions();
@@ -80,14 +104,14 @@ public class WebDriverCreate {
         return new FirefoxDriver(firefoxOptions);
     }
 
-    private static void initProps() {
+    private void initProps() {
         if (Objects.isNull(driver) || isDriverSessionNotPresent()) {
             initDriver();
-            wait = new WebDriverWait(getWebDriverInstance(), 7);
+            wait = new WebDriverWait(getWebDriver(), 15);
         }
     }
 
-    private static boolean isDriverSessionNotPresent() {
+    private boolean isDriverSessionNotPresent() {
         return ((RemoteWebDriver) driver).getSessionId() == null;
     }
 }

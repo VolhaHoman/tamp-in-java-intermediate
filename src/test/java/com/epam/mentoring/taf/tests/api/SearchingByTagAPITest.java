@@ -3,7 +3,8 @@ package com.epam.mentoring.taf.tests.api;
 import com.epam.mentoring.taf.api.RestAPIClient;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import com.epam.mentoring.taf.tests.AbstractTest;
+import com.epam.mentoring.taf.tests.ILoggerTest;
+import com.epam.mentoring.taf.tests.IYmlReader;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
@@ -16,9 +17,12 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.List;
 
+import static com.epam.mentoring.taf.tests.AllCommentsBase.ARTICLES_COUNT_JSON_PATH;
+
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Searching By Tag API Tests")
-public class SearchingByTagAPITest extends AbstractTest {
+public class SearchingByTagAPITest implements IYmlReader, ILoggerTest {
+
 
     public static final String INVALID_TAG = "invalid_tag_name";
     public static final String TAG_LIST_JSON_PATH = "articles.tagList";
@@ -33,8 +37,8 @@ public class SearchingByTagAPITest extends AbstractTest {
     @Description("API Search by a valid tag")
     @Story("Add UI and API layers support to SearchByTagTest")
     public void apiSearchByValidTag(String tag) {
-        RestAPIClient RestAPIClient = new RestAPIClient();
-        Response response = RestAPIClient.sendGetTagRequest(tag, log);
+        RestAPIClient restAPIClient = new RestAPIClient();
+        Response response = restAPIClient.sendGetTagRequest(tag, LOGGER.get());
         List<String> tagList = response.getBody().jsonPath().get(TAG_LIST_JSON_PATH);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertTrue(tagList.toString().contains(tag));
@@ -45,8 +49,8 @@ public class SearchingByTagAPITest extends AbstractTest {
     @Description("API Search by an invalid tag")
     @Story("Add UI and API layers support to SearchByTagTest")
     public void apiSearchByInvalidTag() {
-        RestAPIClient RestAPIClient = new RestAPIClient();
-        Response response = RestAPIClient.sendGetTagRequest(INVALID_TAG, log);
+        RestAPIClient restAPIClient = new RestAPIClient();
+        Response response = restAPIClient.sendGetTagRequest(INVALID_TAG, LOGGER.get());
         int articlesCount = response.getBody().jsonPath().get(ARTICLES_COUNT_JSON_PATH);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         Assert.assertEquals(articlesCount, 0);
@@ -54,7 +58,7 @@ public class SearchingByTagAPITest extends AbstractTest {
 
     private Object[][] getTags() throws IOException {
         try {
-            return DataProviderHelper.mapToProviderArray(READER.readTags());
+            return DataProviderHelper.mapToProviderArray(READER.get().readTags());
         } catch (IOException e) {
             throw new IOException("Failed to load file.");
         }

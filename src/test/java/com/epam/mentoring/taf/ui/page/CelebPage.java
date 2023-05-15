@@ -1,13 +1,12 @@
 package com.epam.mentoring.taf.ui.page;
 
+import com.epam.mentoring.taf.ui.config.WebDriverLoader;
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CelebPage extends BasePage {
 
@@ -22,38 +21,37 @@ public class CelebPage extends BasePage {
     @FindBy(xpath = "//button[contains(text(),'Unfollow celeb_Hamster_Boss')]")
     private WebElement unfollowBtn;
 
-    public CelebPage(Logger logger, WebDriver driver, WebDriverWait wait) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        this.wait = wait;
+    public CelebPage(Logger logger, WebDriverLoader loader) {
+        PageFactory.initElements(loader.getWebDriver(), this);
+        this.loader = loader;
         this.logger = logger;
     }
 
     @Step("Wait until the page is loaded")
     public String waitPageIsLoaded() throws InterruptedException {
-        wait.until(ExpectedConditions.titleIs(PAGE_TITLE));
-        wait.until(ExpectedConditions.visibilityOf(authorName));
+        loader.getWebDriverWait().until(ExpectedConditions.titleIs(PAGE_TITLE));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(authorName));
         logger.info("Page title is: " + PAGE_TITLE);
         return PAGE_TITLE;
     }
 
     @Step("Get username from navigation bar")
     public String getAuthorName() {
-        wait.until(ExpectedConditions.visibilityOf(authorName));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(authorName));
         logger.info("Get username from navigation bar: " + authorName.getText());
         return authorName.getText();
     }
 
     @Step("Get username from navigation bar")
     public String getAuthorPostsNav() {
-        wait.until(ExpectedConditions.visibilityOf(authorPostsNav));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(authorPostsNav));
         logger.info("Get username from navigation bar: " + authorPostsNav.getText());
         return authorPostsNav.getText();
     }
 
     @Step("Verify unfollow button is present")
     public String checkUnfollowBtn() {
-        wait.until(ExpectedConditions.visibilityOf(unfollowBtn));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(unfollowBtn));
         logger.info("Unfollow button has text: " + unfollowBtn.getText());
         return unfollowBtn.getText();
     }

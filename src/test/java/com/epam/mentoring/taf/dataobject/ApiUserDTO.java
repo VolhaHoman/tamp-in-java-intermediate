@@ -1,11 +1,10 @@
 package com.epam.mentoring.taf.dataobject;
 
 public class ApiUserDTO {
-    private String username;
-    private String email;
-    private String password;
-
     public static final String JSON_BODY = "{\"user\":{\"email\":\"%s\",\"password\":\"%s\",\"username\":\"%s\"}}";
+    private final String username;
+    private final String email;
+    private final String password;
 
     ApiUserDTO(ApiUserDTOBuilder builder) {
         this.username = builder.username;

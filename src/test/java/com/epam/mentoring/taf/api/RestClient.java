@@ -8,11 +8,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
-import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.given;
 
 public class RestClient {
 
-    private Logger log;
+    private final Logger log;
 
     public RestClient(Logger log) {
         this.log = log;
@@ -35,8 +35,8 @@ public class RestClient {
 
     @Step("Send POST API request to endpoint")
     public Response sendPostRequest(String path, String body,
-                                   Map<String, String> headers,
-                                   Map<String, String> params) {
+                                    Map<String, String> headers,
+                                    Map<String, String> params) {
         Response result = getRequestSpecification(headers, params)
                 .body(body)
                 .post(path)
@@ -53,7 +53,7 @@ public class RestClient {
 
     @Step("Send PUT API request to endpoint")
     public Response sendPutRequest(String path, String body,
-                                    Map<String, String> headers) {
+                                   Map<String, String> headers) {
         Response result = getRequestSpecification(headers)
                 .body(body)
                 .put(path)

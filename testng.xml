@@ -1,28 +1,59 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Test Suite">
-    <test name="Smoke Tests">
+<suite name="Test Suite Parallel">
+        <test name="Smoke Tests" parallel="methods" thread-count="5">
+            <classes>
+                <class name="com.epam.mentoring.taf.tests.ui.UserSignUpUITest" />
+                <class name="com.epam.mentoring.taf.tests.api.ArticleAPITest">
+                    <methods>
+                        <include name="apiAddValidArticle"/>
+                        <include name="apiDeleteArticle"/>
+                    </methods>
+                </class>
+                <class name="com.epam.mentoring.taf.tests.ui.ArticleUITest">
+                    <methods>
+                        <include name="uiAddValidArticle"/>
+                        <include name="uiEditArticle"/>
+                    </methods>
+                </class>
+                <class name="com.epam.mentoring.taf.tests.api.CommentAPITest">
+                    <methods>
+                        <include name="apiAddCommentWithValidText"/>
+                    </methods>
+                </class>
+                <class name="com.epam.mentoring.taf.tests.ui.SearchingByTagUITest"/>
+                <class name="com.epam.mentoring.taf.tests.api.UserSignInTestApi"/>
+            </classes>
+        </test>
+        <test name="Regression Tests" parallel="methods" thread-count="5">
+            <classes>
+                <class name="com.epam.mentoring.taf.tests.api.UserSignUpAPITest">
+                    <methods>
+                        <include name="apiAlreadyRegisteredUserVerification"/>
+                        <include name="apiBlankUserVerification"/>
+                    </methods>
+                </class>
+                <class name="com.epam.mentoring.taf.tests.api.ArticleAPITest">
+                    <methods>
+                        <include name="apiReadAllArticles"/>
+                        <include name="apiUpdateArticle"/>
+                    </methods>
+                </class>
+                <class name="com.epam.mentoring.taf.tests.ui.ArticleUITest">
+                    <methods>
+                        <include name="uiDeleteArticle"/>
+                        <include name="uiAddArticleWithoutTitle"/>
+                        <include name="uiAddArticleWithoutDescription"/>
+                        <include name="uiAddArticleWithoutBody"/>
+                    </methods>
+                </class>
+                <class name="com.epam.mentoring.taf.tests.ui.CommentUITest"/>
+                <class name="com.epam.mentoring.taf.tests.api.SearchingByTagAPITest"/>
+                <class name="com.epam.mentoring.taf.tests.ui.UserSignInTestUI"/>
+            </classes>
+        </test>
+    <test name="Smoke Test suite not parallel">
         <classes>
-            <class name="com.epam.mentoring.taf.tests.ui.UserSignUpUITest"/>
-            <class name="com.epam.mentoring.taf.tests.api.ArticleAPITest">
-                <methods>
-                    <include name="apiAddValidArticle"/>
-                    <include name="apiDeleteArticle"/>
-                </methods>
-            </class>
-            <class name="com.epam.mentoring.taf.tests.ui.ArticleUITest">
-                <methods>
-                    <include name="uiAddValidArticle"/>
-                    <include name="uiEditArticle"/>
-                </methods>
-            </class>
-            <class name="com.epam.mentoring.taf.tests.api.CommentAPITest">
-                <methods>
-                    <include name="apiAddCommentWithValidText"/>
-                </methods>
-            </class>
-            <class name="com.epam.mentoring.taf.tests.ui.SearchingByTagUITest"/>
-            <class name="com.epam.mentoring.taf.tests.api.UserSignInTestApi"/>
             <class name="com.epam.mentoring.taf.tests.ui.FollowUserTest">
                 <methods>
                     <include name="apiFollowUser"/>
@@ -32,32 +63,9 @@
             </class>
         </classes>
     </test>
-    <test name="Regression Tests">
+    <test name="Regression Test suite not parallel">
         <classes>
-            <class name="com.epam.mentoring.taf.tests.api.UserSignUpAPITest">
-                <methods>
-                    <include name="apiAlreadyRegisteredUserVerification"/>
-                    <include name="apiBlankUserVerification"/>
-                </methods>
-            </class>
-            <class name="com.epam.mentoring.taf.tests.api.ArticleAPITest">
-                <methods>
-                    <include name="apiReadAllArticles"/>
-                    <include name="apiUpdateArticle"/>
-                </methods>
-            </class>
-            <class name="com.epam.mentoring.taf.tests.ui.ArticleUITest">
-                <methods>
-                    <include name="uiDeleteArticle"/>
-                    <include name="uiAddArticleWithoutTitle"/>
-                    <include name="uiAddArticleWithoutDescription"/>
-                    <include name="uiAddArticleWithoutBody"/>
-                </methods>
-            </class>
-            <class name="com.epam.mentoring.taf.tests.ui.CommentUITest"/>
-            <class name="com.epam.mentoring.taf.tests.api.SearchingByTagAPITest"/>
             <class name="com.epam.mentoring.taf.tests.ui.FollowUserTest"/>
-            <class name="com.epam.mentoring.taf.tests.ui.UserSignInTestUI"/>
         </classes>
     </test>
 </suite>

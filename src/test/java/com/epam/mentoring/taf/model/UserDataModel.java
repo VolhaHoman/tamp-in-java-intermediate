@@ -16,6 +16,9 @@ public class UserDataModel {
         this.celebUsername = celebUsername;
     }
 
+    public UserDataModel() {
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -30,8 +33,5 @@ public class UserDataModel {
 
     public String getCelebUsername() {
         return celebUsername;
-    }
-
-    public UserDataModel() {
     }
 }

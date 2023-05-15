@@ -1,6 +1,6 @@
 package com.epam.mentoring.taf.listeners;
 
-import com.epam.mentoring.taf.ui.config.WebDriverCreate;
+import com.epam.mentoring.taf.tests.uihelper.UIDriverTest;
 import io.qameta.allure.Attachment;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -16,10 +16,9 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class TestListener implements ITestListener {
+public class TestListener implements ITestListener, UIDriverTest {
 
     public final Logger logger = LogManager.getRootLogger();
-    public final WebDriver driver = WebDriverCreate.getWebDriverInstance();
 
     private static String getTestMethodName(ITestResult iTestResult) {
         return iTestResult.getMethod().getConstructorOrMethod().getName();
@@ -32,13 +31,13 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult iTestResult) {
-        WebDriver driver = WebDriverCreate.getWebDriverInstance();
+        WebDriver driver = DRIVER.get().getWebDriver();
         saveScreenshotPng(driver);
         saveScreenshotToLogFile();
     }
 
     private void saveScreenshotToLogFile() {
-        File screenCapture = ((TakesScreenshot) driver)
+        File screenCapture = ((TakesScreenshot) DRIVER.get().getWebDriver())
                 .getScreenshotAs(OutputType.FILE);
         String path = ".//target/screenshots/"
                 + getCurrentAsString() + ".png";

@@ -7,9 +7,12 @@ import org.apache.logging.log4j.Logger;
 
 public class ArticleResponseMapper {
 
-    public final Logger logger = LogManager.getRootLogger();
+    private static final Logger logger = LogManager.getRootLogger();
 
-    public ArticleResponseDTO articleToDto(Response response, Logger logger) {
+    private ArticleResponseMapper() {
+    }
+
+    public static ArticleResponseDTO articleToDto(Response response, Logger logger) {
         ArticleResponseDTO articleResponseDTO = response.body().as(ArticleResponseDTO.class);
         logger.info("Response message: " + articleResponseDTO.getArticle());
         return articleResponseDTO;
