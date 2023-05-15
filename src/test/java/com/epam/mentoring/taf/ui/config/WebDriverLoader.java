@@ -5,14 +5,14 @@ import com.epam.mentoring.taf.exception.ParameterIsNullException;
 import com.epam.mentoring.taf.service.YamlReader;
 import com.epam.mentoring.taf.tests.ILoggerTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.Platform;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -74,7 +74,6 @@ public class WebDriverLoader implements ILoggerTest {
     private URL getGridUrl() {
         try {
             String gridUrl = System.getProperty("grid.url");
-            LOGGER.get().info("WEB_DRIVER_LOADER GRID.URL = {}", gridUrl) ;
             if (gridUrl != null && !gridUrl.isBlank()) {
                 return new URL(gridUrl);
             }
@@ -87,10 +86,11 @@ public class WebDriverLoader implements ILoggerTest {
     private WebDriver getChrome() {
         URL gridUrl = getGridUrl();
         if (Objects.nonNull(gridUrl)) {
-            DesiredCapabilities dc = DesiredCapabilities.chrome();
-            dc.setBrowserName("chrome");
-            dc.setPlatform(Platform.LINUX);
-            return new RemoteWebDriver(gridUrl, dc);
+            LOGGER.get().info("WEB_DRIVER_LOADER LOAD CROME : {} ", gridUrl) ;
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR,
+                    UnexpectedAlertBehaviour.IGNORE);
+            return new RemoteWebDriver(gridUrl, chromeOptions);
         }
         WebDriverManager.chromedriver().setup();
         ChromeOptions chromeOptions = new ChromeOptions();
@@ -100,10 +100,12 @@ public class WebDriverLoader implements ILoggerTest {
     private WebDriver getFireFox() {
         URL gridUrl = getGridUrl();
         if (Objects.nonNull(gridUrl)) {
-            DesiredCapabilities dc = DesiredCapabilities.firefox();
-            dc.setBrowserName("firefox");
-            dc.setPlatform(Platform.LINUX);
-            return new RemoteWebDriver(gridUrl, dc);
+            LOGGER.get().info("WEB_DRIVER_LOADER LOAD FIREFOX : {} ", gridUrl) ;
+            System.setProperty("webdriver.gecko.driver", "geckodriver");
+            FirefoxOptions firefoxOptions = new FirefoxOptions();
+            firefoxOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR,
+                    UnexpectedAlertBehaviour.IGNORE);
+            return new RemoteWebDriver(gridUrl, firefoxOptions);
         }
 
         FirefoxBinary firefoxBinary = new FirefoxBinary();
