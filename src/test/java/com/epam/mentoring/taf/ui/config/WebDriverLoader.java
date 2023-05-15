@@ -3,7 +3,9 @@ package com.epam.mentoring.taf.ui.config;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.exception.ParameterIsNullException;
 import com.epam.mentoring.taf.service.YamlReader;
+import com.epam.mentoring.taf.tests.ILoggerTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -19,7 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
 
-public class WebDriverLoader {
+public class WebDriverLoader implements ILoggerTest {
 
     private WebDriver driver;
 
@@ -72,6 +74,7 @@ public class WebDriverLoader {
     private URL getGridUrl() {
         try {
             String gridUrl = System.getProperty("grid.url");
+            LOGGER.get().info("WEB_DRIVER_LOADER GRID.URL = {}", gridUrl) ;
             if (gridUrl != null && !gridUrl.isBlank()) {
                 return new URL(gridUrl);
             }
@@ -84,7 +87,10 @@ public class WebDriverLoader {
     private WebDriver getChrome() {
         URL gridUrl = getGridUrl();
         if (Objects.nonNull(gridUrl)) {
-            return new RemoteWebDriver(gridUrl, DesiredCapabilities.chrome());
+            DesiredCapabilities dc = DesiredCapabilities.chrome();
+            dc.setBrowserName("chrome");
+            dc.setPlatform(Platform.LINUX);
+            return new RemoteWebDriver(gridUrl, dc);
         }
         WebDriverManager.chromedriver().setup();
         ChromeOptions chromeOptions = new ChromeOptions();
@@ -94,7 +100,10 @@ public class WebDriverLoader {
     private WebDriver getFireFox() {
         URL gridUrl = getGridUrl();
         if (Objects.nonNull(gridUrl)) {
-            return new RemoteWebDriver(gridUrl, DesiredCapabilities.firefox());
+            DesiredCapabilities dc = DesiredCapabilities.firefox();
+            dc.setBrowserName("firefox");
+            dc.setPlatform(Platform.LINUX);
+            return new RemoteWebDriver(gridUrl, dc);
         }
 
         FirefoxBinary firefoxBinary = new FirefoxBinary();
