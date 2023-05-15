@@ -96,6 +96,7 @@ public class WebDriverLoader implements ILoggerTest {
         }
         WebDriverManager.chromedriver().setup();
         ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless");
         return new ChromeDriver((chromeOptions));
     }
 
@@ -113,6 +114,7 @@ public class WebDriverLoader implements ILoggerTest {
         }
 
         FirefoxBinary firefoxBinary = new FirefoxBinary();
+        firefoxBinary.addCommandLineOptions("--headless");
         System.setProperty("webdriver.gecko.driver", "geckodriver");
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setBinary(firefoxBinary);
