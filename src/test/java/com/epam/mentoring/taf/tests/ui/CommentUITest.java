@@ -52,6 +52,11 @@ public class CommentUITest
         adminUser = READER.get().readUserData("adminUser");
     }
 
+    @BeforeMethod(alwaysRun = true)
+    public void createArticle() throws IOException {
+        articleMainBase.get().createArticle();
+    }
+
     @AfterMethod(alwaysRun = true)
     public void deleteArticle() {
         articleMainBase.get().cleanArticle();
@@ -61,8 +66,7 @@ public class CommentUITest
     @Severity(SeverityLevel.BLOCKER)
     @Description("UI verification of adding comments")
     @Story("Create new tests for comments functionality")
-    public void uiSubmittedCommentVerification() throws IOException {
-        articleMainBase.get().createArticle();
+    public void uiSubmittedCommentVerification() {
 
         HomePage homePage = homePage(logger);
         logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
@@ -79,8 +83,7 @@ public class CommentUITest
     @Severity(SeverityLevel.MINOR)
     @Story("Create new tests for comments")
     @Description("UI add empty comment")
-    public void uiEmptyCommentVerification() throws IOException {
-        articleMainBase.get().createArticle();
+    public void uiEmptyCommentVerification() {
 
         HomePage homePage = homePage(logger);
         logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
@@ -97,8 +100,7 @@ public class CommentUITest
     @Severity(SeverityLevel.CRITICAL)
     @Description("UI verification of deleting comments")
     @Story("Create new tests for comments functionality")
-    public void uiDeleteCommentVerification() throws IOException {
-        articleMainBase.get().createArticle();
+    public void uiDeleteCommentVerification() {
 
         HomePage homePage = homePage(logger);
         logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));

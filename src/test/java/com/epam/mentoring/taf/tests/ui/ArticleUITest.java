@@ -7,7 +7,10 @@ import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.model.ArticleModel;
 import com.epam.mentoring.taf.model.UserDataModel;
-import com.epam.mentoring.taf.tests.*;
+import com.epam.mentoring.taf.tests.ArticleMainBase;
+import com.epam.mentoring.taf.tests.IAuthorizationTest;
+import com.epam.mentoring.taf.tests.IRestClient;
+import com.epam.mentoring.taf.tests.IYmlReader;
 import com.epam.mentoring.taf.tests.uihelper.ArticlePageBaseUI;
 import com.epam.mentoring.taf.tests.uihelper.LoginBaseUI;
 import com.epam.mentoring.taf.tests.uihelper.OpenClose;
@@ -64,7 +67,6 @@ public class ArticleUITest
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiAddValidArticle(String tag) throws IOException {
             HomePage homePage = homePage(logger);
-
             logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
 
             ArticleDTO articleDTO = ArticleRequest.generateArticle();
@@ -91,6 +93,7 @@ public class ArticleUITest
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiEditArticle() throws IOException {
             articleMainBase.get().createArticle();
+
             HomePage homePage = homePage(logger);
             logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
             selectArticle(homePage, userProfilePage(logger));
@@ -114,14 +117,16 @@ public class ArticleUITest
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiDeleteArticle() throws IOException {
             articleMainBase.get().createArticle();
-            HomePage homePage = homePage(logger);
 
+            HomePage homePage = homePage(logger);
             logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
             UserProfilePage userProfilePage = userProfilePage(logger);
             selectArticle(homePage, userProfilePage);
+
             ArticlePage articlePage = articlePage(logger);
             String articleTobeDeleted = articlePage.getArticleTitle();
             articlePage.clickDeleteArticleBtn();
+
             homePage.navToUser();
             boolean noArticleMessagePresent = userProfilePage.checkNoArticleMessage();
             boolean isDeletedArticlePresent = userProfilePage
@@ -134,9 +139,7 @@ public class ArticleUITest
     @Description("UI: Add an article with no title")
     @Story("Organise “Search By Tag” and “Articles Handling” tests into test suites")
     public void uiAddArticleWithoutTitle() throws IOException {
-
         HomePage homePage = homePage(logger);
-
         logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
@@ -156,7 +159,6 @@ public class ArticleUITest
     @Description("UI: Add an article with no description")
     @Story("Organise “Search By Tag” and “Articles Handling” tests into test suites")
     public void uiAddArticleWithoutDescription() throws IOException {
-
         HomePage homePage = homePage(logger);
         logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
 
