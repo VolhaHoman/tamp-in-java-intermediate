@@ -19,7 +19,7 @@ public class CsvReader {
         );
     }
 
-    private static <T>  List<T> getModels(String path, Class<T> clazz, char separator) throws IOException {
+    private static <T> List<T> getModels(String path, Class<T> clazz, char separator) throws IOException {
         File csvFile = new File(path);
         CsvMapper csvMapper = new CsvMapper();
 

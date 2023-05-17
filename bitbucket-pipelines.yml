@@ -5,7 +5,7 @@ pipelines:
     '**':
       - step:
           name: Build and Test
-          max-time: 2
+          max-time: 3
           caches:
             - maven
           artifacts:
@@ -30,3 +30,5 @@ definitions:
         - selenium-grid
       environment:
         HUB_HOST: localhost
+        NODE_MAX_INSTANCES: 5
+        NODE_MAX_SESSION: 5

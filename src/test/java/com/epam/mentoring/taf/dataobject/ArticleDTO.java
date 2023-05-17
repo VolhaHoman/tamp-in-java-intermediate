@@ -5,12 +5,11 @@ import java.util.stream.Collectors;
 
 public class ArticleDTO {
 
+    private static final String JSON_BODY = "{\"article\":{\"title\":\"%s\", \"description\":\"%s\", \"body\":\"%s\", \"tagList\":[%s]}}";
     private final String title;
     private final String description;
     private final String body;
     private final List<String> tagList;
-
-    private static final String JSON_BODY = "{\"article\":{\"title\":\"%s\", \"description\":\"%s\", \"body\":\"%s\", \"tagList\":[%s]}}";
 
     public ArticleDTO(String title, String description, String body, List<String> tagList) {
         this.title = title;

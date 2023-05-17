@@ -7,7 +7,7 @@ import com.epam.mentoring.taf.dataobject.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import com.epam.mentoring.taf.tests.UiBaseTest;
+import com.epam.mentoring.taf.util.Redirection;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -20,16 +20,18 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static com.epam.mentoring.taf.tests.ui.FollowUserTest.RESPONSE;
+import static com.epam.mentoring.taf.tests.AuthorizationUserBase.API_LOGIN;
+import static com.epam.mentoring.taf.tests.AuthorizationUserBase.RESPONSE;
 import static com.epam.mentoring.taf.util.StorageHelper.rememberTheResponse;
 import static com.epam.mentoring.taf.util.StorageHelper.whatIsTheResponse;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Sign In Tests")
-public class UserSignInTestApi extends UiBaseTest {
+public class UserSignInTestApi {
+
+    Logger logger = LogManager.getLogger();
 
     private UserDataDTO defaultUserData;
-    private final Logger log = LogManager.getLogger();
 
     @BeforeMethod(description = "Generate default Sign in User")
     public void generateUserData() {
@@ -49,7 +51,8 @@ public class UserSignInTestApi extends UiBaseTest {
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword())
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, redirection.getRedirectionUrl(API_LOGIN), log);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, Redirection.getRedirectionUrl(API_LOGIN),
+                logger);
         rememberTheResponse(RESPONSE, response);
 
         verifyStatusCodeIsOk();
@@ -64,7 +67,8 @@ public class UserSignInTestApi extends UiBaseTest {
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword() + "1")
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, redirection.getRedirectionUrl(API_LOGIN), log);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, Redirection.getRedirectionUrl(API_LOGIN),
+                logger);
         rememberTheResponse(RESPONSE, response);
 
         verifyStatusCodeIsForbidden();

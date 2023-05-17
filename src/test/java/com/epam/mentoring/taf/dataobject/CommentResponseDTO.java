@@ -2,9 +2,8 @@ package com.epam.mentoring.taf.dataobject;
 
 public class CommentResponseDTO {
 
-    private String body;
-
     private static final String JSON_BODY = "{\"comment\":{\"body\":\"%s\"}}";
+    private final String body;
 
     CommentResponseDTO(CommentResponseDTOBuilder builder) {
         this.body = builder.body;

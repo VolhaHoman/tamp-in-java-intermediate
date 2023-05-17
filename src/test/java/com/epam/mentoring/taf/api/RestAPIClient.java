@@ -3,7 +3,6 @@ package com.epam.mentoring.taf.api;
 import com.epam.mentoring.taf.dataobject.ApiUserDTO;
 import com.epam.mentoring.taf.dataobject.ResponseDTO;
 import com.epam.mentoring.taf.exception.ResponseCheckException;
-import com.epam.mentoring.taf.tests.AbstractTest;
 import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -12,6 +11,7 @@ import org.apache.http.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static com.epam.mentoring.taf.tests.AuthorizationUserBase.API_URL;
 import static io.restassured.RestAssured.given;
 
 public class RestAPIClient {
@@ -44,7 +44,7 @@ public class RestAPIClient {
     @Step("Send Get request for the given tag")
     public Response sendGetTagRequest(String tag, Logger logger) {
         Response response = given()
-                .baseUri(AbstractTest.API_URL)
+                .baseUri(API_URL)
                 .when()
                 .get(ARTICLES_BY_TAG_URL, tag);
         logger.info("Request sent for: " + tag);

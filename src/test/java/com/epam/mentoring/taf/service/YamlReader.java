@@ -1,6 +1,9 @@
 package com.epam.mentoring.taf.service;
 
-import com.epam.mentoring.taf.model.*;
+import com.epam.mentoring.taf.model.ArticleModel;
+import com.epam.mentoring.taf.model.BrowserConfiguration;
+import com.epam.mentoring.taf.model.TagConfiguration;
+import com.epam.mentoring.taf.model.UserDataModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;

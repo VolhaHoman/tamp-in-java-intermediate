@@ -5,8 +5,14 @@ import com.epam.mentoring.taf.dataobject.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import com.epam.mentoring.taf.tests.UiBaseTest;
+import com.epam.mentoring.taf.tests.uihelper.LoginBaseUI;
+import com.epam.mentoring.taf.tests.uihelper.OpenClose;
+import com.epam.mentoring.taf.tests.uihelper.PageLoader;
+import com.epam.mentoring.taf.ui.page.HomePage;
+import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.qameta.allure.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -18,7 +24,10 @@ import static com.epam.mentoring.taf.ui.page.LoginPage.CREDENTIALS_ERROR_TEXT;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Sign In Tests")
-public class UserSignInTestUI extends UiBaseTest {
+public class UserSignInTestUI
+        implements LoginBaseUI, OpenClose, PageLoader {
+
+    Logger logger = LogManager.getLogger();
 
     private UserDataDTO defaultUserData;
 
@@ -36,9 +45,9 @@ public class UserSignInTestUI extends UiBaseTest {
     @Description("UI Sign In with valid credentials")
     @Story("Create layers for UI tests")
     public void uiSignInWithValidCredentialsVerification() {
-
-        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword());
-        uiVerificationUserWithValidCredsIsSignedIn();
+        HomePage homePage = homePage(logger);
+        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword(), homePage, loginPage(logger));
+        uiVerificationUserWithValidCredsIsSignedIn(homePage);
     }
 
     @Test(description = "UI Sign In with invalid credentials")
@@ -46,20 +55,19 @@ public class UserSignInTestUI extends UiBaseTest {
     @Description("UI Sign In with invalid credentials")
     @Story("Investigate the issues and fix UserSignInTest")
     public void uiSignInWithInvalidCredentialsVerification() {
-
-        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword() + "1");
-        uiVerificationUserWithInvalidCredsCannotSignIn();
+        LoginPage loginPage = loginPage(logger);
+        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword() + "1", homePage(logger), loginPage);
+        uiVerificationUserWithInvalidCredsCannotSignIn(loginPage);
     }
 
     @Step
-    private void uiVerificationUserWithValidCredsIsSignedIn() {
+    private void uiVerificationUserWithValidCredsIsSignedIn(HomePage homePage) {
         Assert.assertEquals(homePage.getUsernameAccountNav(), defaultUserData.getUserName(),
                 "User is signed in");
     }
 
     @Step
-    private void uiVerificationUserWithInvalidCredsCannotSignIn() {
+    private void uiVerificationUserWithInvalidCredsCannotSignIn(LoginPage loginPage) {
         Assert.assertEquals(loginPage.getInvalidCredentialsMessage(), CREDENTIALS_ERROR_TEXT);
     }
-
 }

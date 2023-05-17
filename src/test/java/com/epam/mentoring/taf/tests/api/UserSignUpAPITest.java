@@ -8,7 +8,6 @@ import com.epam.mentoring.taf.dataobject.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import com.epam.mentoring.taf.tests.AbstractTest;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -21,15 +20,18 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
+import static com.epam.mentoring.taf.tests.AuthorizationUserBase.API_USERS;
+
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("API: Sign Up Tests")
-public class UserSignUpAPITest extends AbstractTest {
+public class UserSignUpAPITest {
+
+    Logger logger = LogManager.getLogger();
 
     public static final String BLANK_ERROR_TEXT = "can't be blank";
     public static final String ALREADY_TAKEN_ERROR_TEXT = "has already been taken";
     private UserDataDTO userDataDTO;
     private UserDataDTO defaultUserData;
-    private Logger log = LogManager.getLogger();
 
     @BeforeMethod(description = "Generate Test User")
     public void generateUserData() {
@@ -51,7 +53,7 @@ public class UserSignUpAPITest extends AbstractTest {
                 .setUsername(userDataDTO.getUserName())
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, logger);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
@@ -65,8 +67,8 @@ public class UserSignUpAPITest extends AbstractTest {
                 .setUsername(defaultUserData.getUserName())
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
-        ResponseDTO responseDTO = restAPIClient.transformToDto(response, log);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, logger);
+        ResponseDTO responseDTO = restAPIClient.transformToDto(response, logger);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), ALREADY_TAKEN_ERROR_TEXT);
     }
@@ -81,8 +83,8 @@ public class UserSignUpAPITest extends AbstractTest {
                 .setUsername("")
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, log);
-        ResponseDTO responseDTO = restAPIClient.transformToDto(response, log);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, logger);
+        ResponseDTO responseDTO = restAPIClient.transformToDto(response, logger);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), BLANK_ERROR_TEXT);
     }

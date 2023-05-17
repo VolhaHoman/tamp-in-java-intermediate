@@ -1,14 +1,13 @@
 package com.epam.mentoring.taf.ui.page;
 
+import com.epam.mentoring.taf.ui.config.WebDriverLoader;
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AppEditorPage extends BasePage {
 
@@ -30,16 +29,15 @@ public class AppEditorPage extends BasePage {
     @FindBy(xpath = "//app-list-errors/ul/li")
     private WebElement errorMsg;
 
-    public AppEditorPage(Logger logger, WebDriver driver, WebDriverWait wait) {
-        PageFactory.initElements(driver, this);
-        this.wait = wait;
-        this.driver = driver;
+    public AppEditorPage(Logger logger, WebDriverLoader loader) {
+        PageFactory.initElements(loader.getWebDriver(), this);
+        this.loader = loader;
         this.logger = logger;
     }
 
     @Step("Enter the title")
     public AppEditorPage enterTitle(String text) {
-        wait.until(ExpectedConditions.visibilityOf(title));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(title));
         title.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), Keys.DELETE);
         title.sendKeys(text);
         logger.info("Enter the following title: " + text);
@@ -77,7 +75,7 @@ public class AppEditorPage extends BasePage {
 
     @Step("Get error message")
     public String getError() {
-        wait.until(ExpectedConditions.visibilityOf(errorMsg));
+        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(errorMsg));
         logger.info("The following error appears: " + errorMsg.getText());
         return errorMsg.getText();
     }
