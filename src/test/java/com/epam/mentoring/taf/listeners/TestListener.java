@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 
 public class TestListener implements ITestListener, UIDriverTest {
 
-    public final Logger logger = LogManager.getRootLogger();
+    public final Logger logger = LogManager.getLogger();
 
     private static String getTestMethodName(ITestResult iTestResult) {
         return iTestResult.getMethod().getConstructorOrMethod().getName();

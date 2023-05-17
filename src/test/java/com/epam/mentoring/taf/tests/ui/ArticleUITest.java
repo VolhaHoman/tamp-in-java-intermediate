@@ -1,5 +1,6 @@
 package com.epam.mentoring.taf.tests.ui;
 
+import com.epam.mentoring.taf.api.RestClient;
 import com.epam.mentoring.taf.dataobject.ArticleDTO;
 import com.epam.mentoring.taf.dataobject.ArticleRequest;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
@@ -17,6 +18,8 @@ import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.UserProfilePage;
 import com.epam.mentoring.taf.util.DataProviderHelper;
 import io.qameta.allure.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -25,18 +28,29 @@ import java.io.IOException;
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Article handling UI Tests")
 public class ArticleUITest
-        implements IYmlReader, IRestClient, ILoggerTest, IAuthorizationTest, OpenClose,
+        implements IYmlReader, IRestClient, IAuthorizationTest, OpenClose,
         LoginBaseUI, ArticlePageBaseUI, PageLoader {
-
+    
     public static final String ERROR_MESSAGE_TITLE_BLANK = "title can't be blank";
     public static final String ERROR_MESSAGE_DESCRIPTION_BLANK = "description can't be blank";
     public static final String ERROR_MESSAGE_BODY_BLANK = "body can't be blank";
 
     private UserDataModel adminUser;
+    
+    Logger logger = LogManager.getLogger();
+
+    private final ThreadLocal<ArticleMainBase> articleMainBase =
+            ThreadLocal.withInitial(() -> new ArticleMainBase(logger));
 
     @BeforeMethod
     public void initUser() throws IOException {
         adminUser = READER.get().readUserData("adminUser");
+        CLIENT.set(new RestClient(logger));
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void deleteArticle() {
+        articleMainBase.get().cleanArticle();
     }
 
     @DataProvider(name = "ymlArticleDataProvider")
@@ -44,80 +58,68 @@ public class ArticleUITest
         return getTags();
     }
 
-    @Test(description = "UI: Add a valid article", dataProvider = "ymlArticleDataProvider", priority = 0)
+    @Test(description = "UI: Add a valid article", dataProvider = "ymlArticleDataProvider")
     @Severity(SeverityLevel.BLOCKER)
     @Description("UI: Add a valid article from YAML file")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiAddValidArticle(String tag) throws IOException {
-        ArticleMainBase articleMainBase = new ArticleMainBase(LOGGER.get());
-        try {
-            HomePage homePage = homePage();
+            HomePage homePage = homePage(logger);
 
-            logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage());
+            logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
 
             ArticleDTO articleDTO = ArticleRequest.generateArticle();
-            ArticlePage articlePage = articlePage();
+            ArticlePage articlePage = articlePage(logger);
 
             homePage.navToEditorPage();
-            appEditorPage().enterTitle(articleDTO.getTitle())
+            appEditorPage(logger).enterTitle(articleDTO.getTitle())
                     .enterDescription(articleDTO.getDescription())
                     .enterBody(articleDTO.getBody())
                     .enterTag(tag)
                     .publishArticle();
 
-            articleMainBase.getCreatedArticles().add(articlePage.getSlugFromUrl());
+            articleMainBase.get().getCreatedArticles().add(articlePage.getSlugFromUrl());
 
             Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
             Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
             Assert.assertEquals(articlePage.getArticleTag(), tag);
-        } finally {
-            articleMainBase.cleanArticle();
-        }
 
     }
 
-    @Test(description = "UI: Edit an existing article", priority = 1)
+    @Test(description = "UI: Edit an existing article")
     @Severity(SeverityLevel.BLOCKER)
     @Description("UI: Edit an existing article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiEditArticle() throws IOException {
-        ArticleMainBase articleMainBase = new ArticleMainBase(LOGGER.get());
-        try {
-            articleMainBase.createArticle();
-            HomePage homePage = homePage();
-            logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage());
-            selectArticle(homePage, userProfilePage());
+            articleMainBase.get().createArticle();
+            HomePage homePage = homePage(logger);
+            logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
+            selectArticle(homePage, userProfilePage(logger));
 
             ArticleDTO articleDTO = ArticleRequest.generateArticle();
 
-            ArticlePage articlePage = articlePage();
+            ArticlePage articlePage = articlePage(logger);
 
             articlePage.clickEditArticleBtn();
-            appEditorPage().enterTitle(articleDTO.getTitle())
+            appEditorPage(logger).enterTitle(articleDTO.getTitle())
                     .enterBody(articleDTO.getBody())
                     .publishArticle();
 
             Assert.assertEquals(articlePage.getArticleTitle(), articleDTO.getTitle());
             Assert.assertEquals(articlePage.getArticleBody(), articleDTO.getBody());
-        } finally {
-            articleMainBase.cleanArticle();
-        }
     }
 
-    @Test(description = "UI: Delete an article", priority = 2)
+    @Test(description = "UI: Delete an article")
     @Severity(SeverityLevel.CRITICAL)
     @Description("UI: Delete an article")
     @Story("Create new tests for articles handling functionality using Annotations and Data Providers")
     public void uiDeleteArticle() throws IOException {
-        ArticleMainBase articleMainBase = new ArticleMainBase(LOGGER.get());
-        try {
-            articleMainBase.createArticle();
-            HomePage homePage = homePage();
+            articleMainBase.get().createArticle();
+            HomePage homePage = homePage(logger);
 
-            logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage());
-            UserProfilePage userProfilePage = userProfilePage();
+            logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
+            UserProfilePage userProfilePage = userProfilePage(logger);
             selectArticle(homePage, userProfilePage);
-            ArticlePage articlePage = articlePage();
+            ArticlePage articlePage = articlePage(logger);
             String articleTobeDeleted = articlePage.getArticleTitle();
             articlePage.clickDeleteArticleBtn();
             homePage.navToUser();
@@ -125,25 +127,22 @@ public class ArticleUITest
             boolean isDeletedArticlePresent = userProfilePage
                     .isPresentByXpath("//h1[contains(text(),'" + articleTobeDeleted + "')]");
             Assert.assertTrue(noArticleMessagePresent || !isDeletedArticlePresent);
-        } finally {
-            articleMainBase.cleanArticle();
-        }
     }
 
-    @Test(description = "UI: Add an article with no title", priority = 3)
+    @Test(description = "UI: Add an article with no title")
     @Severity(SeverityLevel.MINOR)
     @Description("UI: Add an article with no title")
     @Story("Organise “Search By Tag” and “Articles Handling” tests into test suites")
     public void uiAddArticleWithoutTitle() throws IOException {
 
-        HomePage homePage = homePage();
+        HomePage homePage = homePage(logger);
 
-        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage());
+        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
 
         homePage.navToEditorPage();
-        AppEditorPage appEditorPage = appEditorPage();
+        AppEditorPage appEditorPage = appEditorPage(logger);
         appEditorPage
                 .enterDescription(articleDTO.getDescription())
                 .enterBody(articleDTO.getBody())
@@ -152,19 +151,19 @@ public class ArticleUITest
         Assert.assertEquals(appEditorPage.getError(), ERROR_MESSAGE_TITLE_BLANK);
     }
 
-    @Test(description = "UI: Add an article with no description", priority = 4)
+    @Test(description = "UI: Add an article with no description")
     @Severity(SeverityLevel.MINOR)
     @Description("UI: Add an article with no description")
     @Story("Organise “Search By Tag” and “Articles Handling” tests into test suites")
     public void uiAddArticleWithoutDescription() throws IOException {
 
-        HomePage homePage = homePage();
-        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage());
+        HomePage homePage = homePage(logger);
+        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
 
         homePage.navToEditorPage();
-        AppEditorPage appEditorPage = appEditorPage();
+        AppEditorPage appEditorPage = appEditorPage(logger);
         appEditorPage.enterTitle(articleDTO.getTitle())
                 .enterBody(articleDTO.getBody())
                 .publishArticle();
@@ -172,18 +171,18 @@ public class ArticleUITest
         Assert.assertEquals(appEditorPage.getError(), ERROR_MESSAGE_DESCRIPTION_BLANK);
     }
 
-    @Test(description = "UI: Add an article with no body", priority = 5)
+    @Test(description = "UI: Add an article with no body")
     @Severity(SeverityLevel.MINOR)
     @Description("UI: Add an article with no body")
     @Story("Organise “Search By Tag” and “Articles Handling” tests into test suites")
     public void uiAddArticleWithoutBody() throws IOException {
-        HomePage homePage = homePage();
-        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage());
+        HomePage homePage = homePage(logger);
+        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
 
         ArticleDTO articleDTO = ArticleRequest.generateArticle();
 
         homePage.navToEditorPage();
-        AppEditorPage appEditorPage = appEditorPage();
+        AppEditorPage appEditorPage = appEditorPage(logger);
         appEditorPage.enterTitle(articleDTO.getTitle())
                 .enterDescription(articleDTO.getDescription())
                 .publishArticle();
@@ -193,9 +192,9 @@ public class ArticleUITest
 
     @AfterMethod(description = "Post-condition: log out")
     public void articleLogOut() {
-        HomePage homePage = homePage();
+        HomePage homePage = homePage(logger);
         if (homePage.userIconIsDisplayed()) {
-            logOut(homePage, settingsPage());
+            logOut(homePage, settingsPage(logger));
         }
     }
 

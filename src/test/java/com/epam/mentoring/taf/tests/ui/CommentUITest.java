@@ -16,11 +16,10 @@ import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Listeners;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +31,7 @@ import static com.epam.mentoring.taf.util.StorageHelper.whatIsThe;
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("UI: Comments Tests")
 public class CommentUITest
-        implements IYmlReader, IRestClient, ILoggerTest, IAuthorizationTest, LoginBaseUI,
+        implements IYmlReader, IRestClient, IAuthorizationTest, LoginBaseUI,
         ArticlePageBaseUI, IAllCommentTest, OpenClose, PageLoader {
 
     public static final String AUTH_TOKEN = "AUTH_TOKEN";
@@ -43,79 +42,74 @@ public class CommentUITest
 
     private UserDataModel adminUser;
 
+    Logger logger = LogManager.getLogger();
+
+    private final ThreadLocal<ArticleMainBase> articleMainBase =
+            ThreadLocal.withInitial(() -> new ArticleMainBase(logger));
+
     @BeforeMethod
     public void initUser() throws IOException {
         adminUser = READER.get().readUserData("adminUser");
     }
 
-    @Test(description = "UI: add comment to article", priority = 1)
+    @AfterMethod(alwaysRun = true)
+    public void deleteArticle() {
+        articleMainBase.get().cleanArticle();
+    }
+
+    @Test(description = "UI: add comment to article")
     @Severity(SeverityLevel.BLOCKER)
     @Description("UI verification of adding comments")
     @Story("Create new tests for comments functionality")
     public void uiSubmittedCommentVerification() throws IOException {
-        ArticleMainBase articleMainBase = new ArticleMainBase(LOGGER.get());
-        try {
-        articleMainBase.createArticle();
+        articleMainBase.get().createArticle();
 
-        HomePage homePage = homePage();
-        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage());
-        selectArticle(homePage, userProfilePage());
-        ArticlePage articlePage = articlePage();
+        HomePage homePage = homePage(logger);
+        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
+        selectArticle(homePage, userProfilePage(logger));
+        ArticlePage articlePage = articlePage(logger);
         articlePage.enterComment(COMMENT)
                 .clickSendCommentBtn();
 
         Assert.assertEquals(articlePage.getComment(), COMMENT);
-        logOut(homePage, settingsPage());
-        } finally {
-            articleMainBase.cleanArticle();
-        }
+        logOut(homePage, settingsPage(logger));
     }
 
-    @Test(description = "UI: add empty comment", priority = 2)
+    @Test(description = "UI: add empty comment")
     @Severity(SeverityLevel.MINOR)
     @Story("Create new tests for comments")
     @Description("UI add empty comment")
     public void uiEmptyCommentVerification() throws IOException {
-        ArticleMainBase articleMainBase = new ArticleMainBase(LOGGER.get());
-        try {
-            articleMainBase.createArticle();
+        articleMainBase.get().createArticle();
 
-        HomePage homePage = homePage();
-        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage());
-        selectArticle(homePage, userProfilePage());
-        ArticlePage articlePage = articlePage();
+        HomePage homePage = homePage(logger);
+        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
+        selectArticle(homePage, userProfilePage(logger));
+        ArticlePage articlePage = articlePage(logger);
         articlePage.enterComment("")
                 .clickSendCommentBtn();
 
         Assert.assertEquals(articlePage.getError(), ERROR_MESSAGE);
-        logOut(homePage, settingsPage());
-        } finally {
-            articleMainBase.cleanArticle();
-        }
+        logOut(homePage, settingsPage(logger));
     }
 
-    @Test(description = "UI: delete comment from article", priority = 3)
+    @Test(description = "UI: delete comment from article")
     @Severity(SeverityLevel.CRITICAL)
     @Description("UI verification of deleting comments")
     @Story("Create new tests for comments functionality")
     public void uiDeleteCommentVerification() throws IOException {
-        ArticleMainBase articleMainBase = new ArticleMainBase(LOGGER.get());
-        try {
-            articleMainBase.createArticle();
+        articleMainBase.get().createArticle();
 
-            HomePage homePage = homePage();
-        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage());
-        selectArticle(homePage, userProfilePage());
-        ArticlePage articlePage = articlePage();
+        HomePage homePage = homePage(logger);
+        logIn(adminUser.getUserEmail(), adminUser.getUserPassword(), homePage, loginPage(logger));
+        selectArticle(homePage, userProfilePage(logger));
+        ArticlePage articlePage = articlePage(logger);
         articlePage.enterComment(COMMENT)
                 .clickSendCommentBtn();
         articlePage.clickDeleteCommentBtn();
 
         Assert.assertFalse(articlePage.commentIsNotDisplayed());
-        logOut(homePage, settingsPage());
-        } finally {
-            articleMainBase.cleanArticle();
-        }
+        logOut(homePage, settingsPage(logger));
     }
 
     @AfterTest(description = "Post-condition: delete all comments")
@@ -135,7 +129,7 @@ public class CommentUITest
             ));
 
             ResponseDataTransferMapper restAPIClient = new ResponseDataTransferMapper();
-            CommentDTO responseDTO = restAPIClient.transformToDtoCom(response, LOGGER.get());
+            CommentDTO responseDTO = restAPIClient.transformToDtoCom(response, logger);
             Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
             Assert.assertNull(responseDTO.getComment());
         }

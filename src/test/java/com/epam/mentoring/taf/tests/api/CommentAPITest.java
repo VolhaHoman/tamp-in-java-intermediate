@@ -1,5 +1,6 @@
 package com.epam.mentoring.taf.tests.api;
 
+import com.epam.mentoring.taf.api.RestClient;
 import com.epam.mentoring.taf.dataobject.CommentDTO;
 import com.epam.mentoring.taf.dataobject.CommentResponseDTO;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -36,7 +38,12 @@ public class CommentAPITest implements IRestClient, IAllCommentTest {
 
     private static final Logger log = LogManager.getLogger();
 
-    @Test(description = "API: add multiple valid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForValidComments", priority = 0)
+    @BeforeMethod
+    public void init() {
+        CLIENT.set(new RestClient(log));
+    }
+
+    @Test(description = "API: add multiple valid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForValidComments")
     @Severity(SeverityLevel.BLOCKER)
     @Description("API add comments to article from json file")
     @Story("Create new tests for comments functionality")
@@ -53,7 +60,7 @@ public class CommentAPITest implements IRestClient, IAllCommentTest {
         Assert.assertEquals(responseDTO.getComment().getBody(), data.get("body"));
     }
 
-    @Test(description = "API: add invalid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForInvalidComments", priority = 1)
+    @Test(description = "API: add invalid comments to article", dataProviderClass = DataUtil.class, dataProvider = "dataProviderForInvalidComments")
     @Severity(SeverityLevel.NORMAL)
     @Description("API add invalid comments to article from json file")
     @Story("Create new tests for comments functionality")

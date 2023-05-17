@@ -8,10 +8,11 @@ import com.epam.mentoring.taf.dataobject.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
-import com.epam.mentoring.taf.tests.ILoggerTest;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -23,7 +24,9 @@ import static com.epam.mentoring.taf.tests.AuthorizationUserBase.API_USERS;
 
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("API: Sign Up Tests")
-public class UserSignUpAPITest implements ILoggerTest {
+public class UserSignUpAPITest {
+
+    Logger logger = LogManager.getLogger();
 
     public static final String BLANK_ERROR_TEXT = "can't be blank";
     public static final String ALREADY_TAKEN_ERROR_TEXT = "has already been taken";
@@ -50,7 +53,7 @@ public class UserSignUpAPITest implements ILoggerTest {
                 .setUsername(userDataDTO.getUserName())
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, LOGGER.get());
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, logger);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
@@ -64,8 +67,8 @@ public class UserSignUpAPITest implements ILoggerTest {
                 .setUsername(defaultUserData.getUserName())
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, LOGGER.get());
-        ResponseDTO responseDTO = restAPIClient.transformToDto(response, LOGGER.get());
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, logger);
+        ResponseDTO responseDTO = restAPIClient.transformToDto(response, logger);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), ALREADY_TAKEN_ERROR_TEXT);
     }
@@ -80,8 +83,8 @@ public class UserSignUpAPITest implements ILoggerTest {
                 .setUsername("")
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, LOGGER.get());
-        ResponseDTO responseDTO = restAPIClient.transformToDto(response, LOGGER.get());
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, API_USERS, logger);
+        ResponseDTO responseDTO = restAPIClient.transformToDto(response, logger);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_UNPROCESSABLE_ENTITY);
         Assert.assertEquals(responseDTO.getErrors().getUsername().get(0), BLANK_ERROR_TEXT);
     }

@@ -3,6 +3,7 @@ package com.epam.mentoring.taf.ui.page;
 import com.epam.mentoring.taf.ui.config.WebDriverLoader;
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -51,6 +52,12 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "//li/a[contains(text(),'Sign in')]")
     private WebElement signInLink;
+
+    @FindBy(xpath = "//a[contains(@href,'/profile')][@routerlinkactive='active']")
+    private WebElement userProfile;
+
+    @FindBy(xpath = "//app-home-page")
+    private WebElement appHomePage;
 
     public HomePage(Logger logger, WebDriverLoader loader) {
         PageFactory.initElements(loader.getWebDriver(), this);
@@ -118,14 +125,15 @@ public class HomePage extends BasePage {
 
     @Step("Navigate to User page")
     public void navToUser() {
-        loader.getWebDriverWait().until(ExpectedConditions.visibilityOfAllElements(tagPills));
+        loader.getWebDriverWait().until(ExpectedConditions.elementToBeClickable(userIcon));
         userIcon.click();
         logger.info("Navigate to User page");
     }
 
     @Step("Navigate to AppEditor page")
     public void navToEditorPage() {
-        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(newArticle));
+        loader.getWebDriverWait().until(ExpectedConditions.presenceOfElementLocated(By.xpath("//app-home-page"))).isDisplayed();
+        loader.getWebDriverWait().until(ExpectedConditions.elementToBeClickable(newArticle));
         newArticle.click();
         logger.info("Navigate to AppEditor page");
     }

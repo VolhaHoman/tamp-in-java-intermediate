@@ -11,6 +11,8 @@ import com.epam.mentoring.taf.tests.uihelper.PageLoader;
 import com.epam.mentoring.taf.ui.page.HomePage;
 import com.epam.mentoring.taf.ui.page.LoginPage;
 import io.qameta.allure.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -24,6 +26,8 @@ import static com.epam.mentoring.taf.ui.page.LoginPage.CREDENTIALS_ERROR_TEXT;
 @Feature("Sign In Tests")
 public class UserSignInTestUI
         implements LoginBaseUI, OpenClose, PageLoader {
+
+    Logger logger = LogManager.getLogger();
 
     private UserDataDTO defaultUserData;
 
@@ -41,8 +45,8 @@ public class UserSignInTestUI
     @Description("UI Sign In with valid credentials")
     @Story("Create layers for UI tests")
     public void uiSignInWithValidCredentialsVerification() {
-        HomePage homePage = homePage();
-        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword(), homePage, loginPage());
+        HomePage homePage = homePage(logger);
+        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword(), homePage, loginPage(logger));
         uiVerificationUserWithValidCredsIsSignedIn(homePage);
     }
 
@@ -51,8 +55,8 @@ public class UserSignInTestUI
     @Description("UI Sign In with invalid credentials")
     @Story("Investigate the issues and fix UserSignInTest")
     public void uiSignInWithInvalidCredentialsVerification() {
-        LoginPage loginPage = loginPage();
-        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword() + "1", homePage(), loginPage);
+        LoginPage loginPage = loginPage(logger);
+        logIn(defaultUserData.getUserEmail(), defaultUserData.getUserPassword() + "1", homePage(logger), loginPage);
         uiVerificationUserWithInvalidCredsCannotSignIn(loginPage);
     }
 

@@ -40,7 +40,7 @@ public class ArticlePage extends BasePage {
 
     @Step("Enter the comment")
     public ArticlePage enterComment(String text) {
-        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(commentArea));
+        loader.getWebDriverWait().until(ExpectedConditions.elementToBeClickable(commentArea));
         commentArea.sendKeys(text);
         logger.info("Enter the following comment: " + text);
         return this;
@@ -55,7 +55,7 @@ public class ArticlePage extends BasePage {
 
     @Step("Click on 'Delete comment' button")
     public void clickDeleteCommentBtn() {
-        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(trashBtn));
+        loader.getWebDriverWait().until(ExpectedConditions.elementToBeClickable(trashBtn));
         trashBtn.click();
         logger.info("Delete comment");
     }
@@ -102,14 +102,14 @@ public class ArticlePage extends BasePage {
 
     @Step("Click on 'Edit Article' button")
     public void clickEditArticleBtn() {
-        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(editArticleBtn));
+        loader.getWebDriverWait().until(ExpectedConditions.elementToBeClickable(editArticleBtn));
         editArticleBtn.click();
         logger.info("Edit an article");
     }
 
     @Step("Click on 'Delete Article' button")
     public void clickDeleteArticleBtn() {
-        loader.getWebDriverWait().until(ExpectedConditions.visibilityOf(deleteArticleBtn));
+        loader.getWebDriverWait().until(ExpectedConditions.elementToBeClickable(deleteArticleBtn));
         deleteArticleBtn.click();
         logger.info("Delete an article");
     }

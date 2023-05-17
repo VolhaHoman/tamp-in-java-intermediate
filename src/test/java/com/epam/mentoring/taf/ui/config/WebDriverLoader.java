@@ -3,8 +3,9 @@ package com.epam.mentoring.taf.ui.config;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
 import com.epam.mentoring.taf.exception.ParameterIsNullException;
 import com.epam.mentoring.taf.service.YamlReader;
-import com.epam.mentoring.taf.tests.ILoggerTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -21,7 +22,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
 
-public class WebDriverLoader implements ILoggerTest {
+public class WebDriverLoader {
+    
+    Logger logger = LogManager.getLogger();
 
     private WebDriver driver;
 
@@ -35,7 +38,7 @@ public class WebDriverLoader implements ILoggerTest {
     public WebDriverWait getWebDriverWait() {
         initProps();
         if (wait == null) {
-            wait = new WebDriverWait(getWebDriver(), 15);
+            wait = new WebDriverWait(getWebDriver(), 60);
         }
         return wait;
     }
@@ -86,7 +89,7 @@ public class WebDriverLoader implements ILoggerTest {
     private WebDriver getChrome() {
         URL gridUrl = getGridUrl();
         if (Objects.nonNull(gridUrl)) {
-            LOGGER.get().info("WEB_DRIVER_LOADER LOAD CROME : {} ", gridUrl) ;
+            logger.info("WEB_DRIVER_LOADER LOAD CROME : {} ", gridUrl) ;
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR,
                     UnexpectedAlertBehaviour.IGNORE);
@@ -104,7 +107,7 @@ public class WebDriverLoader implements ILoggerTest {
     private WebDriver getFireFox() {
         URL gridUrl = getGridUrl();
         if (Objects.nonNull(gridUrl)) {
-            LOGGER.get().info("WEB_DRIVER_LOADER LOAD FIREFOX : {} ", gridUrl) ;
+            logger.info("WEB_DRIVER_LOADER LOAD FIREFOX : {} ", gridUrl) ;
             System.setProperty("webdriver.gecko.driver", "geckodriver");
             FirefoxOptions firefoxOptions = new FirefoxOptions();
             firefoxOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR,
@@ -126,7 +129,7 @@ public class WebDriverLoader implements ILoggerTest {
     private void initProps() {
         if (Objects.isNull(driver) || isDriverSessionNotPresent()) {
             initDriver();
-            wait = new WebDriverWait(getWebDriver(), 15);
+            wait = new WebDriverWait(getWebDriver(), 45);
         }
     }
 

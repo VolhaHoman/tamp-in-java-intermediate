@@ -1,5 +1,6 @@
 package com.epam.mentoring.taf.tests;
 
+import com.epam.mentoring.taf.api.RestClient;
 import com.epam.mentoring.taf.util.StorageHelper;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +21,10 @@ public class AllCommentsBase implements IRestClient, IAuthorizationTest {
     public static final String SLUG = "SLUG";
 
     private static final Logger log = LogManager.getLogger();
+
+    static {
+        CLIENT.set(new RestClient(log));
+    }
 
     public static void getSlug() {
         Response getResponse = CLIENT.get().sendGetRequestWithHeaders(API_ARTICLES, Map.ofEntries(

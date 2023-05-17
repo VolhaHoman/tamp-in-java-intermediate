@@ -29,7 +29,8 @@ import static com.epam.mentoring.taf.util.StorageHelper.whatIsTheResponse;
 @Feature("Sign In Tests")
 public class UserSignInTestApi {
 
-    private final Logger log = LogManager.getLogger();
+    Logger logger = LogManager.getLogger();
+
     private UserDataDTO defaultUserData;
 
     @BeforeMethod(description = "Generate default Sign in User")
@@ -50,7 +51,8 @@ public class UserSignInTestApi {
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword())
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, Redirection.getRedirectionUrl(API_LOGIN), log);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, Redirection.getRedirectionUrl(API_LOGIN),
+                logger);
         rememberTheResponse(RESPONSE, response);
 
         verifyStatusCodeIsOk();
@@ -65,7 +67,8 @@ public class UserSignInTestApi {
                 .ApiUserDTOBuilder(defaultUserData.getUserEmail(), defaultUserData.getUserPassword() + "1")
                 .build();
         RestAPIClient restAPIClient = new RestAPIClient();
-        Response response = restAPIClient.sendApiRequest(apiUserDTO, Redirection.getRedirectionUrl(API_LOGIN), log);
+        Response response = restAPIClient.sendApiRequest(apiUserDTO, Redirection.getRedirectionUrl(API_LOGIN),
+                logger);
         rememberTheResponse(RESPONSE, response);
 
         verifyStatusCodeIsForbidden();

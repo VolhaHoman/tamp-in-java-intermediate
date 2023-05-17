@@ -13,7 +13,7 @@ import java.time.Duration;
 
 public class UserProfilePage extends BasePage {
 
-    @FindBy(xpath = "//app-article-list/app-article-preview[last()]/div/a")
+    @FindBy(xpath = "//app-article-list/app-article-preview[1]/div/a")
     private WebElement article;
 
     @FindBy(xpath = "//*[contains(text(),'No articles are here')]")

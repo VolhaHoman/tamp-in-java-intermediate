@@ -1,5 +1,6 @@
 package com.epam.mentoring.taf.tests;
 
+import com.epam.mentoring.taf.api.RestClient;
 import com.epam.mentoring.taf.dataobject.UserData;
 import com.epam.mentoring.taf.dataobject.UserDataDTO;
 import com.epam.mentoring.taf.exception.ConfigurationSetupException;
@@ -29,6 +30,13 @@ public class AuthorizationUserBase implements IRestClient {
     public static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
     public static final String AUTH_TOKEN = "AUTH_TOKEN";
     private static final Logger log = LogManager.getLogger();
+
+    static {
+        CLIENT.set(new RestClient(log));
+    }
+
+    private AuthorizationUserBase() {
+    }
 
     public static UserDataDTO authorization() {
         UserDataDTO authorizedUser = null;

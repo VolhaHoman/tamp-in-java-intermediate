@@ -1,11 +1,11 @@
 package com.epam.mentoring.taf.tests.ui;
 
+import com.epam.mentoring.taf.api.RestClient;
 import com.epam.mentoring.taf.listeners.ReportPortalTestListener;
 import com.epam.mentoring.taf.listeners.TestListener;
 import com.epam.mentoring.taf.model.UserDataModel;
 import com.epam.mentoring.taf.service.CsvReader;
 import com.epam.mentoring.taf.tests.IAuthorizationTest;
-import com.epam.mentoring.taf.tests.ILoggerTest;
 import com.epam.mentoring.taf.tests.IRestClient;
 import com.epam.mentoring.taf.tests.IYmlReader;
 import com.epam.mentoring.taf.tests.uihelper.LoginBaseUI;
@@ -17,6 +17,8 @@ import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
@@ -31,7 +33,7 @@ import static com.epam.mentoring.taf.util.StorageHelper.*;
 @Listeners({TestListener.class, ReportPortalTestListener.class})
 @Feature("Follow User Functionality")
 public class FollowUserTest
-        implements IYmlReader, IRestClient, PageLoader, LoginBaseUI, ILoggerTest, IAuthorizationTest {
+        implements IYmlReader, PageLoader, LoginBaseUI, IAuthorizationTest {
 
     @BeforeClass
     public void open() {
@@ -47,10 +49,13 @@ public class FollowUserTest
     public static final String RESPONSE = "Response";
 
     private UserDataModel workUser;
+    
+    Logger logger = LogManager.getLogger();
 
     @BeforeMethod
     public void initUser() throws IOException {
         workUser = READER.get().readUserData("adminUserFollow");
+        CLIENT.set(new RestClient(logger));
     }
 
     @DataProvider(name = "csvDataProvider")
@@ -82,8 +87,8 @@ public class FollowUserTest
     @Description("UI Sign In with Admin credentials")
     @Story("Create new tests for users following functionality")
     public void uiSignInAsAdminUser(UserDataModel model) {
-        HomePage homePage = homePage();
-        logIn(workUser.getUserEmail(), workUser.getUserPassword(), homePage, loginPage());
+        HomePage homePage = homePage(logger);
+        logIn(workUser.getUserEmail(), workUser.getUserPassword(), homePage, loginPage(logger));
         uiVerificationAdminIsSignedIn(model, homePage, workUser.getUserName());
     }
 
@@ -92,8 +97,8 @@ public class FollowUserTest
     @Description("UI verification of follow functionality")
     @Story("Create new tests for users following functionality")
     public void uiVerifyFollowIsTrue(UserDataModel model) throws InterruptedException {
-        homePage().clickCelebUserLink();
-        CelebPage celebPage = celebPage();
+        homePage(logger).clickCelebUserLink();
+        CelebPage celebPage = celebPage(logger);
         celebPage.waitPageIsLoaded();
         uiVerificationUserIsFollowed(model, celebPage);
     }
@@ -148,7 +153,7 @@ public class FollowUserTest
         soft.assertEquals(following, "true");
         soft.assertAll("User is followed");
 
-        LOGGER.get().info("Profile name is: " + model.getCelebUsername());
+        logger.info("Profile name is: " + model.getCelebUsername());
     }
 
     @Step
@@ -159,9 +164,9 @@ public class FollowUserTest
         soft.assertEquals(homePage.getYourFeedAuthor(), model.getCelebUsername());
         soft.assertAll("Verify that Admin is signed in on UI");
 
-        LOGGER.get().info("Admin user name is: " + userName);
-        LOGGER.get().info("Your Feed tab exists: " + homePage.getYourFeedNav());
-        LOGGER.get().info("Author name is: " + model.getCelebUsername());
+        logger.info("Admin user name is: " + userName);
+        logger.info("Your Feed tab exists: " + homePage.getYourFeedNav());
+        logger.info("Author name is: " + model.getCelebUsername());
     }
 
     @Step
